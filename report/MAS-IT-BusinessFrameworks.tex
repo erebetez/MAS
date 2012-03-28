@@ -1,0 +1,131 @@
+\documentclass[paper=a4,twoside=false,BCOR=0mm,DIV=calc,fontsize=12pt]{scrartcl}
+
+\usepackage[automark,headsepline]{scrpage2}
+% \usepackage{xunicode,fontspec,xltxtra}
+\usepackage[english,german]{babel}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8x]{inputenc}
+
+\usepackage{graphicx}
+\usepackage{lastpage}
+\usepackage{listings}
+
+%Schöne Tabellen
+\usepackage{booktabs}
+
+%\usepackage{longtable}
+
+\usepackage{multirow}
+
+% Kein einrücken und Abstand zwischen Absätzen.
+\usepackage{parskip}
+\setlength{\parindent}{0cm}
+
+% Hyperlinks und url's
+\usepackage[hidelinks]{hyperref}
+
+
+
+% \usepackage[debug]{libertine}
+% \setromanfont[Mapping=tex-text]{Linux Libertine O}
+% \setsansfont[Mapping=tex-text]{Linux Biolinum O}
+% \setmonofont[Mapping=tex-text]{Liberation Mono}
+
+\pagestyle{scrheadings}
+
+\clearscrheadfoot
+\ihead{\headmark}
+\ohead{Seite\pagemark\ von \pageref{LastPage}}
+\ifoot{Business frameworks}
+\ofoot{\today}
+
+\renewcommand*{\pnumfont}{
+	\normalfont\rmfamily\slshape
+}
+
+\KOMAoptions{draft=false}
+\KOMAoptions{DIV=last}
+
+\begin{document}
+
+% --- Titelseite --- %
+\begin{titlepage}
+	\enlargethispage{3cm}
+	\begin{raggedright}
+	\begin{picture}(0,0)
+		\put(-30,14){\includegraphics[width=7cm]{./img/fhnw-technik-head}}
+	\end{picture}
+
+	\vspace*{6cm}
+	{\Huge\bfseries\sf
+		MAS-IT\\[1.7ex]
+	}
+	{\Large\bfseries\sf
+		Business frameworks\\[2.2ex]
+	}
+	{\large\bfseries\sf
+		Masterthesis von\\[1.5ex]
+		Etienne Rebetez\\[1.5ex]
+	}
+	\vspace*{1.5cm}
+	{\large\bfseries\sf
+		FHNW\\[1.5ex]
+		Hochschule für Technik\\[1.5ex]
+		Studiengang MAS-IT\\[1.5ex]
+		Betreuender Dozent:\\[1.5ex]
+		Dr. sc. techn. Ronald Tanner\\[1.5ex]
+	}
+	\vspace*{2cm}
+	{\large\bfseries\sf
+		Bern, \today\\
+	}
+	\end{raggedright}
+\end{titlepage}
+
+\newpage
+% --- Zusammenfassung --- %
+\section*{Summary}
+Text
+
+% --- Vorwort --- %
+\section*{Vorwort}
+Text
+% --- Inhaltsverzeichnis --- %
+\newpage
+	\tableofcontents
+
+% --- Einleitung --- %
+\newpage
+\section{Einleitung}
+
+
+
+\section{Konzept}
+
+
+\section{BPMN}
+
+
+
+\section{Frameworks}
+
+\subsection{activiti}
+
+
+
+
+
+
+\addcontentsline{toc}{section}{Literaturverzeichnis}
+\begin{thebibliography}{99}
+
+\bibitem{activiti} \url{http://www.activiti.org/}
+
+
+
+
+\end{thebibliography}
+
+\end{document}
+
