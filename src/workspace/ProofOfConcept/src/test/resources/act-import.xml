@@ -1,0 +1,28 @@
+<dataset>
+  <ACT_ID_GROUP ID_='admin' REV_='1' NAME_='System administrator' TYPE_='security-role' />
+  <ACT_ID_GROUP ID_='user' REV_='1' NAME_='User' TYPE_='security-role' />
+  <ACT_ID_GROUP ID_='manager' REV_='1' NAME_='Manager' TYPE_='security-role' />
+  <ACT_ID_GROUP ID_='management' REV_='1' NAME_='Management' TYPE_='assignment' />
+  <ACT_ID_GROUP ID_='accountancy' REV_='1' NAME_='Accountancy' TYPE_='assignment' />
+  <ACT_ID_GROUP ID_='engineering' REV_='1' NAME_='Engineering' TYPE_='assignment' />
+  <ACT_ID_GROUP ID_='sales' REV_='1' NAME_='Sales' TYPE_='assignment' />
+
+  <ACT_ID_USER ID_='kermit' REV_='1' FIRST_='Kermit' LAST_='the Frog' EMAIL_='kermit@localhost' PWD_='kermit' />
+
+  <ACT_ID_MEMBERSHIP  USER_ID_='kermit' GROUP_ID_='admin' />
+  <ACT_ID_MEMBERSHIP  USER_ID_='kermit' GROUP_ID_='manager' />
+  <ACT_ID_MEMBERSHIP  USER_ID_='kermit' GROUP_ID_='management' />
+  <ACT_ID_MEMBERSHIP  USER_ID_='kermit' GROUP_ID_='accountancy' />
+  <ACT_ID_MEMBERSHIP  USER_ID_='kermit' GROUP_ID_='engineering' />
+  <ACT_ID_MEMBERSHIP  USER_ID_='kermit' GROUP_ID_='sales' />
+
+  <ACT_ID_USER ID_='fozzie' REV_='1' FIRST_='Fozzie' LAST_='Bear' EMAIL_='fozzie@localhost' PWD_='fozzie' />
+  <ACT_ID_MEMBERSHIP  USER_ID_='fozzie' GROUP_ID_='user' />
+  <ACT_ID_MEMBERSHIP  USER_ID_='fozzie' GROUP_ID_='accountancy' />
+
+  <ACT_ID_USER ID_='gonzo' REV_='1' FIRST_='Gonzo' LAST_='the Great' EMAIL_='gonzo@localhost' PWD_='gonzo' />
+  <ACT_ID_MEMBERSHIP  USER_ID_='gonzo' GROUP_ID_='manager' />
+  <ACT_ID_MEMBERSHIP  USER_ID_='gonzo' GROUP_ID_='management' />
+  <ACT_ID_MEMBERSHIP  USER_ID_='gonzo' GROUP_ID_='accountancy' />
+  <ACT_ID_MEMBERSHIP  USER_ID_='gonzo' GROUP_ID_='sales' />
+</dataset>
