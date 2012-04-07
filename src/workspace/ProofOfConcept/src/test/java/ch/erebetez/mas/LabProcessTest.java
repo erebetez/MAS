@@ -19,6 +19,8 @@ import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.form.FormProperty;
+import org.activiti.engine.form.TaskFormData;
+import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricDetail;
 import org.activiti.engine.history.HistoricFormProperty;
 import org.activiti.engine.history.HistoricProcessInstance;
@@ -115,14 +117,43 @@ public class LabProcessTest {
 		ProcessInstanceQuery pq = runtimeService.createProcessInstanceQuery();
 		ProcessInstance processInstance = pq.singleResult();
 
-//		Assert.assertEquals(true, processInstance.isEnded());
+		Assert.assertEquals(false, processInstance.isEnded());
 
+		// get the tasks for user kermit
+		List<Task> tasks = taskService.createTaskQuery()
+				.taskCandidateUser("kermit").list();
+		Assert.assertNotNull(tasks);
+		Assert.assertEquals("has exactly one task", 1, tasks.size());
+		Assert.assertEquals("found task", "get data task", tasks.get(0)
+				.getName());
+
+		// claim the task
+		taskService.claim(tasks.get(0).getId(), "kermit");
+
+		// Verify Kermit can now retrieve the task
+		tasks = taskService.createTaskQuery().taskAssignee("kermit").list();
+		Assert.assertNotNull(tasks);
+		Assert.assertEquals("has exactly one task", 1, tasks.size());
+
+
+		List<FormProperty> userFormList = formService.getTaskFormData(tasks.get(0).getId()).getFormProperties();
+		Assert.assertEquals(1, userFormList.size());
+
+		// submit value
+		String dilution = "10";
+		
+		Map<String, String> userFormMap = new HashMap<String, String>();
+		userFormMap.put("dilutionFactor", dilution);
+		
+		formService.submitTaskFormData(tasks.get(0).getId(), userFormMap);	
+		
+		
+		
 		
 		// verify that the process is actually finished
 		HistoricProcessInstance historicProcessInstance = historyService
 				.createHistoricProcessInstanceQuery()
 				.processInstanceId(processInstance.getId()).singleResult();
-
 		Assert.assertNotNull(historicProcessInstance.getEndTime());
 	}
 }

@@ -22,44 +22,55 @@
         <sequenceFlow
             id="flow1"
             sourceRef="theStart"
-            targetRef="scripttask_getdata" />
+            targetRef="usertask_getdata" />
 
-        <scriptTask
-            id="scripttask_getdata"
-            name="Getting Basic Data"
-            scriptFormat="groovy" >
+        <userTask
+            id="usertask_getdata"
+            name="get data task" >
 
-            <script>
-                def varDilution = 3;
-                
-                execution.setVariable("varDilution", varDilution);
-                
-				out:println "Got Values " + varDilution;
-            </script>
-        </scriptTask>
+            <extensionElements>
+
+                <activiti:formProperty
+                    id="dilutionFactor"
+                    name="Dilution factor"
+                    required="true"
+                    type="long" />
+            </extensionElements>
+
+            <potentialOwner>
+
+                <resourceAssignmentExpression>
+
+                    <formalExpression>
+                        group(management)
+                    </formalExpression>
+                </resourceAssignmentExpression>
+            </potentialOwner>
+        </userTask>
 
         <sequenceFlow
             id="flow2"
-            sourceRef="scripttask_getdata"
+            sourceRef="usertask_getdata"
             targetRef="servicetask_getdataFromSDMS" />
 
-		<serviceTask id="servicetask_getdataFromSDMS"
-		    activiti:class="ch.erebetez.mas.SdmsAdapter">
-		</serviceTask>
+        <serviceTask
+            id="servicetask_getdataFromSDMS"
+            activiti:class="ch.erebetez.mas.SdmsAdapter" >
+        </serviceTask>
 
         <sequenceFlow
             id="flow3"
             sourceRef="servicetask_getdataFromSDMS"
             targetRef="scripttask_calculate" />
-        
+
         <scriptTask
             id="scripttask_calculate"
             name="Calculating"
             scriptFormat="groovy" >
 
             <script>
-                def varFormula = varDilution + " * " + varB;
-                def varResult = varDilution * varB;
+                def varFormula = dilutionFactor + " * " + varB;
+                def varResult = dilutionFactor * varB;
                 
                 execution.setVariable("varFormula", varFormula);
                 execution.setVariable("varResult", varResult);
