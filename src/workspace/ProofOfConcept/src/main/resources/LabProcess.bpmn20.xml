@@ -22,70 +22,74 @@
         <sequenceFlow
             id="flow1"
             sourceRef="theStart"
-            targetRef="getWorklistId" />
+            targetRef="scripttask_getdata" />
 
-        <userTask
-            id="getWorklistId"
-            name="Get the Worklist ID" >
+        <scriptTask
+            id="scripttask_getdata"
+            name="Getting Basic Data"
+            scriptFormat="groovy" >
 
-            <documentation>
-              Input the Worklist (Test)
-            </documentation>
-
-            <potentialOwner>
-
-                <resourceAssignmentExpression>
-
-                    <formalExpression>
-						accountancy
-                    </formalExpression>
-                </resourceAssignmentExpression>
-            </potentialOwner>
-        </userTask>
+            <script>
+                def varDilution = 3;
+                
+                execution.setVariable("varDilution", varDilution);
+                
+				out:println "Got Values " + varDilution;
+            </script>
+        </scriptTask>
 
         <sequenceFlow
             id="flow2"
-            sourceRef="getWorklistId"
-            targetRef="scripttask1" />
+            sourceRef="scripttask_getdata"
+            targetRef="servicetask_getdataFromSDMS" />
+
+		<serviceTask id="servicetask_getdataFromSDMS"
+		    activiti:class="ch.erebetez.mas.SdmsAdapter">
+		</serviceTask>
+
+        <sequenceFlow
+            id="flow3"
+            sourceRef="servicetask_getdataFromSDMS"
+            targetRef="scripttask_calculate" />
+        
+        <scriptTask
+            id="scripttask_calculate"
+            name="Calculating"
+            scriptFormat="groovy" >
+
+            <script>
+                def varFormula = varDilution + " * " + varB;
+                def varResult = varDilution * varB;
+                
+                execution.setVariable("varFormula", varFormula);
+                execution.setVariable("varResult", varResult);
+                
+				out:println "calculating...";
+            </script>
+        </scriptTask>
+
+        <sequenceFlow
+            id="flow4"
+            name="Send to App"
+            sourceRef="scripttask_calculate"
+            targetRef="scripttask_print" />
 
         <scriptTask
-            id="scripttask1"
+            id="scripttask_print"
             name="Validate Worklist"
             scriptFormat="groovy" >
 
             <script>
 				out:println "Worklist entered " + worklist;
+				out:println "Formula " + varFormula;
+				
+				out:println "Result " + varResult;
             </script>
         </scriptTask>
 
         <sequenceFlow
-            id="flow3"
-            name="Send to App"
-            sourceRef="scripttask1"
-            targetRef="verifyWorklist" />
-
-        <userTask
-            id="verifyWorklist"
-            name="Verify the given Worklist" >
-
-            <documentation>
-               Verifys the Worlist 
-            </documentation>
-
-            <potentialOwner>
-
-                <resourceAssignmentExpression>
-
-                    <formalExpression>
-						management
-                    </formalExpression>
-                </resourceAssignmentExpression>
-            </potentialOwner>
-        </userTask>
-
-        <sequenceFlow
-            id="flow4"
-            sourceRef="verifyWorklist"
+            id="flow5"
+            sourceRef="scripttask_print"
             targetRef="theEnd" />
 
         <endEvent id="theEnd" />

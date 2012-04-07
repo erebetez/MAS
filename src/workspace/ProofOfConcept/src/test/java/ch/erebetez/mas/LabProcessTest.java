@@ -43,7 +43,7 @@ import org.springframework.test.context.transaction.BeforeTransaction;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-@ContextConfiguration(locations = { "/activiti-context.xml" })
+@ContextConfiguration(locations = { "/activiti-context-mem-test.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
 public class LabProcessTest {
 	@Resource
@@ -115,38 +115,9 @@ public class LabProcessTest {
 		ProcessInstanceQuery pq = runtimeService.createProcessInstanceQuery();
 		ProcessInstance processInstance = pq.singleResult();
 
-		// get the tasks for user kermit
-		List<Task> tasks = taskService.createTaskQuery()
-				.taskCandidateUser("kermit").list();
-		Assert.assertNotNull(tasks);
-		Assert.assertEquals("has exactly one task", 1, tasks.size());
-		Assert.assertEquals("found task", "Get the Worklist ID", tasks.get(0)
-				.getName());
+//		Assert.assertEquals(true, processInstance.isEnded());
 
-		// claim the task
-		taskService.claim(tasks.get(0).getId(), "kermit");
-
-		// Verify Kermit can now retrieve the task
-		tasks = taskService.createTaskQuery().taskAssignee("kermit").list();
-		Assert.assertNotNull(tasks);
-		Assert.assertEquals("has exactly one task", 1, tasks.size());
-
-		// Complete this task
-		taskService.complete(tasks.get(0).getId());
-
-		// get the tasks for user kermit (agian)
-		tasks = taskService.createTaskQuery().taskCandidateUser("kermit")
-				.list();
-		Assert.assertNotNull(tasks);
-		Assert.assertEquals("has exactly one task", 1, tasks.size());
-		Assert.assertEquals("found task", "Verify the given Worklist", tasks
-				.get(0).getName());
-
-		// claim the task
-		taskService.claim(tasks.get(0).getId(), "kermit");
-		// Complete this task
-		taskService.complete(tasks.get(0).getId());
-
+		
 		// verify that the process is actually finished
 		HistoricProcessInstance historicProcessInstance = historyService
 				.createHistoricProcessInstanceQuery()
