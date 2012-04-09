@@ -11,8 +11,8 @@ public class CalculationAdapter implements JavaDelegate {
 
 	public void execute(DelegateExecution execution) {
 
-		String host = "localhost";
-		int port = 9001;
+		String host = (String) execution.getVariable("calcHost");
+		Integer port = (Integer) execution.getVariable("calcPort");
 
 		System.out.println("sending to calculator at " + host + ":" + port);
 
@@ -29,7 +29,7 @@ public class CalculationAdapter implements JavaDelegate {
 			PrintWriter out = null;
 			BufferedReader in = null;
 
-			echoSocket = new Socket(host, port);
+			echoSocket = new Socket(host, port.intValue());
 			out = new PrintWriter(echoSocket.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(
 					echoSocket.getInputStream()));

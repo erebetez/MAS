@@ -61,17 +61,33 @@
         <sequenceFlow
             id="flow3"
             sourceRef="servicetask_getdataFromSDMS"
+            targetRef="scripttask_chooseCalc" />
+
+        <scriptTask
+            id="scripttask_chooseCalc"
+            name="Print Report"
+            scriptFormat="groovy" >
+
+            <script>
+                execution.setVariable("calcHost", "localhost");
+                execution.setVariable("calcPort", 9998);
+            </script>
+        </scriptTask>
+
+        <sequenceFlow
+            id="flow4"
+            sourceRef="scripttask_chooseCalc"
             targetRef="servicetask_calculate" />
 
         <serviceTask
             id="servicetask_calculate"
             activiti:class="ch.erebetez.mas.CalculationAdapter" >
         </serviceTask>
-        
+
         <sequenceFlow
-            id="flow4"
+            id="flow5"
             sourceRef="servicetask_calculate"
-            targetRef="scripttask_print" />      
+            targetRef="scripttask_print" />
 
         <scriptTask
             id="scripttask_print"
@@ -79,15 +95,32 @@
             scriptFormat="groovy" >
 
             <script>
-				out:println "Worklist entered " + worklist;
+				fielpath = '/tmp/lab_report_' + worklist + '.txt';
 				
+				out:println "Printing report to " + fielpath;
 				
-				out:println "Result " + varResult;
+				def out = new File(fielpath);
+
+			    out.append "Worklist " + worklist;
+			    out.append '\n';
+
+			    out.append "Dilutin factor " + dilutionFactor;
+			    out.append '\n';
+
+			    out.append "Raw data " + varB;
+			    out.append '\n';
+				
+				out.append "Result " + varResult;
+			    out.append '\n';
+
+			    cmdLine = "firefox " + fielpath;
+
+			    def process = cmdLine.execute();
             </script>
         </scriptTask>
 
         <sequenceFlow
-            id="flow5"
+            id="flow6"
             sourceRef="scripttask_print"
             targetRef="theEnd" />
 
