@@ -92,13 +92,13 @@ public class LabProcessTest {
 
 		ProcessDefinition def = repositoryService
 				.createProcessDefinitionQuery()
-				.processDefinitionKey("laborProcess").singleResult();
+				.processDefinitionKey("laborProcess001").singleResult();
 
 		List<FormProperty> formList = formService.getStartFormData(def.getId())
 				.getFormProperties();
 		Assert.assertEquals(1, formList.size());
 
-		// submit registration request
+		// submit request
 		String workilstid = "WL2012000123";
 		Map<String, String> formMap = new HashMap<String, String>();
 		formMap.put("worklist", workilstid);
@@ -124,7 +124,7 @@ public class LabProcessTest {
 				.taskCandidateUser("kermit").list();
 		Assert.assertNotNull(tasks);
 		Assert.assertEquals("has exactly one task", 1, tasks.size());
-		Assert.assertEquals("found task", "get data task", tasks.get(0)
+		Assert.assertEquals("found task", "Aufarbeitung Protokollieren", tasks.get(0)
 				.getName());
 
 		// claim the task
@@ -148,12 +148,12 @@ public class LabProcessTest {
 		formService.submitTaskFormData(tasks.get(0).getId(), userFormMap);	
 		
 		
-		
-		
 		// verify that the process is actually finished
 		HistoricProcessInstance historicProcessInstance = historyService
 				.createHistoricProcessInstanceQuery()
 				.processInstanceId(processInstance.getId()).singleResult();
 		Assert.assertNotNull(historicProcessInstance.getEndTime());
+		
+		
 	}
 }

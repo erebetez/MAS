@@ -1,11 +1,14 @@
 <definitions xmlns:activiti="http://activiti.org/bpmn"
     id="definitions"
     targetNamespace="http://activiti.org/bpmn20"
+    xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+    xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+    xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"     
     xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" >
 
     <process
-        id="laborProcess"
-        name="test_LaborProcess001" >
+        id="laborProcess001"
+        name="Proben Verdünnung" >
 
         <startEvent id="theStart" >
 
@@ -26,7 +29,12 @@
 
         <userTask
             id="usertask_getdata"
-            name="get data task" >
+            name="Aufarbeitung Protokollieren" >
+
+            <documentation textFormat="text/plain" >
+               Bitte Probe für die ${worklist} verdünnen.                
+               Verdünnungsfaktor im Formular angeben.                
+            </documentation>
 
             <extensionElements>
 
@@ -55,6 +63,7 @@
 
         <serviceTask
             id="servicetask_getdataFromSDMS"
+            name="SDMS Adapter"
             activiti:class="ch.erebetez.mas.SdmsAdapter" >
         </serviceTask>
 
@@ -65,7 +74,7 @@
 
         <scriptTask
             id="scripttask_chooseCalc"
-            name="Print Report"
+            name="Choos the Calculation Server"
             scriptFormat="groovy" >
 
             <script>
@@ -81,6 +90,7 @@
 
         <serviceTask
             id="servicetask_calculate"
+            name="Calculate Result"
             activiti:class="ch.erebetez.mas.CalculationAdapter" >
         </serviceTask>
 
@@ -126,5 +136,139 @@
 
         <endEvent id="theEnd" />
     </process>
+
+    <bpmndi:BPMNDiagram>
+
+        <bpmndi:BPMNPlane bpmnElement="laborProcess001" >
+
+            <bpmndi:BPMNShape bpmnElement="theStart" >
+
+                <omgdc:Bounds
+                    height="30.0"
+                    width="30.0"
+                    x="75.0"
+                    y="225.0" />
+            </bpmndi:BPMNShape>
+
+            <bpmndi:BPMNShape bpmnElement="usertask_getdata" >
+
+                <omgdc:Bounds
+                    height="80.0"
+                    width="100.0"
+                    x="110.0"
+                    y="200.0" />
+            </bpmndi:BPMNShape>
+
+            <bpmndi:BPMNShape bpmnElement="servicetask_getdataFromSDMS" >
+
+                <omgdc:Bounds
+                    height="80.0"
+                    width="100.0"
+                    x="220.0"
+                    y="200.0" />
+            </bpmndi:BPMNShape>
+            
+            <bpmndi:BPMNShape bpmnElement="scripttask_chooseCalc" >
+
+                <omgdc:Bounds
+                    height="80.0"
+                    width="100.0"
+                    x="330.0"
+                    y="200.0" />
+            </bpmndi:BPMNShape>
+ 
+            <bpmndi:BPMNShape bpmnElement="servicetask_calculate" >
+
+                <omgdc:Bounds
+                    height="80.0"
+                    width="100.0"
+                    x="440.0"
+                    y="200.0" />
+            </bpmndi:BPMNShape>
+            
+            <bpmndi:BPMNShape bpmnElement="scripttask_print" >
+
+                <omgdc:Bounds
+                    height="80.0"
+                    width="100.0"
+                    x="550.0"
+                    y="200.0" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="theEnd" >
+
+                <omgdc:Bounds
+                    height="28.0"
+                    width="28.0"
+                    x="660.0"
+                    y="226.0" />
+            </bpmndi:BPMNShape>
+
+            <bpmndi:BPMNEdge bpmnElement="flow1" >
+
+                <omgdi:waypoint
+                    x="105.0"
+                    y="240.0" />
+
+                <omgdi:waypoint
+                    x="110.0"
+                    y="240.0" />
+            </bpmndi:BPMNEdge>
+
+            <bpmndi:BPMNEdge bpmnElement="flow2" >
+
+                <omgdi:waypoint
+                    x="210.0"
+                    y="240.0" />
+
+                <omgdi:waypoint
+                    x="220.0"
+                    y="240.0" />
+            </bpmndi:BPMNEdge>
+
+            <bpmndi:BPMNEdge bpmnElement="flow3" >
+
+                <omgdi:waypoint
+                    x="310.0"
+                    y="240.0" />
+
+                <omgdi:waypoint
+                    x="320.0"
+                    y="240.0" />
+            </bpmndi:BPMNEdge>
+
+            <bpmndi:BPMNEdge bpmnElement="flow4" >
+
+                <omgdi:waypoint
+                    x="410.0"
+                    y="240.0" />
+
+                <omgdi:waypoint
+                    x="420.0"
+                    y="240.0" />
+            </bpmndi:BPMNEdge>
+            
+             <bpmndi:BPMNEdge bpmnElement="flow5" >
+
+                <omgdi:waypoint
+                    x="510.0"
+                    y="240.0" />
+
+                <omgdi:waypoint
+                    x="520.0"
+                    y="240.0" />
+            </bpmndi:BPMNEdge>   
+                    
+            <bpmndi:BPMNEdge bpmnElement="flow6" >
+
+                <omgdi:waypoint
+                    x="660.0"
+                    y="240.0" />
+
+                <omgdi:waypoint
+                    x="660.0"
+                    y="240.0" />
+            </bpmndi:BPMNEdge>
+        </bpmndi:BPMNPlane>
+    </bpmndi:BPMNDiagram>
 
 </definitions>
