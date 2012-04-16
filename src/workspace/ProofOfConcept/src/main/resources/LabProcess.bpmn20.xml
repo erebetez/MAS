@@ -105,7 +105,7 @@
             scriptFormat="groovy" >
 
             <script>
-				fielpath = '/tmp/lab_report_' + worklist + '.txt';
+				fielpath = 'lab_report_' + worklist + '.txt';
 				
 				out:println "Printing report to " + fielpath;
 				
@@ -123,9 +123,9 @@
 				out.append "Result " + varResult;
 			    out.append '\n';
 
-			    cmdLine = "firefox " + fielpath;
+<!-- 			    cmdLine = "firefox " + fielpath; -->
 
-			    def process = cmdLine.execute();
+<!-- 			    def process = cmdLine.execute(); -->
             </script>
         </scriptTask>
 
