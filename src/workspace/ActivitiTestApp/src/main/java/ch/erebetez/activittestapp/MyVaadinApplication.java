@@ -21,23 +21,34 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Window;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+
 /**
  * The Application's "main" class
  */
-@SuppressWarnings("serial")
+@Configurable(preConstruction=true)
 public class MyVaadinApplication extends Application
 {
-    private Window window;
+	private static final long serialVersionUID = 1L;
+	
+	private Window window;
 
+    @Autowired
+    private HelloSpringInterface bean;
+    
     @Override
     public void init()
     {
-        window = new Window("My Vaadin Application");
+        window = new Window("My Vaadin Application");     
+        
         setMainWindow(window);
         Button button = new Button("Click Me");
         button.addListener(new Button.ClickListener() {
-            public void buttonClick(ClickEvent event) {
-                window.addComponent(new Label("Thank you for clicking"));
+			private static final long serialVersionUID = 1L;
+
+			public void buttonClick(ClickEvent event) {
+                window.addComponent(new Label("Thank you for clicking: " + bean.sayHello() ));
             }
         });
         window.addComponent(button);
