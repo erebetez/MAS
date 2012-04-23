@@ -1,121 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:context="http://www.springframework.org/schema/context"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns="http://www.springframework.org/schema/beans"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
        		http://www.springframework.org/schema/beans/spring-beans.xsd
        		http://www.springframework.org/schema/context
-		    http://www.springframework.org/schema/context/spring-context-3.0.xsd" >
+		    http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-    <context:annotation-config />
+	<context:annotation-config />
 
-    <bean
-        id="processEngineConfiguration"
-        class="org.activiti.spring.SpringProcessEngineConfiguration" >
+	<bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
 
-        <property
-            name="dataSource"
-            ref="dataSource" />
+		<property name="dataSource" ref="dataSource" />
 
-        <property
-            name="transactionManager"
-            ref="transactionManager" />
+		<property name="transactionManager" ref="transactionManager" />
 
-        <property
-            name="databaseSchemaUpdate"
-            value="true" />
+		<property name="databaseSchemaUpdate" value="true" />
 
-        <property
-            name="history"
-            value="full" />
+		<property name="history" value="full" />
 
-        <property
-            name="jobExecutorActivate"
-            value="true" />
-    </bean>
-
-     
-
-    <bean
-        id="dataSource"
-        class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
-   
-        
-        <property
-            name="driverClassName"
-            value="com.mysql.jdbc.Driver" />
-
-        <property
-            name="url"
-            value="jdbc:mysql://localhost:3306/activiti?autoReconnect=true" />
-
-        <property
-            name="username"
-            value="activiti" />
-
-        <property
-            name="password"
-            value="activiti" />
-
- 
-    </bean>
+		<property name="jobExecutorActivate" value="true" />
+	</bean>
 
 
-    <bean
-        id="transactionManager"
-        class="org.springframework.jdbc.datasource.DataSourceTransactionManager" >
 
-        <property
-            name="dataSource"
-            ref="dataSource" />
-    </bean>
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 
-    <bean
-        id="processEngine"
-        class="org.activiti.spring.ProcessEngineFactoryBean" >
 
-        <property
-            name="processEngineConfiguration"
-            ref="processEngineConfiguration" />
-    </bean>
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
 
-    <bean
-        id="activitiRule"
-        class="org.activiti.engine.test.ActivitiRule" >
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/activiti?autoReconnect=true" />
 
-        <property
-            name="processEngine"
-            ref="processEngine" />
-    </bean>
+		<property name="username" value="activiti" />
 
-    <bean
-        id="repositoryService"
-        factory-bean="processEngine"
-        factory-method="getRepositoryService" />
+		<property name="password" value="activiti" />
 
-    <bean
-        id="runtimeService"
-        factory-bean="processEngine"
-        factory-method="getRuntimeService" />
 
-    <bean
-        id="taskService"
-        factory-bean="processEngine"
-        factory-method="getTaskService" />
+	</bean>
 
-    <bean
-        id="identityService"
-        factory-bean="processEngine"
-        factory-method="getIdentityService" />
 
-    <bean
-        id="historyService"
-        factory-bean="processEngine"
-        factory-method="getHistoryService" />
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 
-    <bean
-        id="formService"
-        factory-bean="processEngine"
-        factory-method="getFormService" />
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="processEngine" class="org.activiti.spring.ProcessEngineFactoryBean">
+
+		<property name="processEngineConfiguration" ref="processEngineConfiguration" />
+	</bean>
+
+	<bean id="activitiRule" class="org.activiti.engine.test.ActivitiRule">
+
+		<property name="processEngine" ref="processEngine" />
+	</bean>
+
+	<bean id="repositoryService" factory-bean="processEngine"
+		factory-method="getRepositoryService" />
+
+	<bean id="runtimeService" factory-bean="processEngine"
+		factory-method="getRuntimeService" />
+
+	<bean id="taskService" factory-bean="processEngine"
+		factory-method="getTaskService" />
+
+	<bean id="identityService" factory-bean="processEngine"
+		factory-method="getIdentityService" />
+
+	<bean id="historyService" factory-bean="processEngine"
+		factory-method="getHistoryService" />
+
+	<bean id="formService" factory-bean="processEngine"
+		factory-method="getFormService" />
 
 </beans>
