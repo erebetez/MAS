@@ -2,7 +2,7 @@ mvn archetype:generate \
 -DarchetypeGroupId=com.vaadin \
 -DarchetypeArtifactId=vaadin-archetype-clean \
 -DarchetypeVersion=LATEST \
--DgroupId=ch.erebetez.activittestapp \
+-DgroupId=ch.erebetez.activititestapp \
 -DartifactId=ActivitiTestApp \
 -Dversion=1.0 \
 -Dpackaging=war
