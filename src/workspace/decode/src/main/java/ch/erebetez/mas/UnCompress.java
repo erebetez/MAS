@@ -6,9 +6,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.util.zip.GZIPInputStream;
+import java.util.zip.*;
 
 import org.apache.commons.codec.binary.Base64;
+
+
 
 public class UnCompress {
 	String base64 = null;
@@ -47,11 +49,17 @@ public class UnCompress {
 
 		InputStream inputStream = null;
 
-		try {
-			inputStream = new GZIPInputStream(base64Decode());
-		} catch (IOException e) {
-			inputStream = base64Decode();
-		}
+//		try {
+//			inputStream = new GZIPInputStream(base64Decode());
+//		} catch (IOException e) {
+//			
+		
+	    	inputStream = new InflaterInputStream(base64Decode(), new Inflater(true));
+		
+//		}
+		
+
+
 
 		try {
 			this.value = readInputStream(inputStream);

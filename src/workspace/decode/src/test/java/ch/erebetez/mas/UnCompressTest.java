@@ -37,31 +37,31 @@ public class UnCompressTest {
 		return text.toString();
 	}
 
-	@Test
-	public void uncomprss() throws IOException {
-
-		UnCompress comp = new UnCompress(readFile("resources/myBaseZip.txt"));
-
-		String xml = comp.getValue();
-
-		System.out.println(xml);
-
-		Assert.assertEquals("Hello", xml);
-
-	}
-
-	@Test
-	public void uncomprssNoZip() throws IOException {
-
-		UnCompress comp = new UnCompress(readFile("resources/myBaseNoZip.txt"));
-
-		String xml = comp.getValue();
-
-		System.out.println(xml);
-
-		Assert.assertEquals("Hello2", xml);
-
-	}
+//	@Test
+//	public void uncomprss() throws IOException {
+//
+//		UnCompress comp = new UnCompress(readFile("resources/myBaseZip.txt"));
+//
+//		String xml = comp.getValue();
+//
+//		System.out.println(xml);
+//
+//		Assert.assertEquals("Hello", xml);
+//
+//	}
+//
+//	@Test
+//	public void uncomprssNoZip() throws IOException {
+//
+//		UnCompress comp = new UnCompress(readFile("resources/myBaseNoZip.txt"));
+//
+//		String xml = comp.getValue();
+//
+//		System.out.println(xml);
+//
+//		Assert.assertEquals("Hello2", xml);
+//
+//	}
 	
 	@Test
 	public void uncomprssXml() throws IOException {
@@ -70,15 +70,18 @@ public class UnCompressTest {
 		
 		UnCompress comp = new UnCompress(readFile("resources/biggerXml.txt"));
 		
-		for( String charset : Charset.availableCharsets().keySet()){
-			
-			comp.setCharset(charset);
-
-			String xml = comp.getValue();
-
-			System.out.println(charset);
-			System.out.println(xml);	
-		}
+		String xml = comp.getValue();
+		System.out.println(xml);
+		
+//		for( String charset : Charset.availableCharsets().keySet()){
+//			
+//			comp.setCharset(charset);
+//
+//			String xml = comp.getValue();
+//
+//			System.out.println(charset);
+//			
+//		}
 
 
 //		Assert.assertEquals("Hello2", xml);
