@@ -37,40 +37,26 @@ public class UnCompressTest {
 		return text.toString();
 	}
 
-//	@Test
-//	public void uncomprss() throws IOException {
-//
-//		UnCompress comp = new UnCompress(readFile("resources/myBaseZip.txt"));
-//
-//		String xml = comp.getValue();
-//
-//		System.out.println(xml);
-//
-//		Assert.assertEquals("Hello", xml);
-//
-//	}
-//
-//	@Test
-//	public void uncomprssNoZip() throws IOException {
-//
-//		UnCompress comp = new UnCompress(readFile("resources/myBaseNoZip.txt"));
-//
-//		String xml = comp.getValue();
-//
-//		System.out.println(xml);
-//
-//		Assert.assertEquals("Hello2", xml);
-//
-//	}
+	@Test
+	public void uncompressGZip() throws IOException {
+
+		UnCompressInterface comp = new UnCompressGzip(readFile("resources/myBaseZip.txt"));
+
+		String xml = comp.uncompress();
+
+		Assert.assertEquals("Hello", xml);
+
+	}
+
 	
 	@Test
 	public void uncomprssEatXml() throws IOException {
 		
 		System.out.println(Charset.defaultCharset().toString());
 		
-		UnCompress comp = new UnCompress(readFile("resources/biggerXml.txt"), "windows-1252");
+		UnCompressInterface comp = new UnCompressEat(readFile("resources/biggerXml.txt"));
 		
-		String xml = comp.getValue();
+		String xml = comp.uncompress();
 
         String refxml = readFile("resources/shortXml.xml");
 		
