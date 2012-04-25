@@ -1,16 +1,23 @@
 package ch.erebetez.mas;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.util.zip.*;
+import java.util.Arrays;
+
 
 import org.apache.commons.codec.binary.Base64;
 
-
+import com.jcraft.jzlib.*;
 
 public class UnCompress {
 	String base64 = null;
@@ -54,7 +61,39 @@ public class UnCompress {
 //		} catch (IOException e) {
 //			
 		
-	    	inputStream = new InflaterInputStream(base64Decode(), new Inflater(true));
+	    	try {
+	    		
+	    		byte[] source = Base64.decodeBase64(base64);
+	    		
+	    		writeByteToFile(source);
+
+	    		String zipValue = new String(source);
+	    		
+	    		
+	    		
+	    		int delimiterPos = zipValue.indexOf(":");
+	    		System.out.println("delpos: " + delimiterPos);
+	    		
+	    		
+	    		String theHexLength = zipValue.substring(0, delimiterPos);
+	    		
+	    		System.out.println(theHexLength);	    
+	    		
+	    		int theLength = Integer.valueOf(theHexLength, 16).intValue();
+	    		
+	    		System.out.println(theLength);	
+	    		
+	    		// No idea why the position has to be shifted 3 bytes.
+	    		source = Arrays.copyOfRange(source, delimiterPos + 3, source.length);
+	    		
+	    		
+				inputStream = new InflaterInputStream( new ByteArrayInputStream(source), new Inflater(JZlib.DEF_WBITS, true));
+				
+
+			} catch (IOException e1) {
+
+				e1.printStackTrace();
+			}
 		
 //		}
 		
@@ -70,8 +109,68 @@ public class UnCompress {
 	}
 
 	private InputStream base64Decode(){
-		return new ByteArrayInputStream(
-				Base64.decodeBase64(base64.getBytes()));
+
+		// does not seam to be necessary. automatic url safe dedetciont or so...
+	    base64 = base64.replace('_', '/');
+	    base64 = base64.replace('-', '+');
+	    		
+		byte[] source = Base64.decodeBase64(base64);
+
+		byte[] bytLength = Arrays.copyOfRange(source, 0, 2);
+		
+
+		System.out.println("the Stirng");
+		System.out.println(Arrays.toString(source));
+		
+		String length = Arrays.toString(bytLength);
+		System.out.println(length);
+		
+		System.out.println("bytelengt: " + source.length);
+		
+		
+		source = Arrays.copyOfRange(source, 0, source.length);
+		
+		System.out.println("bytelengt: " + source.length);
+
+		return new ByteArrayInputStream(source);
+	}
+	
+	
+	private void writeByteToFile(byte[] source){
+		BufferedOutputStream bos = null;		
+		try {
+			
+			bos = new BufferedOutputStream(new FileOutputStream(new File("outfilename.txt")));
+			
+			bos.write(source);
+			bos.close();
+        }
+        catch(FileNotFoundException fnfe)
+        {
+                System.out.println("Specified file not found" + fnfe);
+        }
+        catch(IOException ioe)
+        {
+                System.out.println("Error while writing file" + ioe);
+        }
+        finally
+        {
+                if(bos != null)
+                {
+                        try
+                        {
+                       
+                                //flush the BufferedOutputStream
+                        	bos.flush();
+                               
+                                //close the BufferedOutputStream
+                        	bos.close();
+                       
+                        }
+                        catch(Exception e){}
+                }
+        }
+		
 	}
 	
 	private String readInputStream(InputStream inputStream) throws IOException {
@@ -88,6 +187,8 @@ public class UnCompress {
 			readed.append(read);
 		}
 
+		System.out.println(readed.length());
+		
 		return readed.toString();
 	}
 	

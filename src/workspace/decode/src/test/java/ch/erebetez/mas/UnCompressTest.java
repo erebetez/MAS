@@ -32,7 +32,7 @@ public class UnCompressTest {
 			e.printStackTrace();
 		}
 
-		System.out.println("Text read in: " + text);
+//		System.out.println("Text read in: " + text);
 
 		return text.toString();
 	}
@@ -64,27 +64,17 @@ public class UnCompressTest {
 //	}
 	
 	@Test
-	public void uncomprssXml() throws IOException {
-
-		System.out.println(Charset.availableCharsets());
+	public void uncomprssEatXml() throws IOException {
 		
-		UnCompress comp = new UnCompress(readFile("resources/biggerXml.txt"));
+		System.out.println(Charset.defaultCharset().toString());
+		
+		UnCompress comp = new UnCompress(readFile("resources/biggerXml.txt"), "windows-1252");
 		
 		String xml = comp.getValue();
-		System.out.println(xml);
+
+        String refxml = readFile("resources/shortXml.xml");
 		
-//		for( String charset : Charset.availableCharsets().keySet()){
-//			
-//			comp.setCharset(charset);
-//
-//			String xml = comp.getValue();
-//
-//			System.out.println(charset);
-//			
-//		}
-
-
-//		Assert.assertEquals("Hello2", xml);
+		Assert.assertEquals(refxml, xml);
 
 	}	
 
