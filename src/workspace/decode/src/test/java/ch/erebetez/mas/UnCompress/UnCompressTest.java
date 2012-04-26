@@ -11,44 +11,20 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+import ch.erebetez.mas.Compress.*;
 import ch.erebetez.mas.UnCompress.UnCompressEat;
 import ch.erebetez.mas.UnCompress.UnCompressGzip;
-import ch.erebetez.mas.UnCompress.UnCompressInterface;
+import ch.erebetez.mas.UnCompress.UnCompress;
 
 public class UnCompressTest {
-
-	private String readFile(String filename) {
-		StringBuilder text = new StringBuilder();
-
-		Scanner scanner;
-		try {
-			scanner = new Scanner(
-					new FileInputStream(filename));
-			try {
-				while (scanner.hasNextLine()) {
-					text.append(scanner.nextLine());
-				}
-			} finally {
-				scanner.close();
-			}
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-
-//		System.out.println("Text read in: " + text);
-
-		return text.toString();
-	}
 
 	@Test
 	public void uncompressGZip() throws IOException {
 
-		UnCompressInterface comp = new UnCompressGzip(readFile("resources/myBaseZip.txt"));
-
-		String xml = comp.uncompress();
-
-		Assert.assertEquals("Hello", xml);
+		String compressedData = FileWriters.readFile("resources/myBaseZip.txt");
+		
+		UnCompress unComp = new UnCompressGzip(compressedData);
+		Assert.assertEquals("Hello", unComp.uncompress());
 
 	}
 
@@ -56,11 +32,11 @@ public class UnCompressTest {
 	@Test
 	public void uncomprssEatXmlBig() throws IOException {
 		
-		UnCompressInterface comp = new UnCompressEat(readFile("resources/biggerXml.txt"));
+		UnCompress comp = new UnCompressEat(FileWriters.readFile("resources/biggerXml.txt"));
 		
 		String xml = comp.uncompress();
 
-        String refxml = readFile("resources/biggerXml.xml");
+        String refxml = FileWriters.readFile("resources/biggerXml.xml");
 		
 		Assert.assertEquals(refxml, xml);
 
@@ -69,11 +45,11 @@ public class UnCompressTest {
 	@Test
 	public void uncomprssEatXmlSmall() throws IOException {
 		
-		UnCompressInterface comp = new UnCompressEat(readFile("resources/shorterXml.txt"));
+		UnCompress comp = new UnCompressEat(FileWriters.readFile("resources/shorterXml.txt"));
 		
 		String xml = comp.uncompress();
 
-        String refxml = readFile("resources/shorterXml.xml");
+        String refxml = FileWriters.readFile("resources/shorterXml.xml");
 		
 		Assert.assertEquals(refxml, xml);
 
@@ -82,7 +58,7 @@ public class UnCompressTest {
 	@Test
 	public void uncomprssEatXmlHalloSmall() throws IOException {
 		
-		UnCompressInterface comp = new UnCompressEat(readFile("resources/HalloString.txt"));
+		UnCompress comp = new UnCompressEat(FileWriters.readFile("resources/HalloString.txt"));
 		
 //		FileWriters.writeByteToFile(comp.getCompressedData());
 		

@@ -8,7 +8,7 @@ import java.nio.charset.Charset;
 
 import org.apache.commons.codec.binary.Base64;
 
-public abstract class UnCompressAbstract implements UnCompressInterface {
+public abstract class UnCompressAbstract implements UnCompress {
 	byte[] compressedData = null;
 	String charset = null;
 
