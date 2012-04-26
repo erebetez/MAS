@@ -27,7 +27,7 @@ public class UnCompressEat extends UnCompressAbstract {
 			e.printStackTrace();
 			return null;
 		}
-
+		
 		int delimiterPos = getDelimiterPosition(compressedString);
 
 		int unCompressedLenght = getUnCompressedLength(compressedString,
@@ -45,7 +45,7 @@ public class UnCompressEat extends UnCompressAbstract {
 			returnValue = super.readInputStream(inputStream);
 
 		} catch (IOException e1) {
-
+            System.out.println("Delimitterposition: " + delimiterPos);
 			e1.printStackTrace();
 		}
 
@@ -59,8 +59,8 @@ public class UnCompressEat extends UnCompressAbstract {
 		return compressedString.indexOf(":");
 	}
 
-	private int getUnCompressedLength(String compressedString2, int delimiterPos) {
-		String theHexLength = compressedString2.substring(0, delimiterPos);
+	private int getUnCompressedLength(String compressedString, int delimiterPos) {
+		String theHexLength = compressedString.substring(0, delimiterPos);
 		return Integer.valueOf(theHexLength, 16).intValue();
 	}
 

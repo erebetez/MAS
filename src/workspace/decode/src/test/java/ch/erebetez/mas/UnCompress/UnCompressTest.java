@@ -1,5 +1,7 @@
 package ch.erebetez.mas.UnCompress;
 
+import ch.erebetez.utils.*;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -74,6 +76,17 @@ public class UnCompressTest {
         String refxml = readFile("resources/shorterXml.xml");
 		
 		Assert.assertEquals(refxml, xml);
+
+	}	
+	
+	@Test
+	public void uncomprssEatXmlHalloSmall() throws IOException {
+		
+		UnCompressInterface comp = new UnCompressEat(readFile("resources/HalloString.txt"));
+		
+//		FileWriters.writeByteToFile(comp.getCompressedData());
+		
+		Assert.assertEquals("Hallo", comp.uncompress());
 
 	}	
 }

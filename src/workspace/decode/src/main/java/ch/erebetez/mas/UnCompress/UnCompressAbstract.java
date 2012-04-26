@@ -12,6 +12,10 @@ public abstract class UnCompressAbstract implements UnCompressInterface {
 	byte[] compressedData = null;
 	String charset = null;
 
+	public byte[] getCompressedData() {
+		return compressedData;
+	}
+	
 	public String getCharset() {
 		return charset;
 	}
