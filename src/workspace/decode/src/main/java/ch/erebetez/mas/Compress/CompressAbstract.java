@@ -1,11 +1,8 @@
 package ch.erebetez.mas.Compress;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
-import java.nio.charset.Charset;
+
 
 import org.apache.commons.codec.binary.Base64;
 
@@ -35,6 +32,13 @@ public abstract class CompressAbstract implements Compress {
 		this.charset = charset;
 		this.payload = payload;
 	}
-
+	
+	public String encodeDataToBase64(){
+		return Base64.encodeBase64URLSafeString( this.compressedData );
+	}
+	
+	public void saveOutputStreamAsByteArray(OutputStream outputStream){
+		this.compressedData = ((ByteArrayOutputStream) outputStream).toByteArray();
+	}
 	
 }
