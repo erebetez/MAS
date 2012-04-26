@@ -1,8 +1,9 @@
-package ch.erebetez.mas;
+package ch.erebetez.mas.UnCompress;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
 import com.jcraft.jzlib.Inflater;
@@ -18,7 +19,14 @@ public class UnCompressEat extends UnCompressAbstract {
 	@Override
 	public String uncompress() {
 		String returnValue = null;
-		String compressedString = new String(compressedData);
+		String compressedString;
+		
+		try {
+			compressedString = new String(compressedData, super.charset);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return null;
+		}
 
 		int delimiterPos = getDelimiterPosition(compressedString);
 
@@ -27,7 +35,7 @@ public class UnCompressEat extends UnCompressAbstract {
 
 		try {
 
-			// No idea why the position has to be shifted 3 bytes.
+			// FIXME: No idea why the position has to be shifted 3 bytes.
 			byte[] source = Arrays.copyOfRange(compressedData,
 					delimiterPos + 3, compressedData.length);
 

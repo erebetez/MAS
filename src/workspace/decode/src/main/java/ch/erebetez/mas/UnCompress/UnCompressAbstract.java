@@ -1,4 +1,4 @@
-package ch.erebetez.mas;
+package ch.erebetez.mas.UnCompress;
 
 import java.io.BufferedReader;
 import java.io.IOException;
