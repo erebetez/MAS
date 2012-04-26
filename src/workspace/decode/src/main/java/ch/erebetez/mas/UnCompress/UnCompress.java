@@ -1,6 +1,6 @@
 package ch.erebetez.mas.UnCompress;
 
-public interface UnCompressInterface {
+public interface UnCompress {
 	
 	public String getCharset();
 	
