@@ -1,4 +1,10 @@
-package ch.cslbehring.util;
+/* *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * 
+ Code is from 
+ http://beradrian.wordpress.com/2008/11/03/detecting-process-exit-in-java/
+ 
+ Thanks Adrian
+ *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  */
+package ch.erebetez.util;
 
 import java.util.*;
 
@@ -22,6 +28,7 @@ public class ProcessExitDetector extends Thread {
             process.exitValue();
             throw new IllegalArgumentException("The process is already ended");
         } catch (IllegalThreadStateException exc) {
+        	System.out.println("add process " + process.toString());
             this.process = process;
         }
     }
@@ -33,13 +40,19 @@ public class ProcessExitDetector extends Thread {
 
     public void run() {
         try {
-            // wait for the process to finish
+        	System.out.println("run startet " + process.toString());
+            
+        	// wait for the process to finish
             process.waitFor();
+            
+            
+            System.out.println("process beendet " + process.toString());
             // invokes the listeners
             for (ProcessListener listener : listeners) {
                 listener.processFinished(process);
             }
         } catch (InterruptedException e) {
+        	System.out.println("Error " + process.toString());
         }
     }
 
