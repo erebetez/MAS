@@ -19,7 +19,17 @@
 
 package ch.erebetez.mas.Compress;
 
-public class CompressEat extends CompressAbstract{
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
+
+import com.jcraft.jzlib.Deflater;
+import com.jcraft.jzlib.DeflaterOutputStream;
+import com.jcraft.jzlib.JZlib;
+
+public class CompressEat extends CompressAbstract {
 
 	CompressEat(String payload) {
 		super(payload, "windows-1252");
@@ -28,11 +38,49 @@ public class CompressEat extends CompressAbstract{
 	@Override
 	public String compress() {
 
-		
-		
-		return null;
+		OutputStream outputStream = new ByteArrayOutputStream();
+		DeflaterOutputStream outZlib = null;
+
+		try {
+			outZlib = new DeflaterOutputStream(outputStream,  new Deflater(JZlib.Z_BEST_COMPRESSION) );
+
+			outZlib.write(super.payload.getBytes(super.charset));
+			outZlib.close();
+
+			super.saveOutputStreamAsByteArray(outputStream);
+
+			prependLenghtInformation();
+
+		} catch (UnsupportedEncodingException e) {
+
+			e.printStackTrace();
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
+
+		return super.encodeDataToBase64();
+
 	}
 
-	
-	
+	private void prependLenghtInformation() {
+		StringBuffer buffer = new StringBuffer();
+
+		buffer.append(Integer.toHexString(super.payload.length()));
+		buffer.append(":");
+
+		buffer.toString().getBytes();
+
+		super.compressedData = concatByte(buffer.toString().getBytes(),
+				super.compressedData);
+		
+
+	}
+
+	private byte[] concatByte(byte[] first, byte[] second) {
+		byte[] result = Arrays.copyOf(first, first.length + second.length);
+		System.arraycopy(second, 0, result, first.length, second.length);
+		return result;
+	}
+
 }

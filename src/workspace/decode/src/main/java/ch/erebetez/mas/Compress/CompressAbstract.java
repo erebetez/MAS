@@ -53,7 +53,16 @@ public abstract class CompressAbstract implements Compress {
 	}
 	
 	public String encodeDataToBase64(){
-		return Base64.encodeBase64URLSafeString( this.compressedData );
+		// The URLSave mode does truncate the equals from the end.
+		Base64 base64Object = new Base64(-1, null, false);		
+
+		String base64String = new String(base64Object.encodeAsString( this.compressedData ));
+		
+		// It's easyer to replace the not URL conform Chars, than to calculate the needed equals to append.  
+		base64String = base64String.replace('+', '-');
+		base64String = base64String.replace('/', '_');
+		
+		return base64String;
 	}
 	
 	public void saveOutputStreamAsByteArray(OutputStream outputStream){

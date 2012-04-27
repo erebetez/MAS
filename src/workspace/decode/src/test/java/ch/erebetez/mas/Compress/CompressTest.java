@@ -32,7 +32,7 @@ import ch.erebetez.utils.FileWriters;
 public class CompressTest {
 
 		@Test
-		public void uncompressGZip() throws IOException {
+		public void uncompressSmallGZip() throws IOException {
 
 			String compressedData = FileWriters.readFile("resources/myBaseZip.txt");
 			
@@ -44,8 +44,41 @@ public class CompressTest {
 			System.out.println(compressedData);
 			System.out.println(comp.compress());
 			Assert.assertEquals(compressedData, comp.compress());
-		
 
 		}
 
+		@Test
+		public void comprssEatXmlHalloSmall() throws IOException {
+			
+			Compress comp = new CompressEat("Hallo");
+			
+			String compressedReference = FileWriters.readFile("resources/HalloString.txt");
+			
+			System.out.println(compressedReference);
+			
+			String compressed = comp.compress();
+			
+			System.out.println(compressed);
+			
+			Assert.assertEquals(compressedReference, compressed);
+
+		}
+		
+		@Test
+		public void comprssEatBiggerXml() throws IOException {
+			
+			Compress comp = new CompressEat(FileWriters.readFile("resources/biggerXml.xml"));
+			
+			String compressedReference = FileWriters.readFile("resources/biggerXml.txt");
+			
+			System.out.println(compressedReference);
+			
+			String compressed = comp.compress();
+			
+			System.out.println(compressed);
+			
+			Assert.assertEquals(compressedReference, compressed);
+
+		}	
+		
 }
