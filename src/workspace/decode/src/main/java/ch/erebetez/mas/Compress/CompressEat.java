@@ -31,7 +31,7 @@ import com.jcraft.jzlib.JZlib;
 
 public class CompressEat extends CompressAbstract {
 
-	CompressEat(String payload) {
+	public CompressEat(String payload) {
 		super(payload, "windows-1252");
 	}
 

@@ -42,11 +42,11 @@ public abstract class CompressAbstract implements Compress {
 		this.charset = charset;
 	}
 
-	CompressAbstract(String payload) {		
+	public CompressAbstract(String payload) {		
 		this(payload, "UTF-8");
 	}
 
-	CompressAbstract(String payload, String charset) {
+	public CompressAbstract(String payload, String charset) {
 		super();
 		this.charset = charset;
 		this.payload = payload;

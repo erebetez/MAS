@@ -26,7 +26,7 @@ import java.util.zip.GZIPInputStream;
 
 public class UnCompressGzip extends UnCompressAbstract {
 
-	UnCompressGzip(String payload) {
+	public UnCompressGzip(String payload) {
 		super(payload);
 
 	}

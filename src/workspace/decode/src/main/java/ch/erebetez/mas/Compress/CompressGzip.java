@@ -24,7 +24,7 @@ import java.util.zip.*;
 
 public class CompressGzip extends CompressAbstract {
 
-	CompressGzip(String payload) {
+	public CompressGzip(String payload) {
 		super(payload);
 	}
 

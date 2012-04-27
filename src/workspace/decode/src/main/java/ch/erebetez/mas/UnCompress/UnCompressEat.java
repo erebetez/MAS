@@ -31,7 +31,7 @@ import com.jcraft.jzlib.JZlib;
 
 public class UnCompressEat extends UnCompressAbstract {
 
-	UnCompressEat(String payload) {
+	public UnCompressEat(String payload) {
 		super(payload, "windows-1252");
 	}
 

@@ -43,11 +43,11 @@ public abstract class UnCompressAbstract implements UnCompress {
 		this.charset = charset;
 	}
 
-	UnCompressAbstract(String payload) {		
+	public UnCompressAbstract(String payload) {		
 		this(payload, "UTF-8");
 	}
 
-	UnCompressAbstract(String payload, String charset) {
+	public UnCompressAbstract(String payload, String charset) {
 		super();
 		this.charset = charset;
 		
