@@ -117,9 +117,6 @@ welches qualifizierte Gerät darf verwendet werden,
 wie werden die Daten verrechnet und schlussendlich wie werden die Resultate wieder an das nächst höhere System weitergegeben.
 Gleichzeitig solle das System den Laborarbeiter unterstützen und die durchgeführten Schritte sollten in alle nachvollziehbar sein.
 
-Im Labor gibt es nun verschiedenste Methoden welche unterschiedliche Ursprünge haben. So ist eine Chemische Titration ein vollkommen anderes Konzept 
-als z.B eine Biochemische Elysa Analyse.
-Dies ergibt ein äusserst Heterogene Landschaft an Analysegeräten mit und ohne Software. Resultate oder Rohdaten liegen in unterschiedlichsten Formaten und Layouts vor.
 
 <Geräte Software>
 
@@ -128,28 +125,114 @@ Dies ergibt ein äusserst Heterogene Landschaft an Analysegeräten mit und ohne 
 Menschen sind ausserordentlich gut darin Informationen 
 
 
+\section{Die Laborumgebung}
+Im Labor gibt es nun verschiedenste Methoden welche unterschiedliche Historische Ursprünge haben. So ist eine Chemische Titration ein
+vollkommen anderes Konzept als z.B eine Biochemische Elisa Analyse.
+Dies ergibt ein äusserst Heterogene Landschaft an Analysegeräten mit und ohne Software. Resultate oder Rohdaten liegen in unterschiedlichsten Formaten und Layouts vor.
 
 
 
 
 
 \section{Konzept}
+Um eine Automatisierung in diesem Heterogenen Umfeld realisieren zu können, braucht es eine Engine die einerseits den Status der einzelnen
+Abläufe kennt und auch weiss welcher Businessprozess als nächster aufgerufen werden soll. Diese Statemachien oder Sheduler währe somit das
+Herzstück der Automatisierung. Häufig fällt auch der Begriff SOA (Service Oriented Architecture).
 
+Das Labor ist lange nicht der einzige Bereich welcher eine Automatisierung verlangt. Andere Branchen habe grundsätzlich das selbe
+Bedürfnis. Daher gibt es schon eine reihe von Produkten welche diese Statemachienen bereits anbieten.
 
-\section{BPMN}
+Die Konfiguration dieser Engines geschieht über standardisierte XML Files. Dabei haben sich zwei Beschreibungssprachen etabliert:
+\begin{itemize}
+ \item BPEL
+ \item BPMN
+\end{itemize}
+
+Beide sind offene Standards vom OMG \cite{omg}.
+
 
 
 \section{BPEL}
+Die BPEL (Business Process Execution Language) Beschreibungsprache kommt aus der Informatikwelt. Diese wird hat Beschreibungen zu
+Schleifen, Bedingugnen und anderes Konstrukte die man aus der Programmierung kennt. 
+
+
+\section{BPMN}
+BPMN (Business Process Model and Notation) kommt aus dem Business und war gedacht erstmals auf dem Papier die Prozesse einheitlich
+beschreiben zu können. Grob gesagt, handelt es sich um Flowcharts. 
+Mit der Version 2 vom BPMN können diese Flowcharts nun auch programmatisch ausgeführt werden. 
+
 
 
 
 \section{Engines}
+Die Engine ist nun eine Implementierung einer solchen Business Prozess Beschreibung. Die Engines erfüllen nun die Logik. 
+\begin{itemize}
+  \item Welche Prozesse gibt es?
+  \item Welche sind aktiv und in welchem zustand?
+  \item Der Prozess wird korrekt weiter geführt, auch wenn der Server Abstürzen würde.
+  \item Was passiert mit einer neuen Version eines Prozessen und so weiter.                      
+\end{itemize}
+
+Das sind alles relativ komplexe aufgaben, welche man im Normalfall nicht selber neu erfinden möchte.
+
+Es folgt nun ein verglich verschiedener Engines. Die getroffene Auswahl ist weit weg von vollständig.
+
+
+
+\subsection{activVOS}
+Active Endpoints, Inc. 
+
+java. 
+proprietär (setzt aber auf offenen standards)
+eclipse plugin.
+Viele Guis
+Hat zum Beispiel ein Report designer.
+
+Preise?
+
+Dokumentation:
+Diverse Videos und demos
+
+\subsection{biztalk}
+Microsoft
+.NET
+proprietär
+nur bpel
+
+
+Preise?
+
+Dokumentation:
+
+
+\subsection{Apache ODE}
+apache fundation
+java
+open source
+nur bpel engine
+
+
 
 \subsection{activiti}
+java
+opensource
+nur bpmn engine
+open source
+schlank und aufgeräumt
 
 
-\subsection{activiti}
 
+\subsection{Übersicht}
+
+
+
+
+\section{Technologie Wahl}
+
+
+
+\section{Datennormalisierung}
 
 
 
@@ -159,6 +242,8 @@ Menschen sind ausserordentlich gut darin Informationen
 \begin{thebibliography}{99}
 
 \bibitem{activiti} \url{http://www.activiti.org/}
+
+\bibitem{omg} \url{http://www.omg.org/}
 
 
 
