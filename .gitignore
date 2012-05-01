@@ -1,0 +1,12 @@
+ 
+.*
+
+*.jar
+*.log
+*.toc
+*.class
+*.out
+
+target/
+
+build/
