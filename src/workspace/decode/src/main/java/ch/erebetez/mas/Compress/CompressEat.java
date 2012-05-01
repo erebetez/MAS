@@ -35,7 +35,6 @@ public class CompressEat extends CompressAbstract {
 		super(payload, "windows-1252");
 	}
 
-	@Override
 	public String compress() {
 
 		OutputStream outputStream = new ByteArrayOutputStream();

@@ -67,7 +67,7 @@ public class CompressTest {
 		@Test
 		public void comprssEatBiggerXml() throws IOException {
 			
-			Compress comp = new CompressEat(FileWriters.readFile("resources/biggerXml.xml"));
+			Compress comp = new CompressEat(FileWriters.readFile("resources/biggerXml.xml", "windows-1252"));
 			
 			String compressedReference = FileWriters.readFile("resources/biggerXml.txt");
 			

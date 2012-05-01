@@ -34,9 +34,10 @@ public class UnCompressTest {
 		
 		UnCompress comp = new UnCompressEat(FileWriters.readFile("resources/biggerXml.txt"));
 		
+		
 		String xml = comp.uncompress();
 
-        String refxml = FileWriters.readFile("resources/biggerXml.xml");
+        String refxml = FileWriters.readFile("resources/biggerXml.xml", "windows-1252");
 		
 		Assert.assertEquals(refxml, xml);
 

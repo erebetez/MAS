@@ -46,14 +46,18 @@ public class FileWriters {
         }
 		
 	}
-	
+
 	public static String readFile(String filename) {
+		return readFile(filename, "UTF-8");
+	}
+	
+	public static String readFile(String filename, String charset) {
 		StringBuilder text = new StringBuilder();
 
 		Scanner scanner;
 		try {
 			scanner = new Scanner(
-					new FileInputStream(filename));
+					new FileInputStream(filename), charset);
 			try {
 				while (scanner.hasNextLine()) {
 					text.append(scanner.nextLine());

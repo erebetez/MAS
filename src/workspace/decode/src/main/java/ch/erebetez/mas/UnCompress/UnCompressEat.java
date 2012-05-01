@@ -35,7 +35,6 @@ public class UnCompressEat extends UnCompressAbstract {
 		super(payload, "windows-1252");
 	}
 
-	@Override
 	public String uncompress() {
 		String returnValue = null;
 		String compressedString;

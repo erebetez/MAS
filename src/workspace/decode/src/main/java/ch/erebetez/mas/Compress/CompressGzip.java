@@ -28,7 +28,6 @@ public class CompressGzip extends CompressAbstract {
 		super(payload);
 	}
 
-	@Override
 	public String compress() {
 		
 		OutputStream outputStream = new ByteArrayOutputStream ();

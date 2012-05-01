@@ -31,7 +31,6 @@ public class UnCompressGzip extends UnCompressAbstract {
 
 	}
 
-	@Override
 	public String uncompress() {
 		String returnData = null;
 
