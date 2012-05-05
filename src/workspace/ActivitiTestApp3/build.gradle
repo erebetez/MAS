@@ -1,0 +1,38 @@
+apply plugin: 'war'  
+apply plugin: 'eclipse'  
+apply plugin: 'jetty'  
+    
+// Project properties  
+version = "0.0.1"  
+sourceCompatibility = 1.6  
+targetCompatibility = 1.6  
+webAppDirName = 'WebContent'  
+  
+// Repositories  
+repositories{  
+    mavenCentral()
+    
+    maven {
+        url "http://maven.alfresco.com/nexus/content/repositories/activiti"
+    }
+    
+    maven {
+        url "http://maven.vaadin.com/vaadin-addons"
+    }    
+}  
+    
+// Dependencies  
+dependencies{  
+    compile group:'com.vaadin', name:'vaadin', version:'6.7.5'
+    compile group:'org.activiti', name:'activiti-engine', version:'5.9'
+    compile group:'org.vaadin.addons', name:'org.vaadin.mvp.common', version:'0.9.0'    
+} 
+  
+// Source directories  
+sourceSets{  
+    main{  
+    	java{  
+    	    srcDir 'src'  
+    	}  
+    }  
+}   
