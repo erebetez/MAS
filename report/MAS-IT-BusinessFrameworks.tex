@@ -258,11 +258,32 @@ Viele GUI's.
 Monitoring, Reporting werkzeuge dabei.
 Hauptsächlich für SAP entwickelt
 Wird eventuel von <Firma> eingekauft/verwendet.
+Programmierung und Konfiguration muss fast eingekauft werden.
 
 
 
-\subsection{Übersicht}
+\subsection{Zusammenfassung}
+BPMN ist auf Gurnd der Business nähe eher für Laborprozesse geignet als das BPEL.
 
+Betrachtet man jetzt nur die BPMN Engines, bleibt von den oben genannten nur noch das ActiVOS, activit und ARIS übrig.
+
+ActiVOS bietet vor allem zusätzliche GUI's an um die Konfiguratin "einfacher" zu machen. Es geschieht viel im Hintergrund. 
+So gesehen bietet es einen relativen geringen Mehrwert.
+
+ARIS ist das grosse rundum-sorglos-paket. Leider wird einem auch alles code relevante versteckt. Es daher nötig alles bei der anbietenden Firma einzukaufen oder extra ein paar Schulungen beim Anbieter zu machen.
+
+activit verzichtet auf eigene Gui's. Es bietet hauptsächlich eine durchdachte programmierschnitstelle an. Dadurch bleibt es schlank und beschränkt sich auf das wesentliche, nähmlich dem verwalten der Prozesse. Die einarbeitung ist eher schwieriger, da direkt alles im code implementiert wird.
+
+Der Monolytische ansatz hat sich in der vergangenheit nicht bewährt. Mit dieser Anforderung stickt das actvit sehr positiv heraus. Weiter Tools die benötigt würden wie das Monitoring oder Reporting, können dann von anderen Tools welche in dem gebiet spezilisiert sind implementiert werden.
+Nimmt man zudem Vaadin als Webframework, spielt es sehr gut mit activiti zusammen.
+
+
+\subsection{Kompatibilität}
+Trotz des BPMN Standards, haben die verschiedenen implementierunge der Engines eigene schlüsselwörter, wie z.B für Formulare. 
+Die BPMN Beschreibungen können daher nicht "einfach so" von einer zu anderen engine kopiert werden. 
+Die Wahl der Engine ist demnach schon bindend.
+
+Da aber immerhin die Geschäftslogik schön abgekapselt ist, ist das portieren einfacher, als wenn man alles in reinem jave programiert hätte.
 
 
 \section{Beispiel Applikation}
