@@ -1,17 +1,13 @@
 package ch.erebetez.mas.UnCompress;
 
-import ch.erebetez.utils.*;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Scanner;
+
+import ch.erebetez.utils.*;
 
 import junit.framework.Assert;
 
 import org.junit.Test;
 
-import ch.erebetez.mas.Compress.*;
 import ch.erebetez.mas.UnCompress.UnCompressEat;
 import ch.erebetez.mas.UnCompress.UnCompressGzip;
 import ch.erebetez.mas.UnCompress.UnCompress;
