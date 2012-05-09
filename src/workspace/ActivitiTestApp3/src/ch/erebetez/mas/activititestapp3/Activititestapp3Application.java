@@ -1,20 +1,10 @@
 package ch.erebetez.mas.activititestapp3;
 
-
-import java.util.logging.Level;
-
-import org.activiti.engine.IdentityService;
-import org.activiti.engine.ManagementService;
-import org.activiti.engine.ProcessEngine;
-import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.RepositoryService;
-import org.activiti.engine.RuntimeService;
-import org.activiti.engine.TaskService;
-import org.activiti.engine.identity.Group;
-import org.activiti.engine.identity.GroupQuery;
-import org.activiti.engine.identity.User;
-import org.activiti.engine.identity.UserQuery;
+
 import org.activiti.engine.repository.ProcessDefinition;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 
 import com.vaadin.Application;
 import com.vaadin.ui.*;
@@ -22,8 +12,12 @@ import com.vaadin.ui.Button.ClickEvent;
 
 
 @SuppressWarnings("serial")
+@Configurable(preConstruction = true)
 public class Activititestapp3Application extends Application {
 
+    @Autowired
+    protected RepositoryService repositoryService;
+	
 	private Window window = null;
 	
 	private VerticalLayout layout = null;
@@ -31,6 +25,7 @@ public class Activititestapp3Application extends Application {
 	@Override
 	public void init() {
 //		setTheme("VaadinActivitiDemo");
+		SetupDemo.init();
 		createAndShowLoginWindow();
 	}
 
@@ -62,13 +57,12 @@ public class Activititestapp3Application extends Application {
 //       
 //       IdentityService identityService = processEngine.getIdentityService();
 
-////	   ProcessDefinition def = repositoryService
-////				.createProcessDefinitionQuery()
-////				.processDefinitionKey("panRefereceSamples").singleResult();       
-//       
+	   ProcessDefinition def = repositoryService
+				.createProcessDefinitionQuery()
+				.processDefinitionKey("panRefereceSamples").singleResult();       
 	   
        
-       layout.addComponent(new Label("Hello ...!")); 
+       layout.addComponent(new Label("Hello ...! " + def.getName())); 
        layout.addComponent(button); 
        
        
@@ -90,8 +84,8 @@ public class Activititestapp3Application extends Application {
 
 	@Override
 	public void close() {
-		ProcessEngines.getDefaultProcessEngine().getIdentityService()
-				.setAuthenticatedUserId(null);
+//		ProcessEngines.getDefaultProcessEngine().getIdentityService()
+//				.setAuthenticatedUserId(null);
 		super.close();
 	}
 

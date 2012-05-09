@@ -2,25 +2,31 @@
 <web-app id="WebApp_ID" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 	<display-name>ActivitiTestApp3</display-name>
 	<context-param>
-		<description>
-		Vaadin production mode</description>
+		<description>Vaadin production mode</description>
 		<param-name>productionMode</param-name>
 		<param-value>false</param-value>
 	</context-param>
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:application-context.xml</param-value>
+    </context-param>	
 	<servlet>
 		<servlet-name>Activititestapp3 Application</servlet-name>
 		<servlet-class>com.vaadin.terminal.gwt.server.ApplicationServlet</servlet-class>
 		<init-param>
-			<description>
-			Vaadin application class to start</description>
+			<description>Vaadin application class to start</description>
 			<param-name>application</param-name>
 			<param-value>ch.erebetez.mas.activititestapp3.Activititestapp3Application</param-value>
 		</init-param>
 	</servlet>
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>	
 	<servlet-mapping>
 		<servlet-name>Activititestapp3 Application</servlet-name>
 		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
+	
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 		<welcome-file>index.htm</welcome-file>

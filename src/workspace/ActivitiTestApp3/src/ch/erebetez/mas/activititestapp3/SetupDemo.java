@@ -3,10 +3,6 @@ package ch.erebetez.mas.activititestapp3;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.annotation.WebListener;
-
 import org.activiti.engine.IdentityService;
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.RepositoryService;
@@ -14,36 +10,41 @@ import org.activiti.engine.identity.Group;
 import org.activiti.engine.identity.GroupQuery;
 import org.activiti.engine.identity.User;
 import org.activiti.engine.identity.UserQuery;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 
-@WebListener
-public class ProcessEngineServletContextListener implements
-		ServletContextListener {
 
+@Configurable(preConstruction = true)
+public class SetupDemo {
+	
+    @Autowired
+    protected static IdentityService identityService;	
+	
+	
 	private static final Logger log = Logger
-			.getLogger(ProcessEngineServletContextListener.class.getName());
-
-	@Override
-	public void contextDestroyed(ServletContextEvent event) {
+			.getLogger("Setup");
+	
+	public static void close() {
 		log.info("Destroying process engines");
-		ProcessEngines.destroy();
+//		ProcessEngines.destroy();
 	}
 
-	@Override
-	public void contextInitialized(ServletContextEvent event) {
+
+	public static void init() {
 		log.info("Initializing process engines");
-		ProcessEngines.init();
+//		ProcessEngines.init();
 		createGroupsIfNotPresent();
 		createAdminUserIfNotPresent();
 		deployProcesses();
 	}
 
-	private void createAdminUserIfNotPresent() {
+	private static void createAdminUserIfNotPresent() {
 		if (!isAdminUserPresent()) {
 			createAdminUser();
 		}
 	}
 
-	private void createGroupsIfNotPresent() {
+	private static void createGroupsIfNotPresent() {
 		if (!isGroupPresent("managers")) {
 			createGroup("managers", "Managers");
 		}
@@ -55,56 +56,54 @@ public class ProcessEngineServletContextListener implements
 		}
 	}
 
-	private boolean isAdminUserPresent() {
-		UserQuery query = getIdentityService().createUserQuery();
+	private static boolean isAdminUserPresent() {
+		UserQuery query = identityService.createUserQuery();
 		query.userId("admin");
 		return query.count() > 0;
 	}
 
-	private void createAdminUser() {
+	private static void createAdminUser() {
 		log.info("Creating an administration user with the username 'admin' and password 'password'");
-		User adminUser = getIdentityService().newUser("admin");
+		User adminUser = identityService.newUser("admin");
 		adminUser.setFirstName("Arnold");
 		adminUser.setLastName("Administrator");
 		adminUser.setPassword("password");
-		getIdentityService().saveUser(adminUser);
+		identityService.saveUser(adminUser);
 		assignAdminUserToGroups();
 	}
 
-	private void assignAdminUserToGroups() {
-		getIdentityService().createMembership("admin", "managers");
-		getIdentityService().createMembership("admin", "developers");
-		getIdentityService().createMembership("admin", "reporters");
+	private static void assignAdminUserToGroups() {
+		identityService.createMembership("admin", "managers");
+		identityService.createMembership("admin", "developers");
+		identityService.createMembership("admin", "reporters");
 	}
 
-	private boolean isGroupPresent(String groupId) {
-		GroupQuery query = getIdentityService().createGroupQuery();
+	private static boolean isGroupPresent(String groupId) {
+		GroupQuery query = identityService.createGroupQuery();
 		query.groupId(groupId);
 		return query.count() > 0;
 	}
 
-	private void createGroup(String groupId, String groupName) {
+	private static void createGroup(String groupId, String groupName) {
 		log.log(Level.INFO,
 				"Creating a group with the id '{1}' and name '{2}'",
 				new Object[] { groupId, groupName });
-		Group group = getIdentityService().newGroup(groupId);
+		Group group = identityService.newGroup(groupId);
 		group.setName(groupName);
-		getIdentityService().saveGroup(group);
+		identityService.saveGroup(group);
 	}
 
-	private IdentityService getIdentityService() {
-		return ProcessEngines.getDefaultProcessEngine().getIdentityService();
-	}
-
-	private void deployProcesses() {
+	private static void deployProcesses() {
 		log.info("Deploying processes");
 		RepositoryService repositoryService = ProcessEngines
 				.getDefaultProcessEngine().getRepositoryService();
 		repositoryService
 				.createDeployment()
 				.addClasspathResource(
-						"ch/erebetez/mas/activititestapp3/bpmn/PanExample.bpmn20.xml")
+						"ch/erebetez/mas/bpmn/PanExample.bpmn20.xml")
 				.deploy();
 	}
 
+	
+	
 }
