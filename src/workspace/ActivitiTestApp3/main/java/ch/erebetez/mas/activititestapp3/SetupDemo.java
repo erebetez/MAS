@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Configurable;
 public class SetupDemo {
 	
     @Autowired
-    protected static IdentityService identityService;	
+    protected static IdentityService identityService;
 	
 	
 	private static final Logger log = Logger

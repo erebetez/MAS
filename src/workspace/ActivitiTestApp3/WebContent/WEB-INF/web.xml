@@ -8,8 +8,8 @@
 	</context-param>
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:application-context.xml</param-value>
-    </context-param>	
+        <param-value>classpath:ch/erebetez/mas/activititestapp3/application-context.xml</param-value>
+    </context-param>
 	<servlet>
 		<servlet-name>Activititestapp3 Application</servlet-name>
 		<servlet-class>com.vaadin.terminal.gwt.server.ApplicationServlet</servlet-class>

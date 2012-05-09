@@ -18,7 +18,8 @@ repositories{
     
     maven {
         url "http://maven.vaadin.com/vaadin-addons"
-    }    
+    }  
+    
 }  
     
 project.ext.set("activitiVersion", "5.9")
@@ -56,16 +57,18 @@ dependencies{
 }
   
   
-war {
-    webInf { from 'src/application-context.xml' } // adds a file-set to the WEB-INF dir.
-}
+
   
   
 // Source directories  
-sourceSets{  
+sourceSets{
     main{  
     	java{  
-    	    srcDir 'src'  
-    	}  
+    	    srcDir 'main/java'  
+    	}
+    	
+    	resources{
+    	    srcDir 'main/resources'
+    	}
     }  
 }   
