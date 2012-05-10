@@ -150,18 +150,6 @@
             <url>http://maven.alfresco.com/nexus/content/repositories/activiti/</url>
         </repository>
         <repository>
-            <id>vaadin-addons</id>
-            <url>http://maven.vaadin.com/vaadin-addons</url>
-        </repository>	
-        <repository>
-            <id>icepush</id>
-            <url>http://anonsvn.icefaces.org/repo/maven2/releases/</url>
-        </repository>
-        <repository>
-            <id>icepush-gwt</id>
-            <url>http://openccdb.org:8081/nexus/content/repositories/thirdparty</url>
-        </repository>
-        <repository>
             <id>eclipselink</id>
             <url>http://download.eclipse.org/rt/eclipselink/maven.repo</url>
         </repository>
@@ -245,18 +233,7 @@
                 <artifactId>javax.persistence</artifactId>
                 <version>2.0.3</version>
             </dependency>
-        
-        <!-- Validation -->
-            <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-validator</artifactId>
-                <version>4.2.0.Final</version>
-            </dependency>    
-            <dependency>
-                <groupId>javax.validation</groupId>
-                <artifactId>validation-api</artifactId>
-                <version>1.0.0.GA</version>
-            </dependency>    
+  
 
 	<!-- Spring -->
             <dependency>
@@ -335,19 +312,6 @@
                 <version>${slf4j.version}</version>
             </dependency>   
         
-        <!-- Reflections -->
-            <dependency>
-                <groupId>org.reflections</groupId>
-                <artifactId>reflections</artifactId>
-                <version>0.9.5</version>
-            </dependency>    
-        
-        <!-- Commons -->
-            <dependency>
-                <groupId>commons-lang</groupId>
-                <artifactId>commons-lang</artifactId>
-                <version>2.6</version>
-            </dependency>
     
     <!--
     <dependency>

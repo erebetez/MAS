@@ -56,7 +56,7 @@ public class Activititestapp4 extends Application {
 		
 		ProcessDefinition def = repositoryService
 				.createProcessDefinitionQuery()
-				.processDefinitionKey("easyProcess").singleResult();
+				.processDefinitionKey("easyProcess").latestVersion().singleResult();
 
 		
 		layout.addComponent(new Label("Hello ...! " + def.getName()));
