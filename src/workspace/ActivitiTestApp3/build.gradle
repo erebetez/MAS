@@ -1,7 +1,8 @@
 apply plugin: 'war'  
 apply plugin: 'eclipse'  
 apply plugin: 'jetty'  
-    
+//apply url:'http://github.com/breskeby/gradleplugins/raw/0.9-upgrade/aspectjPlugin/aspectJ.gradle'
+
 // Project properties  
 version = "0.0.1"  
 sourceCompatibility = 1.6  
@@ -64,11 +65,11 @@ dependencies{
 sourceSets{
     main{  
     	java{  
-    	    srcDir 'main/java'  
+    	    srcDir 'src/main/java'  
     	}
     	
     	resources{
-    	    srcDir 'main/resources'
+    	    srcDir 'src/main/resources'
     	}
     }  
 }   
