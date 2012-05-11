@@ -1,14 +1,19 @@
 package ch.erebetez.activititestapp4;
 
 
+import java.util.List;
+
+import org.activiti.engine.IdentityService;
 import org.activiti.engine.RepositoryService;
+import org.activiti.engine.identity.User;
+import org.activiti.engine.identity.UserQuery;
 import org.activiti.engine.repository.ProcessDefinition;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
-
 import com.vaadin.Application;
+import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 
@@ -19,14 +24,21 @@ public class Activititestapp4 extends Application {
 	@Autowired
 	protected RepositoryService repositoryService;
 
+    @Autowired
+    protected IdentityService identityService;
+
 	private Window window = null;
 
 	private VerticalLayout layout = null;
 
+	private Table userTable;
+	
+	
 	@Override
 	public void init() {
 		// setTheme("VaadinActivitiDemo");
-		// SetupDemo.init();
+		SetupInitialData setup = new SetupInitialData();
+		setup.init();
 
 		createAndShowLoginWindow();
 	}
@@ -48,20 +60,33 @@ public class Activititestapp4 extends Application {
 				layout.addComponent(new Label("Thank you for clicking"));
 			}
 		});
-
-		repositoryService.createDeployment()
-				.addClasspathResource(
-						"ch/erebetez/activititestapp4/bpmn/easy.bpmn20.xml")
-				.deploy();
 		
 		ProcessDefinition def = repositoryService
 				.createProcessDefinitionQuery()
 				.processDefinitionKey("easyProcess").latestVersion().singleResult();
+		
 
 		
 		layout.addComponent(new Label("Hello ...! " + def.getName()));
 		layout.addComponent(button);
 
+		userTable = new Table();
+		layout.addComponent(userTable);
+		
+		populateTable();
+		
+		
+	}
+	
+	
+	private void populateTable() {
+		UserQuery query = identityService.createUserQuery();
+		List<User> allUsers = query.orderByUserId().asc().list();
+		BeanItemContainer<User> dataSource = new BeanItemContainer<User>(
+				User.class, allUsers);
+		userTable.setContainerDataSource(dataSource);
+		userTable.setVisibleColumns(new String[] { "id", "firstName",
+				"lastName", "email" });
 	}
 
 	// private void createAndShowMainWindow() {
