@@ -12,6 +12,8 @@ import org.activiti.engine.repository.ProcessDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
+import ch.erebetez.activititestapp4.ui.*;
+
 import com.vaadin.Application;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.*;
@@ -29,9 +31,11 @@ public class Activititestapp4 extends Application {
 
 	private Window window = null;
 
-	private VerticalLayout layout = null;
+	private GridLayout layout = null;
 
 	private Table userTable;
+	
+	private ProcessViewer processViewer = null;
 	
 	
 	@Override
@@ -47,7 +51,7 @@ public class Activititestapp4 extends Application {
 
 		window = new Window("My Vaadin Application");
 
-		layout = new VerticalLayout();
+		layout = new GridLayout(3, 5);
 		window.addComponent(layout);
 
 		setMainWindow(window);
@@ -57,7 +61,7 @@ public class Activititestapp4 extends Application {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				layout.addComponent(new Label("Thank you for clicking"));
+				layout.addComponent(new Label("Thank you for clicking"), 2, 0);
 			}
 		});
 		
@@ -67,11 +71,16 @@ public class Activititestapp4 extends Application {
 		
 
 		
-		layout.addComponent(new Label("Hello ...! " + def.getName()));
-		layout.addComponent(button);
+		layout.addComponent(new Label("Hello ...! " + def.getName()), 0, 0);
+		layout.addComponent(button, 0, 1);
 
 		userTable = new Table();
-		layout.addComponent(userTable);
+		layout.addComponent(userTable, 0, 2);
+		
+		
+		processViewer = new ProcessViewer();
+		layout.addComponent(processViewer, 1, 0);
+		
 		
 		populateTable();
 		
