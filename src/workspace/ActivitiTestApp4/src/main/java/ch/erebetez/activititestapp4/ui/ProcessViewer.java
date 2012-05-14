@@ -8,7 +8,6 @@ import java.util.logging.Logger;
 
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
-import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -35,7 +34,7 @@ public class ProcessViewer extends CustomComponent{
 	protected RuntimeService runtimeservice;
 
 	
-	Table processTabel = new Table();
+	Table processTable = null;
 
 	Button startNewInstanceButton = null;
 	
@@ -44,8 +43,7 @@ public class ProcessViewer extends CustomComponent{
 	
 	public Button getStartNewInstanceButton() {
 		if(startNewInstanceButton == null){
-	    	startNewInstanceButton = new Button();
-	    	setButtonCaption("Start Process");
+	    	startNewInstanceButton = new Button("Start Process");
 	    	startNewInstanceButton.setEnabled(false);
 	    	
 	 		startNewInstanceButton.addListener(new Button.ClickListener() {
@@ -62,57 +60,62 @@ public class ProcessViewer extends CustomComponent{
 		return startNewInstanceButton;
 	}
 	
+	
 	public void setButtonCaption(String caption){
-		startNewInstanceButton.setCaption(caption);
-    	startNewInstanceButton.setEnabled(true);
+		getStartNewInstanceButton().setCaption(caption);
+		getStartNewInstanceButton().setEnabled(true);
 	}
 
+	public Table getprocessTable() {
+		if(processTable == null){
+		   processTable = new Table();
+		   processTable.setSizeFull();
+	        
+	        // Allow selecting items from the table.
+	        processTable.setSelectable(true);
+
+	        // Send changes in selection immediately to server.
+	        processTable.setImmediate(true);
+	        
+	        processTable.addListener(new ItemClickListener() {
+	        	
+				private static final long serialVersionUID = 1L;
+
+				public void itemClick(ItemClickEvent event) {
+	                if (event.getButton() == ItemClickEvent.BUTTON_LEFT) {
+	                	
+	                	processDefinition = (ProcessDefinition) event.getItemId();
+
+	                	setButtonCaption("Start process " + processDefinition.getName() );
+	                    System.out.println("Hallo................." + processDefinition.toString() );
+	                    
+	                }
+
+	            }
+
+
+	        });
+
+		}
+		return processTable;
+	}
+
+	
 
 	public ProcessViewer(){
 		Panel panel = new Panel("Processes");
 		panel.setContent(new VerticalLayout());
 
-	 		
     	
     	panel.addComponent(getStartNewInstanceButton());
-		panel.addComponent(processTabel);  	
+		panel.addComponent(getprocessTable());  	
 		
 		
         // The composition root MUST be set
         setCompositionRoot(panel);
         
         populateProcessTable();
-        
-        processTabel.setSizeFull();
-        
-        // Allow selecting items from the table.
-        processTabel.setSelectable(true);
-
-        // Send changes in selection immediately to server.
-        processTabel.setImmediate(true);
-        
-        processTabel.addListener(new ItemClickListener() {
-        	
-			private static final long serialVersionUID = 1L;
-
-			public void itemClick(ItemClickEvent event) {
-                if (event.getButton() == ItemClickEvent.BUTTON_LEFT) {
-                	
-                	processDefinition = (ProcessDefinition) event.getItemId();
-
-                	setButtonCaption("Start process " + processDefinition.getName() );
-                    System.out.println("Hallo................." + processDefinition.toString() );
-                    
-                }
-
-                
-
-
-            }
-
-
-        });
-
+  
         
 	}
 
@@ -126,10 +129,10 @@ public class ProcessViewer extends CustomComponent{
 		BeanItemContainer<ProcessDefinition> dataSource = new BeanItemContainer<ProcessDefinition>(
 				ProcessDefinition.class, definitionList);
 		
-		processTabel.setContainerDataSource(dataSource);
-		processTabel.setVisibleColumns(new String[] { "name", "version" });
+		processTable.setContainerDataSource(dataSource);
+		processTable.setVisibleColumns(new String[] { "name", "version" });
 
-//		processTabel.setVisibleColumns(new String[] { "name", "key", "version",
+//		processTable.setVisibleColumns(new String[] { "name", "key", "version",
 //				"resourceName", "category"  });
 
 	}
@@ -142,6 +145,7 @@ public class ProcessViewer extends CustomComponent{
 		log.log(Level.INFO, "Starting instance of process {1}",
 				processDefinition.getKey());
 		try {
+			//TODO implement starting forms
 //			if (processDefinitionHasForm(processDefinition)) {
 //				openFormForProcessDefinition(processDefinition);
 //			} else {

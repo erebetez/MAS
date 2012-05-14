@@ -23,11 +23,13 @@ public class LabDashboard extends Window {
 		
 		ProcessViewer processViewer = new ProcessViewer();
 		TaskViewer taskViewer = new TaskViewer();
+		MyTaskViewer mytaskViewer = new MyTaskViewer();
 		
 		
 		
 		layout.addComponent(processViewer, 0, 0);
 		layout.addComponent(taskViewer, 0, 1);
+		layout.addComponent(mytaskViewer, 1, 0);
 		
 		
 	}

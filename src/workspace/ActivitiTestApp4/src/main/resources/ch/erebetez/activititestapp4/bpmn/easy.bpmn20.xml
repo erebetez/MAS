@@ -12,7 +12,7 @@
         <sequenceFlow id="flowfromStart" sourceRef="theStart"
             targetRef="usertask_getdata" />
 
-		<userTask id="usertask_getdata" name="Aufarbeitung Protokollieren">
+		<userTask id="usertask_getdata" name="Do somthing">
 
 			<documentation textFormat="text/plain">
 				A User Task. sudo get me a sandwich.
