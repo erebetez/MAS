@@ -47,15 +47,16 @@ public class EatUnmarshaller {
 	    
 	    docMarshall.normalize();
 	    
-	    Element element = docMarshall.getDocumentElement();
+	    Node element = docMarshall.getDocumentElement();
 
 	    
-	    
-	    System.out.println("unmarshall start" + element.getNodeName());
+	    System.out.println("unmarshall start " + element.getNodeName());
+	    element = element.getLastChild();
+	    System.out.println("unmarshall start " + element.getNodeName());
+	    System.out.println("unmarshall type " + element.getNodeType());
 	    
      	// TODO return long...
-	    unmarshall01(element.getLastChild(), dictionary, 1);
-	    		  
+	    unmarshall01(element, dictionary, 1);
 
 	    return dictionary;
 	}
@@ -66,6 +67,12 @@ public class EatUnmarshaller {
 		if( docElement == null ){
 			return null;
 		}
+		
+		if( docElement.getNodeType() != Node.ELEMENT_NODE){
+			return null;
+		}
+		
+		System.out.println("unmarshall node type " + docElement.getNodeType());
 		
 		System.out.println(docElement.getLocalName());
 		
@@ -93,6 +100,9 @@ public class EatUnmarshaller {
 	private Object unmarshallArray01(Node docElement, int lngMinor ){
 		switch (lngMinor){
 		case 1:
+			
+			System.out.println("array node type " + docElement.getNodeType());
+			
 		    List<Object> tmpList = new Vector<Object>();
 		    Object varDestination = new Object();		    
 		    
@@ -121,6 +131,8 @@ public class EatUnmarshaller {
 		switch (lngMinor){
 		case 1:
 
+			System.out.println("dict type " + docElement.getNodeType());
+			
 			Object varDestination = new Object();
 		    
 			Map<String, Object> dict = new HashMap<String, Object>();
@@ -128,13 +140,14 @@ public class EatUnmarshaller {
 			System.out.println("unmarshallDictionary01 length " + docElement.getChildNodes().getLength());
 			
 	        if( docElement.getChildNodes().getLength() == 0 ){
+	        	System.out.println("exiting dictionary");
 	            return dict;
 	        }
 
 			NodeList list = docElement.getChildNodes();
 		    
 	        for( int index = 0; index < list.getLength(); ++index ){
-	        	System.out.println(list);
+	        	System.out.println("dict Item " + index + " :" + list.item(index).getNodeName());
 	        	
 	        	// last child?
 	            unmarshall01(list.item(index).getLastChild(), varDestination, lngMinor);
@@ -155,22 +168,32 @@ public class EatUnmarshaller {
 
 
 	private Object unmarshallAtom01(Node docElement, int lngMinor ){
-		
-		if(docElement == null){
-			return null;
-		}
-		
 		switch (lngMinor){
 		case 1:
 
-		    long lngVarType;
-		    
+			if(docElement == null){
+				return null;
+			}
 			
-		    NamedNodeMap attrib = docElement.getAttributes();
+			System.out.println("atom node type " + docElement.getNodeType());	
+			
+			if(docElement.getNodeType() != Node.ELEMENT_NODE){
+				return null;
+			}
+			
+		    System.out.println("atom: " + docElement.getNodeName());
+
+		    if(docElement.getNodeName() != "atom"){
+		    	return null;
+		    }
 		    
-		    System.out.println(attrib.getNamedItem("type").getNodeValue());
+		    Node atom = docElement.getFirstChild();
+			
+//		    NamedNodeMap attrib = docElement.getAttributes();
+//		    
+//		    System.out.println(attrib.getNamedItem("type").getNodeValue());
 		    
-		    
+		    long lngVarType;
 //		    switch (attrib.getNamedItem("type").getNodeValue()){
 //		        case "boolean":
 //		            lngVarType = vbBoolean
@@ -184,10 +207,12 @@ public class EatUnmarshaller {
 //		            lngVarType = vbDate
 //		    }
 		
-		    System.out.println(docElement.getNodeValue());
+//		    System.out.println("node type " + list.item(0).getNodeType());
+		    
+		    System.out.println("Value: " + atom.getNodeValue());
 		    
 //		    return pK009_lexical2Canonical_H(docElement.getNodeValue(), lngVarType);
-		    return docElement.getNodeValue();
+		    return atom.getNodeValue();
 		    
 		default: 
 			throw new IllegalArgumentException(
