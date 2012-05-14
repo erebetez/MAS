@@ -30,7 +30,7 @@ public class SetupInitialData {
 		log.info("Initializing basic data");
 		createGroupsIfNotPresent();
 		createAdminUserIfNotPresent();
-		deployProcesses();
+//		deployProcesses();
 	}
 
 	private void createAdminUserIfNotPresent() {
@@ -40,14 +40,20 @@ public class SetupInitialData {
 	}
 
 	private void createGroupsIfNotPresent() {
-		if (!isGroupPresent("managers")) {
-			createGroup("managers", "Managers");
+		if (!isGroupPresent("labmanagers")) {
+			createGroup("labmanagers", "Labmanagers");
 		}
-		if (!isGroupPresent("developers")) {
-			createGroup("developers", "Developers");
+		if (!isGroupPresent("reviewers")) {
+			createGroup("reviewers", "Reviewers");
 		}
-		if (!isGroupPresent("reporters")) {
-			createGroup("reporters", "Reporters");
+		if (!isGroupPresent("analysts")) {
+			createGroup("analysts", "Analysts");
+		}
+		if (!isGroupPresent("001")) {
+			createGroup("001", "001");
+		}
+		if (!isGroupPresent("002")) {
+			createGroup("002", "002");
 		}
 	}
 
@@ -68,9 +74,11 @@ public class SetupInitialData {
 	}
 
 	private void assignAdminUserToGroups() {
-		identityService.createMembership("admin", "managers");
-		identityService.createMembership("admin", "developers");
-		identityService.createMembership("admin", "reporters");
+		identityService.createMembership("admin", "labmanagers");
+		identityService.createMembership("admin", "reviewers");
+		identityService.createMembership("admin", "analysts");
+		identityService.createMembership("admin", "001");
+		identityService.createMembership("admin", "002");		
 	}
 
 	private boolean isGroupPresent(String groupId) {
@@ -91,9 +99,14 @@ public class SetupInitialData {
 	private void deployProcesses() {
 		log.info("Deploying processes");
 		
-		repositoryService.createDeployment()
+		repositoryService.createDeployment()		
 		.addClasspathResource(
 				"ch/erebetez/activititestapp4/bpmn/easy.bpmn20.xml")
+		.deploy();
+		
+		repositoryService.createDeployment()
+		.addClasspathResource(
+				"ch/erebetez/activititestapp4/bpmn/dilution.bpmn20.xml")
 		.deploy();
 	}
 }
