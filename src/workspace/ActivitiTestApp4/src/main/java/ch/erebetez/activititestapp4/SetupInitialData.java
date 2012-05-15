@@ -30,7 +30,7 @@ public class SetupInitialData {
 		log.info("Initializing basic data");
 		createGroupsIfNotPresent();
 		createAdminUserIfNotPresent();
-//		deployProcesses();
+		deployProcesses();
 	}
 
 	private void createAdminUserIfNotPresent() {

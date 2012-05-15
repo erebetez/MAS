@@ -1,4 +1,4 @@
-package ch.erebetez.activititestapp4.ui;
+package ch.erebetez.activititestapp4.ui.widgets;
 
 
 

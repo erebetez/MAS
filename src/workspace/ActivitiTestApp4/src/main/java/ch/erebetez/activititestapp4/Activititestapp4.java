@@ -1,7 +1,9 @@
 package ch.erebetez.activititestapp4;
 
 
+import ch.erebetez.activititestapp4.bpmn.forms.DilutionReportForm;
 import ch.erebetez.activititestapp4.ui.*;
+import ch.erebetez.activititestapp4.ui.util.UserTaskFormContainer;
 
 import com.vaadin.Application;
 import com.vaadin.ui.*;
@@ -28,12 +30,8 @@ public class Activititestapp4 extends Application {
         
 		// TODO add login
 		
-		window = new LabDashboard();
 
-
-
-		setMainWindow(window);
-		
+		createAndShowMainWindow();
 	
 		
 	}
@@ -49,17 +47,19 @@ public class Activititestapp4 extends Application {
 //				"lastName", "email" });
 //	}
 
-	// private void createAndShowMainWindow() {
-	//
-	// }
+	 private void createAndShowMainWindow() {
+			window = new LabDashboard();
+
+			setMainWindow(window);
+	 }
+	 
 	//
 	// private void createAndInitViewProvider() {
 	//
 	// }
 	//
-	// private void createAndInitUserTaskFormContainer() {
-	//
-	// }
+	 
+
 
 	@Override
 	public void close() {

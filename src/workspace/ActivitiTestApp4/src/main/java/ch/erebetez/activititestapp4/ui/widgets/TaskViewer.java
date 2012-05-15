@@ -1,4 +1,4 @@
-package ch.erebetez.activititestapp4.ui;
+package ch.erebetez.activititestapp4.ui.widgets;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -89,7 +89,7 @@ public class TaskViewer extends CustomComponent {
 					populateTaskTable();
 				}
 
-			});			
+			});
 
 		}
 		
@@ -107,8 +107,7 @@ public class TaskViewer extends CustomComponent {
 	        // Send changes in selection immediately to server.
 	        taskTable.setImmediate(true);
 	        
-	        taskTable.addListener(new ItemClickListener() {
-	        	
+	        taskTable.addListener(new ItemClickListener() {	        	
 				private static final long serialVersionUID = 1L;
 
 				public void itemClick(ItemClickEvent event) {
