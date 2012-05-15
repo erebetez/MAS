@@ -58,9 +58,7 @@ public class MyTaskViewer extends CustomComponent{
 				public void buttonClick(ClickEvent event) {
 					populateTaskTable();
 				}
-
 			});
-
 		}
 		
 		return updateButton;
