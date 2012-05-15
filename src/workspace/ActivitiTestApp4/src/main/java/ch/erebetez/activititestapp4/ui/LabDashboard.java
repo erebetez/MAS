@@ -2,56 +2,32 @@ package ch.erebetez.activititestapp4.ui;
 
 import ch.erebetez.activititestapp4.bpmn.forms.DilutionReportForm;
 import ch.erebetez.activititestapp4.ui.util.UserTaskFormContainer;
-import ch.erebetez.activititestapp4.ui.widgets.FormViewer;
-import ch.erebetez.activititestapp4.ui.widgets.MyTaskViewer;
-import ch.erebetez.activititestapp4.ui.widgets.ProcessViewer;
-import ch.erebetez.activititestapp4.ui.widgets.TaskViewer;
+import ch.erebetez.activititestapp4.ui.widgets.*;
 
-import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.Window;
+import com.vaadin.ui.*;
 
-public class LabDashboard extends Window {
-
+public class LabDashboard extends CustomComponent {
 	private static final long serialVersionUID = -8080589786012261360L;
 	
-	private GridLayout layout = null;
-
-	UserTaskFormContainer userTaskFormContainer;
+	private VerticalLayout layout = null;
 
 	public LabDashboard(){
 		
 		setCaption("Laboratory Dashboard");
-		
-		
-		layout = new GridLayout(3, 3);
+				
+		layout = new VerticalLayout();
 		layout.setSizeFull();
-		addComponent(layout);
-		
-		createAndInitUserTaskFormContainer();
+        setCompositionRoot(layout);	
 		
 		ProcessViewer processViewer = new ProcessViewer();
 		TaskViewer taskViewer = new TaskViewer();
+	
 		
-		FormViewer formViewer = new FormViewer(userTaskFormContainer);
-		
-		MyTaskViewer mytaskViewer = new MyTaskViewer(formViewer);
-		
-		
-		
-		layout.addComponent(processViewer, 0, 0);
-		layout.addComponent(taskViewer, 1, 0);
-		layout.addComponent(mytaskViewer, 2, 0);
-		layout.addComponent(formViewer, 2, 1);
-		
-		
+		layout.addComponent(processViewer);
+		layout.addComponent(taskViewer);
 		
 	}
 	
-	private void createAndInitUserTaskFormContainer() {
-		userTaskFormContainer = new UserTaskFormContainer();
-		userTaskFormContainer.registerForm(DilutionReportForm.FORM_KEY,
-				DilutionReportForm.class);
 
-	}
 	
 }

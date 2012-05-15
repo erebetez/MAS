@@ -50,7 +50,6 @@ public class FormViewer  extends CustomComponent{
 		panel.addComponent(formContainerLayout);
 		panel.addComponent(getSubmitButton());
 
-        // The composition root MUST be set
         setCompositionRoot(panel);
 
 	}

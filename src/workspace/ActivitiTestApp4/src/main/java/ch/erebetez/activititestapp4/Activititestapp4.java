@@ -13,9 +13,9 @@ import com.vaadin.ui.*;
 
 public class Activititestapp4 extends Application {
 
-
-	private Window window = null;
+	private MainWindow window = null;
 	
+
 	
 	@Override
 	public void init() {
@@ -47,10 +47,9 @@ public class Activititestapp4 extends Application {
 //				"lastName", "email" });
 //	}
 
-	 private void createAndShowMainWindow() {
-			window = new LabDashboard();
-
-			setMainWindow(window);
+	 private void createAndShowMainWindow() {		 
+		 window = new MainWindow();
+         setMainWindow(window);
 	 }
 	 
 	//
