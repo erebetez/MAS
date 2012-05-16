@@ -263,34 +263,58 @@ Programmierung und Konfiguration muss fast eingekauft werden.
 
 
 \subsection{Zusammenfassung}
-BPMN ist auf Gurnd der Business nähe eher für Laborprozesse geignet als das BPEL.
+BPMN ist auf Grund der Business nähe eher für Laborprozesse geeignet als das BPEL.
 
 Betrachtet man jetzt nur die BPMN Engines, bleibt von den oben genannten nur noch das ActiVOS, activit und ARIS übrig.
 
-ActiVOS bietet vor allem zusätzliche GUI's an um die Konfiguratin "einfacher" zu machen. Es geschieht viel im Hintergrund. 
-So gesehen bietet es einen relativen geringen Mehrwert.
+ActiVOS bietet vor allem zusätzliche GUI's an um die Konfiguration "einfacher" zu machen. Es geschieht viel im Hintergrund. 
+So gesehen bietet es einen relativen geringen Mehrwert. 
 
-ARIS ist das grosse rundum-sorglos-paket. Leider wird einem auch alles code relevante versteckt. Es daher nötig alles bei der anbietenden Firma einzukaufen oder extra ein paar Schulungen beim Anbieter zu machen.
+ARIS ist das grosse rundum-sorglos-Paket. Leider wird einem auch alles Code relevante versteckt. Es daher nötig alles bei der anbietenden
+Firma einzukaufen oder extra ein paar Schulungen beim Anbieter zu machen.
 
-activit verzichtet auf eigene Gui's. Es bietet hauptsächlich eine durchdachte programmierschnitstelle an. Dadurch bleibt es schlank und beschränkt sich auf das wesentliche, nähmlich dem verwalten der Prozesse. Die einarbeitung ist eher schwieriger, da direkt alles im code implementiert wird.
+activit verzichtet auf eigene Gui's. Es bietet eine durchdachte Programmierschnitstelle an. Dadurch bleibt es schlank und beschränkt sich
+auf das wesentliche, nämlich dem verwalten der Prozesse. Die Einarbeitung ist eher schwieriger, da direkt alles im Code implementiert wird.
+Da es aber Opensource ist, gibt es bereits gute Beispiele wie eine Webapplikatione auszusehen hat.
 
-Der Monolytische ansatz hat sich in der vergangenheit nicht bewährt. Mit dieser Anforderung stickt das actvit sehr positiv heraus. Weiter Tools die benötigt würden wie das Monitoring oder Reporting, können dann von anderen Tools welche in dem gebiet spezilisiert sind implementiert werden.
+Der monolytische Ansatz von grossen Systemen die alles können wollen, hat sich in der Vergangenheit nicht bewährt. Mit dieser Anforderung
+sticht das activiti sehr positiv heraus. Weiter Tools die benötigt würden wie das Monitoring oder Reporting, können dann von anderen Tools
+welche in dem Gebiet spezialisiert sind implementiert werden.
 Nimmt man zudem Vaadin als Webframework, spielt es sehr gut mit activiti zusammen.
 
 
 \subsection{Kompatibilität}
-Trotz des BPMN Standards, haben die verschiedenen implementierunge der Engines eigene schlüsselwörter, wie z.B für Formulare. 
+Trotz des BPMN Standards, haben die verschiedenen implementierunge der Engines eigene Schlüsselwörter, wie z.B für Formulare. 
 Die BPMN Beschreibungen können daher nicht "einfach so" von einer zu anderen engine kopiert werden. 
 Die Wahl der Engine ist demnach schon bindend.
 
-Da aber immerhin die Geschäftslogik schön abgekapselt ist, ist das portieren einfacher, als wenn man alles in reinem jave programiert hätte.
+Da aber immerhin die Geschäftslogik schön abgekapselt ist, ist das portieren einfacher, als wenn man alles in reinem Java programmiert
+hätte.
 
 
 \section{Beispiel Applikation}
+Der Prozess beschreibt eine Jährliche Inventarkontrolle von Rückstellmustern.
+
+Liste der Rückstellmuster wird aus dem übergeordneten System geholt (z.B LIMS). 
+
+Liste wird anschliessend abgearbeitet. Dies kann von verschiedenne Personen Blockweise geschehen. Abarbeitung muss auch Offline passieren
+können. Die Einzelnen Musterchecks erzeugen anschliessend einen Report zur Bestätigung und Nachverfolgbarkeit.
+
+Zusammenfassende Liste mit Resultaten und eventuellen fails wird als Report gedruckt.
+
+Reports werden in der elektronischen Datenbank abgelegt (anderes system). 
+
+Dier Prozess wird von nun an als Beispiel herangezogen.
+
+\subsection{Technologie Wahl}
 
 
-\section{Technologie Wahl}
+\subsection{Webapplikation}
 
+\subsection{bpmn}
+
+
+\subsection{}
 
 
 
