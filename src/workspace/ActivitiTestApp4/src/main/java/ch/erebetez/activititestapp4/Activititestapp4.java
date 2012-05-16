@@ -1,21 +1,22 @@
 package ch.erebetez.activititestapp4;
 
-
-import ch.erebetez.activititestapp4.bpmn.forms.DilutionReportForm;
 import ch.erebetez.activititestapp4.ui.*;
-import ch.erebetez.activititestapp4.ui.util.UserTaskFormContainer;
+import ch.erebetez.activititestapp4.ui.login.LoginListener;
+import ch.erebetez.activititestapp4.ui.login.LoginWindow;
 
 import com.vaadin.Application;
 import com.vaadin.ui.*;
 
 
-@SuppressWarnings("serial")
 
-public class Activititestapp4 extends Application {
-
-	private MainWindow window = null;
+public class Activititestapp4 extends Application  {
+	private static final long serialVersionUID = 8718633567934963964L;
 	
-
+	private Window baseWindow = new Window("Lab Execution");
+	
+	private MainWindow mainWindow = null;
+	private LoginWindow loginWindow = null;
+	
 	
 	@Override
 	public void init() {
@@ -23,40 +24,48 @@ public class Activititestapp4 extends Application {
 		SetupInitialData setup = new SetupInitialData();
 		setup.init();
 
-		createAndShowLoginWindow();
-	}
-
-	private void createAndShowLoginWindow() {
-        
-		// TODO add login
+		ValueHandler.instance().setApplication(this);
 		
-
-		createAndShowMainWindow();
-	
+//		setUser("admin");
+		baseWindow.setBorder(Window.BORDER_DEFAULT);
+		setMainWindow(baseWindow);
 		
+		showLoginWindow();
 	}
 	
-	
-//	private void populateTable() {
-//		UserQuery query = identityService.createUserQuery();
-//		List<User> allUsers = query.orderByUserId().asc().list();
-//		BeanItemContainer<User> dataSource = new BeanItemContainer<User>(
-//				User.class, allUsers);
-//		userTable.setContainerDataSource(dataSource);
-//		userTable.setVisibleColumns(new String[] { "id", "firstName",
-//				"lastName", "email" });
-//	}
 
-	 private void createAndShowMainWindow() {		 
-		 window = new MainWindow();
-         setMainWindow(window);
+	
+	public void showLoginWindow(){
+		if( loginWindow == null ){
+			loginWindow = new LoginWindow();
+			loginWindow.addListener(new LoginListener() {
+				@Override
+				public void logginSucess(String e) {
+					baseWindow.setContent(getMyMainWindow());
+				}
+			});			
+		}
+		baseWindow.setContent(loginWindow);
+	    
+	}
+    	
+	
+	 public VerticalLayout getMyMainWindow() {
+		 System.out.println("User: " + this.getUser());
+		 
+		 if(this.getUser() == null){			 
+			 showLoginWindow();
+			 return null;
+		 }
+		 
+		 if( mainWindow == null ){
+			 mainWindow = new MainWindow();
+		 }
+		 
+		 return mainWindow;
 	 }
 	 
-	//
-	// private void createAndInitViewProvider() {
-	//
-	// }
-	//
+
 	 
 
 

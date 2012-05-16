@@ -10,6 +10,8 @@ import org.activiti.engine.task.TaskQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
+import ch.erebetez.activititestapp4.ValueHandler;
+
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.ItemClickEvent.ItemClickListener;
@@ -129,17 +131,13 @@ public class TaskViewer extends CustomComponent {
 		return taskTable;
 	}
 
-	
-	
 
-	
 	
 	private void populateTaskTable(){
 		
         TaskQuery query = taskService.createTaskQuery();
         
-        // FIXME Userawardness... .taskCandidateUser("admin")
-        List<Task> taskList  = query.taskUnnassigned()
+        List<Task> taskList  = query.taskUnnassigned().taskCandidateUser(ValueHandler.instance().getUser())
 		.orderByTaskPriority().desc().orderByDueDate().desc().list();
 
 		

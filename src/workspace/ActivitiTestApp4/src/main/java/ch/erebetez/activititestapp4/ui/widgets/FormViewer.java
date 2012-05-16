@@ -1,6 +1,5 @@
 package ch.erebetez.activititestapp4.ui.widgets;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.activiti.engine.FormService;

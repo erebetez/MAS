@@ -6,6 +6,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Button.ClickEvent;
 
 public abstract class CustomComponentLabWindow extends CustomComponent{
+	private static final long serialVersionUID = 1L;
 
 	protected VerticalLayout layout;
 	

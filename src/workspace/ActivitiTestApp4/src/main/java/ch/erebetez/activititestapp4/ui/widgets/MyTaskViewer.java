@@ -8,6 +8,8 @@ import org.activiti.engine.task.TaskQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
+import ch.erebetez.activititestapp4.ValueHandler;
+
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.ItemClickEvent.ItemClickListener;
@@ -82,14 +84,9 @@ public class MyTaskViewer extends CustomComponent{
 		                	task = (Task) event.getItemId();
 		                	formViewer.showTaskForm(task.getId());
 		                			                	
-		                	
 		                    System.out.println("Show................." + task.toString() );
-		                    
 		                }
-
 		            }
-
-
 		        });	       
 		}
 		return myTasksTable;
@@ -100,8 +97,8 @@ public class MyTaskViewer extends CustomComponent{
 		
         TaskQuery query = taskService.createTaskQuery();
         
-        // FIXME Userawardness... 
-        List<Task> taskList  = query.taskAssignee("admin")
+        // FIXME Userawardness...  
+        List<Task> taskList  = query.taskAssignee(ValueHandler.instance().getUser())
 		    .orderByTaskPriority().desc().orderByDueDate().desc().list();
 
 		
@@ -112,7 +109,5 @@ public class MyTaskViewer extends CustomComponent{
 		getmyTasksTable().setVisibleColumns( new String[] { "id", "name", "description", "priority",
 				"dueDate", "createTime" });
 	}
-	
-	
 	
 }
