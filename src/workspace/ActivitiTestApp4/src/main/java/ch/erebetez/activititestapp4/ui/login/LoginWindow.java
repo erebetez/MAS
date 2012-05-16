@@ -51,8 +51,7 @@ public class LoginWindow extends VerticalLayout{
 	private void attemptLogin(String username, String password) {
 		if (identityervice.checkPassword(username, password)) {
 			identityervice.setAuthenticatedUserId(username);
-			getApplication().setUser(username);
-			showLoginOk();
+			showLoginOk(username);
 			
             for (LoginListener listener : listeners) {
                 listener.logginSucess(username);
@@ -63,6 +62,13 @@ public class LoginWindow extends VerticalLayout{
 		}
 	}
 	
+	public void logout(){
+		identityervice.setAuthenticatedUserId(null);
+		
+        for (LoginListener listener : listeners) {
+            listener.logginSucess(null);
+        }
+	}
 
 	private void showLoginFailed() {
 		getWindow().showNotification(
@@ -70,9 +76,9 @@ public class LoginWindow extends VerticalLayout{
 				Notification.TYPE_HUMANIZED_MESSAGE);
 	}
 
-	private void showLoginOk() {
+	private void showLoginOk(String username) {
 		getWindow().showNotification(
-				"Login Ok. " + getApplication().getUser(),
+				"Login Ok. " + username,
 				Notification.TYPE_HUMANIZED_MESSAGE);
 	}
 

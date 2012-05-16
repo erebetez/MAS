@@ -8,7 +8,7 @@ public class ValueHandler {
 
     private static ValueHandler instance = null;
 	
-    private Application application;
+    private Activititestapp4 application;
 	
 	public static ValueHandler instance(){
 		if(instance == null){
@@ -26,10 +26,15 @@ public class ValueHandler {
 	}
 	
 
-	public void setApplication(Application application) {
+	public void setApplication(Activititestapp4 application) {
 		this.application = application;
 	}
 
+	
+	public void logoutUser(){
+		application.logout();
+	}
+	
 	private ValueHandler(){
 		
 	}

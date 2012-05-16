@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import ch.erebetez.activititestapp4.ValueHandler;
+import ch.erebetez.activititestapp4.ui.RefreshListener;
 
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.ItemClickEvent;
@@ -21,7 +22,7 @@ import com.vaadin.ui.Window.Notification;
 
 
 @Configurable(preConstruction = true)
-public class TaskViewer extends CustomComponent {
+public class TaskViewer extends CustomComponent implements RefreshListener{
 	private static final long serialVersionUID = 7765912131071411327L;
 
 	private static Logger log = Logger.getLogger(ProcessViewer.class
@@ -43,7 +44,6 @@ public class TaskViewer extends CustomComponent {
 		Panel panel = new Panel("Tasks");
 		panel.setContent(new VerticalLayout());
 
-		panel.addComponent(getUpdateButton());
 		panel.addComponent(getclaimTaskButton());
 		panel.addComponent(gettaskTable());  	
 				
@@ -66,9 +66,7 @@ public class TaskViewer extends CustomComponent {
 				public void buttonClick(ClickEvent event) {
 					assignTaskToCurrentUser(task);
 				}
-
 			});			
-
 		}
 		
 		return claimTaskButton;
@@ -78,25 +76,6 @@ public class TaskViewer extends CustomComponent {
 		getclaimTaskButton().setCaption(caption);
 		getclaimTaskButton().setEnabled(true);
 	}	
-	
-	public Button getUpdateButton() {
-		if(updateButton == null){
-			updateButton = new Button("Refresh");
-	    	
-	    	updateButton.addListener(new Button.ClickListener() {
-				private static final long serialVersionUID = -2546778565499238459L;
-
-				@Override
-				public void buttonClick(ClickEvent event) {
-					populateTaskTable();
-				}
-
-			});
-
-		}
-		
-		return updateButton;
-	}
 	
 	public Table gettaskTable() {
 		if(taskTable == null){
@@ -121,10 +100,7 @@ public class TaskViewer extends CustomComponent {
 	                    System.out.println("Hallo................." + task.toString() );
 	                    
 	                }
-
 	            }
-
-
 	        });
 
 		}
@@ -137,7 +113,8 @@ public class TaskViewer extends CustomComponent {
 		
         TaskQuery query = taskService.createTaskQuery();
         
-        List<Task> taskList  = query.taskUnnassigned().taskCandidateUser(ValueHandler.instance().getUser())
+        List<Task> taskList  = query.taskUnnassigned()
+        		.taskCandidateUser(ValueHandler.instance().getUser())
 		.orderByTaskPriority().desc().orderByDueDate().desc().list();
 
 		
@@ -152,12 +129,12 @@ public class TaskViewer extends CustomComponent {
 	
 	
 	public void assignTaskToCurrentUser(Task task) {
-//		String currentUserId = getIdOfCurrentUser();
+		String currentUserId = ValueHandler.instance().getUser();
 
 //		log.log(Level.INFO, "Assigning task {1} to user {2}", new Object[] {
 //				task.getId(), currentUserId });
 		try {
-			taskService.claim(task.getId(), "admin"); // FIXME
+			taskService.claim(task.getId(), currentUserId);
 			
 			populateTaskTable();
 			showTaskAssignmentSuccess(task);
@@ -167,7 +144,7 @@ public class TaskViewer extends CustomComponent {
 		}
 	}
 	
-	
+
 	public void showTaskAssignmentSuccess(Task task) {
 		getWindow().showNotification(
 				String.format("%s assigned successfully", task.getName()),
@@ -182,12 +159,12 @@ public class TaskViewer extends CustomComponent {
 								task.getName()),
 						Notification.TYPE_ERROR_MESSAGE);
 	}
-//String currentUser = getIdOfCurrentUser();
 
-	
-//protected String getIdOfCurrentUser() {
-//	return (String) getApplication().getUser();
-//}
+
+	@Override
+	public void refresh() {
+		populateTaskTable();
+	}
 
 
 }

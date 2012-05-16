@@ -7,17 +7,14 @@ import ch.erebetez.activititestapp4.ui.login.LoginWindow;
 import com.vaadin.Application;
 import com.vaadin.ui.*;
 
-
-
-public class Activititestapp4 extends Application  {
+public class Activititestapp4 extends Application {
 	private static final long serialVersionUID = 8718633567934963964L;
-	
+
 	private Window baseWindow = new Window("Lab Execution");
-	
+
 	private MainWindow mainWindow = null;
 	private LoginWindow loginWindow = null;
-	
-	
+
 	@Override
 	public void init() {
 		// setTheme("VaadinActivitiDemo");
@@ -25,66 +22,58 @@ public class Activititestapp4 extends Application  {
 		setup.init();
 
 		ValueHandler.instance().setApplication(this);
-		
-//		setUser("admin");
+
+		// setUser("admin");
 		baseWindow.setBorder(Window.BORDER_DEFAULT);
 		setMainWindow(baseWindow);
-		
+
 		showLoginWindow();
 	}
-	
 
-	
-	public void showLoginWindow(){
-		if( loginWindow == null ){
+	public void showLoginWindow() {
+		if (loginWindow == null) {
 			loginWindow = new LoginWindow();
 			loginWindow.addListener(new LoginListener() {
 				@Override
-				public void logginSucess(String e) {
-					baseWindow.setContent(getMyMainWindow());
+				public void logginSucess(String user) {
+					
+					if(user != null){
+						setUser(user);
+						baseWindow.setContent(getMyMainWindow());
+					} else {
+						baseWindow.setContent(loginWindow);
+					}
 				}
-			});			
+			});
 		}
 		baseWindow.setContent(loginWindow);
-	    
+
 	}
-    	
+
+	public VerticalLayout getMyMainWindow() {
+		System.out.println("User: " + this.getUser());
+
+		if (this.getUser() == null) {
+			showLoginWindow();
+			return null;
+		}
+
+		if (mainWindow == null) {
+			mainWindow = new MainWindow();
+		}
+
+		return mainWindow;
+	}
+
+	public void logout(){
+		setUser(null);
+		loginWindow.logout();
+	}
 	
-	 public VerticalLayout getMyMainWindow() {
-		 System.out.println("User: " + this.getUser());
-		 
-		 if(this.getUser() == null){			 
-			 showLoginWindow();
-			 return null;
-		 }
-		 
-		 if( mainWindow == null ){
-			 mainWindow = new MainWindow();
-		 }
-		 
-		 return mainWindow;
-	 }
-	 
-
-	 
-
-
 	@Override
 	public void close() {
-		// ProcessEngines.getDefaultProcessEngine().getIdentityService()
-		// .setAuthenticatedUserId(null);
 		super.close();
 	}
 
-//	 @Override
-//	 public void handleViewEvent(ViewEvent event) {
-//	 if (event instanceof UserLoggedInEvent) {
-//	 String username = ((UserLoggedInEvent) event).getUsername();
-//	 setUser(username);
-//	 createAndShowMainWindow();
-//	 } else if (event instanceof UserLoggedOutEvent) {
-//	 close();
-//	 }
-//	 }
 
 }

@@ -9,27 +9,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import ch.erebetez.activititestapp4.ValueHandler;
+import ch.erebetez.activititestapp4.ui.RefreshListener;
 
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.ItemClickEvent.ItemClickListener;
-import com.vaadin.ui.Button;
+
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Button.ClickEvent;
 
 @Configurable(preConstruction = true)
-public class MyTaskViewer extends CustomComponent{
+public class MyTaskViewer extends CustomComponent implements RefreshListener{
 	private static final long serialVersionUID = 3727005920258717798L;
 	
 	@Autowired
 	private TaskService taskService;	
 
 	private Table myTasksTable = null;
-	
-	private Button updateButton = null;
 	
 	private Task task;
 	
@@ -40,30 +38,12 @@ public class MyTaskViewer extends CustomComponent{
 		Panel panel = new Panel("My Tasks");
 		panel.setContent(new VerticalLayout());
 
-		panel.addComponent(getUpdateButton());
 		panel.addComponent(getmyTasksTable());  	
 
         setCompositionRoot(panel);
         
         populateTaskTable();
 		
-	}
-	
-	public Button getUpdateButton() {
-		if(updateButton == null){
-			updateButton = new Button("Refresh");
-	    	
-	    	updateButton.addListener(new Button.ClickListener() {
-				private static final long serialVersionUID = -2546778565499238459L;
-
-				@Override
-				public void buttonClick(ClickEvent event) {
-					populateTaskTable();
-				}
-			});
-		}
-		
-		return updateButton;
 	}
 	
 	public Table getmyTasksTable() {
@@ -97,7 +77,6 @@ public class MyTaskViewer extends CustomComponent{
 		
         TaskQuery query = taskService.createTaskQuery();
         
-        // FIXME Userawardness...  
         List<Task> taskList  = query.taskAssignee(ValueHandler.instance().getUser())
 		    .orderByTaskPriority().desc().orderByDueDate().desc().list();
 
@@ -108,6 +87,11 @@ public class MyTaskViewer extends CustomComponent{
 		getmyTasksTable().setContainerDataSource(dataSource);
 		getmyTasksTable().setVisibleColumns( new String[] { "id", "name", "description", "priority",
 				"dueDate", "createTime" });
+	}
+
+	@Override
+	public void refresh() {
+		populateTaskTable();
 	}
 	
 }
