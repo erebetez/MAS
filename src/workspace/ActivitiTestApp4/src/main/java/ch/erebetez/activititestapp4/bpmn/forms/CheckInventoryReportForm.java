@@ -24,8 +24,9 @@ public class CheckInventoryReportForm extends AbstractUserTaskForm {
 	}
 
 	@Override
-	public void copyFormProperties(Map<String, String> destination) {
-		destination.put("checkComment", (String) comments.getValue());
+	protected void populateFormInit(String taskId, String executionId) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
@@ -34,7 +35,12 @@ public class CheckInventoryReportForm extends AbstractUserTaskForm {
 //			comments.setValue(propertyValue);
 		}
 	}
-
+	
+	@Override
+	public void copyFormProperties(Map<String, String> destination) {
+		destination.put("checkComment", (String) comments.getValue());
+	}
+	
 	@Override
 	protected void init() {
 		comments = new TextField("Comment");

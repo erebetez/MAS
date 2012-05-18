@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.activiti.engine.form.StartFormData;
 import org.activiti.engine.form.TaskFormData;
+import org.activiti.engine.task.Task;
 
 import com.vaadin.ui.Component;
 
@@ -15,9 +16,9 @@ public interface UserTaskForm extends java.io.Serializable {
 
 	Type getFormType();
 
-	String getProcessDefinitionId();
+//	String getProcessDefinitionId();
 
-	String getTaskId();
+	Task getTask();
 
 	String getDisplayName();
 
@@ -25,9 +26,9 @@ public interface UserTaskForm extends java.io.Serializable {
 
 	String getFormKey();
 
-	void populateForm(StartFormData formData, String processDefinitionId);
+	void populateForm(TaskFormData formData, Task task);
 
-	void populateForm(TaskFormData formData, String taskId);
+//	void populateForm(TaskFormData formData, String taskId);
 
 	Map<String, String> getFormProperties();
 

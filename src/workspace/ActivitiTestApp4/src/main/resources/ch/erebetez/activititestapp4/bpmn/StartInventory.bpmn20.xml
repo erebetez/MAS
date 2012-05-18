@@ -22,14 +22,14 @@
 
 
 		<callActivity id="callInventoryItem" calledElement="doInventoryItem" >
-             <multiInstanceLoopCharacteristics isSequential="false">
-                  <loopCardinality>${InventoryCount}</loopCardinality>
-             </multiInstanceLoopCharacteristics>
-          
-<!-- 		     <extensionElements> -->
-<!-- 		          <activiti:in source="someVariableInMainProcess" target="nameOfVariableInSubProcess" /> -->
-<!-- 		          <activiti:out source="someVariableInSubProcss" target="nameOfVariableInMainProcess" /> -->
-<!-- 		     </extensionElements> -->
+             <extensionElements>
+                     <activiti:in source="itemDataParent" target="itemData" />
+<!--                     <activiti:out source="name" target="name" /> -->
+             </extensionElements> 
+             <multiInstanceLoopCharacteristics isSequential="false" >
+				 <loopDataInputRef>InventoryData</loopDataInputRef>
+				 <inputDataItem name="itemDataParent" />
+             </multiInstanceLoopCharacteristics>    
 		</callActivity>
 
         <sequenceFlow id="flowToListCheck" sourceRef="callInventoryItem"

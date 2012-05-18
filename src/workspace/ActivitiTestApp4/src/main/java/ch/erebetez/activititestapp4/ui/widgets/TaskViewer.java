@@ -29,15 +29,13 @@ public class TaskViewer extends CustomComponent implements RefreshListener{
 			.getName());	
 	
 	@Autowired
-	TaskService taskService;
+	private TaskService taskService;
 	
-	Table taskTable = null;
+	private Table taskTable = null;
 	
-	Button claimTaskButton = null;
-
-	Button updateButton = null;
+	private Button claimTaskButton = null;
 	
-	Task task;
+	private Task task;
 	
 	
 	public TaskViewer(){
@@ -116,7 +114,6 @@ public class TaskViewer extends CustomComponent implements RefreshListener{
         List<Task> taskList  = query.taskUnnassigned()
         		.taskCandidateUser(ValueHandler.instance().getUser())
 		.orderByTaskPriority().desc().orderByDueDate().desc().list();
-
 		
 		BeanItemContainer<Task> dataSource = new BeanItemContainer<Task>(
 				Task.class, taskList);
@@ -131,8 +128,8 @@ public class TaskViewer extends CustomComponent implements RefreshListener{
 	public void assignTaskToCurrentUser(Task task) {
 		String currentUserId = ValueHandler.instance().getUser();
 
-//		log.log(Level.INFO, "Assigning task {1} to user {2}", new Object[] {
-//				task.getId(), currentUserId });
+		log.log(Level.INFO, "Assigning task {1} to user {2}", new Object[] {
+				task.getId(), currentUserId });
 		try {
 			taskService.claim(task.getId(), currentUserId);
 			

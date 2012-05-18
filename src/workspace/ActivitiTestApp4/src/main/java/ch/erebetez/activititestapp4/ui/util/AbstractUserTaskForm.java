@@ -5,25 +5,33 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.activiti.engine.RuntimeService;
 import org.activiti.engine.form.FormData;
 import org.activiti.engine.form.FormProperty;
 import org.activiti.engine.form.StartFormData;
 import org.activiti.engine.form.TaskFormData;
+import org.activiti.engine.task.Task;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 
 import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
 
+@Configurable(preConstruction = true)
 public abstract class AbstractUserTaskForm extends VerticalLayout implements
 		UserTaskForm {
-
+	private static final long serialVersionUID = -1578037829262126003L;
+	
+	@Autowired
+	private RuntimeService runtimeservice;
+	
 	private static Logger log = Logger.getLogger(AbstractUserTaskForm.class
 			.getName());
 
-	private static final long serialVersionUID = -1578037829262126003L;
+	// TODO support processDefinitions (Start forms)
+//	private String processDefinitionId;
 
-	private String processDefinitionId;
-
-	private String taskId;
+	private Task task;
 
 	public AbstractUserTaskForm() {
 		init();
@@ -33,35 +41,36 @@ public abstract class AbstractUserTaskForm extends VerticalLayout implements
 
 	@Override
 	public Type getFormType() {
-		if (taskId != null) {
+		if (task != null) {
 			return Type.TASK_FORM;
-		} else if (processDefinitionId != null) {
-			return Type.START_FORM;
+//		} else if (processDefinitionId != null) {
+//			return Type.START_FORM;
 		} else {
 			throw new IllegalStateException(
 					"No taskId nor processDefinitionId has been specified");
 		}
 	}
 
-	@Override
-	public String getProcessDefinitionId() {
-		return processDefinitionId;
-	}
+//	@Override
+//	public String getProcessDefinitionId() {
+//		return processDefinitionId;
+//	}
 
 	@Override
-	public String getTaskId() {
-		return taskId;
+	public Task getTask() {
+		return this.task;
 	}
 
-	@Override
-	public void populateForm(StartFormData formData, String processDefinitionId) {
-		this.processDefinitionId = processDefinitionId;
-		populateFormFields(formData);
-	}
+//	@Override
+//	public void populateForm(StartFormData formData, String processDefinitionId) {
+//		this.processDefinitionId = processDefinitionId;
+//		populateFormFields(formData);
+//	}
 
 	@Override
-	public void populateForm(TaskFormData formData, String taskId) {
-		this.taskId = taskId;
+	public void populateForm(TaskFormData formData, Task task) {
+		this.task = task;
+		populateFormInit( task.getId(), task.getExecutionId() );
 		populateFormFields(formData);
 	}
 
@@ -84,11 +93,20 @@ public abstract class AbstractUserTaskForm extends VerticalLayout implements
 		copyFormProperties(map);
 		return map;
 	}
+	
+	
+	public Object getVariable(String key){
+
+				
+		return runtimeservice.getVariable(task.getExecutionId(), key); 
+	}
 
 	protected abstract void copyFormProperties(Map<String, String> destination);
 
 	protected abstract void populateFormField(String propertyId,
 			String propertyValue);
+	
+	protected abstract void populateFormInit(String taskId, String executionId);
 
 	@Override
 	public Component getFormComponent() {

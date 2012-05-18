@@ -63,6 +63,6 @@
 	<bean id="formService" factory-bean="processEngine"
 		factory-method="getFormService" />
 
-	<context:component-scan base-package="ch.erebetez.mas.activititestapp3" />
+	<context:component-scan base-package="ch.erebetez.activititestapp4" />
 
 </beans>

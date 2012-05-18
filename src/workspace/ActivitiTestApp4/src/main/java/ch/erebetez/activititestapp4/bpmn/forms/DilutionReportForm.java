@@ -23,9 +23,10 @@ public class DilutionReportForm extends AbstractUserTaskForm {
 		return FORM_KEY;
 	}
 
+	
 	@Override
-	public void copyFormProperties(Map<String, String> destination) {
-		destination.put("dilution", (String) dilution.getValue());
+	protected void populateFormInit(String taskId, String executionId) {
+		// TODO Auto-generated method stub		
 	}
 
 	@Override
@@ -36,11 +37,18 @@ public class DilutionReportForm extends AbstractUserTaskForm {
 	}
 
 	@Override
+	public void copyFormProperties(Map<String, String> destination) {
+		destination.put("dilution", (String) dilution.getValue());
+	}
+	
+	@Override
 	protected void init() {
 		dilution = new TextField("Dilution");
 		dilution.setEnabled(true);
 		dilution.setRequired(true);
 		addComponent(dilution);
 	}
+
+
 
 }

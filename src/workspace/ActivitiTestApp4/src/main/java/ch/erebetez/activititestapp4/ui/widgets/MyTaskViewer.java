@@ -62,7 +62,7 @@ public class MyTaskViewer extends CustomComponent implements RefreshListener{
 		                if (event.getButton() == ItemClickEvent.BUTTON_LEFT) {
 		                	
 		                	task = (Task) event.getItemId();
-		                	formViewer.showTaskForm(task.getId());
+		                	formViewer.showTaskForm(task);
 		                			                	
 		                    System.out.println("Show................." + task.toString() );
 		                }

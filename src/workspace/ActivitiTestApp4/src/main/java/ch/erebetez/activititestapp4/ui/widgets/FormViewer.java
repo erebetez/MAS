@@ -3,7 +3,9 @@ package ch.erebetez.activititestapp4.ui.widgets;
 import java.util.logging.Logger;
 
 import org.activiti.engine.FormService;
+import org.activiti.engine.RuntimeService;
 import org.activiti.engine.form.TaskFormData;
+import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -22,7 +24,8 @@ public class FormViewer  extends CustomComponent{
 			.getName());	
 	
 	@Autowired
-	protected FormService formService;			
+	protected FormService formService;
+
 
 	private Button submitButton = null;
 	
@@ -67,15 +70,11 @@ public class FormViewer  extends CustomComponent{
 		return submitButton;
 	}
 	
-	public void setTask(){
-		
-	}
-	
-	public void showTaskForm(String taskId) {
-		TaskFormData formData = formService.getTaskFormData(taskId);		
+	public void showTaskForm(Task task) {
+		TaskFormData formData = formService.getTaskFormData(task.getId());
 		UserTaskForm form = userTaskFormContainer.getForm(formData.getFormKey());
 		this.form = form;
-		form.populateForm(formData, taskId);
+		form.populateForm(formData, task);
 		setForm(form);
 	}
 
@@ -105,11 +104,11 @@ public class FormViewer  extends CustomComponent{
 	
 	public void submitForm(UserTaskForm form) {
 		if (form.getFormType().equals(UserTaskForm.Type.START_FORM)) {
-			formService.submitStartFormData(form.getProcessDefinitionId(),
-					form.getFormProperties());
-			
+//			formService.submitStartFormData(form.getProcessDefinitionId(),
+//					form.getFormProperties());
+
 		} else if (form.getFormType().equals(UserTaskForm.Type.TASK_FORM)) {
-			formService.submitTaskFormData(form.getTaskId(),
+			formService.submitTaskFormData(form.getTask().getId(),
 					form.getFormProperties());
 		}
 	}
