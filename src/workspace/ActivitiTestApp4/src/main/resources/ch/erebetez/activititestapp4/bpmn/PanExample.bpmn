@@ -6,12 +6,11 @@
         <timeDate>2012-06-01T12:13</timeDate>
       </timerEventDefinition>
     </startEvent>
-    <userTask id="usertaskChooseTask" name="Auswahl der Aufgabe"></userTask>
-    <serviceTask id="servicetaskGetLimsData" name="Get Lims Data"></serviceTask>
-    <subProcess id="subprocessLocalExecution" name="Lokale Ausführung">
+    <serviceTask id="servicetaskGetLimsData" name="Get Inventory Data"></serviceTask>
+    <subProcess id="subprocessLocalExecution" name="Local SubProcess">
       <startEvent id="startevent1" name="Start"></startEvent>
       <userTask id="usertaskCollectData" name="Collect Data"></userTask>
-      <serviceTask id="servicetaskPrintResults" name="Print Results"></serviceTask>
+      <serviceTask id="servicetaskPrintResults" name="Print Inventory Item Result"></serviceTask>
       <exclusiveGateway id="exclusivegatewayIsSampleOk" name="Is Sample ok"></exclusiveGateway>
       <serviceTask id="servicetaskCreateOOS" name="Create OOS"></serviceTask>
       <endEvent id="endevent3" name="End"></endEvent>
@@ -23,23 +22,18 @@
       <sequenceFlow id="flow10" name="" sourceRef="exclusivegatewayIsSampleOk" targetRef="servicetaskCreateOOS"></sequenceFlow>
       <sequenceFlow id="flow11" name="" sourceRef="servicetaskCreateOOS" targetRef="endevent4"></sequenceFlow>
     </subProcess>
-    <userTask id="usertaskCheckTask" name="Checken der Aufgabe"></userTask>
-    <serviceTask id="servicetaskPrintFinalList" name="Drucken der Aufgaben Liste"></serviceTask>
+    <userTask id="usertaskCheckTask" name="Check Inventory List"></userTask>
+    <serviceTask id="servicetaskPrintFinalList" name="Print Inventory List"></serviceTask>
     <endEvent id="endevent2" name="End"></endEvent>
-    <sequenceFlow id="flow4" name="" sourceRef="usertaskChooseTask" targetRef="subprocessLocalExecution"></sequenceFlow>
     <sequenceFlow id="flow5" name="" sourceRef="timerstartevent1" targetRef="servicetaskGetLimsData"></sequenceFlow>
-    <sequenceFlow id="flow6" name="" sourceRef="servicetaskGetLimsData" targetRef="usertaskChooseTask"></sequenceFlow>
-    <sequenceFlow id="flow12" name="" sourceRef="subprocessLocalExecution" targetRef="usertaskCheckTask"></sequenceFlow>
     <sequenceFlow id="flow13" name="" sourceRef="usertaskCheckTask" targetRef="servicetaskPrintFinalList"></sequenceFlow>
     <sequenceFlow id="flow14" name="" sourceRef="servicetaskPrintFinalList" targetRef="endevent2"></sequenceFlow>
+    <callActivity id="callactivity1" name="For Each Inventory Item Start Process" activiti:async="true"></callActivity>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_panRefereceSamples">
     <bpmndi:BPMNPlane bpmnElement="panRefereceSamples" id="BPMNPlane_panRefereceSamples">
       <bpmndi:BPMNShape bpmnElement="timerstartevent1" id="BPMNShape_timerstartevent1">
         <omgdc:Bounds height="35" width="35" x="110" y="150"></omgdc:Bounds>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="usertaskChooseTask" id="BPMNShape_usertaskChooseTask">
-        <omgdc:Bounds height="55" width="105" x="330" y="140"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="servicetaskGetLimsData" id="BPMNShape_servicetaskGetLimsData">
         <omgdc:Bounds height="55" width="105" x="200" y="140"></omgdc:Bounds>
@@ -102,21 +96,12 @@
       <bpmndi:BPMNShape bpmnElement="endevent2" id="BPMNShape_endevent2">
         <omgdc:Bounds height="35" width="35" x="860" y="150"></omgdc:Bounds>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
-        <omgdi:waypoint x="382" y="195"></omgdi:waypoint>
-        <omgdi:waypoint x="535" y="242"></omgdi:waypoint>
-      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape bpmnElement="callactivity1" id="BPMNShape_callactivity1">
+        <omgdc:Bounds height="75" width="105" x="350" y="120"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
         <omgdi:waypoint x="145" y="167"></omgdi:waypoint>
         <omgdi:waypoint x="200" y="167"></omgdi:waypoint>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
-        <omgdi:waypoint x="305" y="167"></omgdi:waypoint>
-        <omgdi:waypoint x="330" y="167"></omgdi:waypoint>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="flow12" id="BPMNEdge_flow12">
-        <omgdi:waypoint x="535" y="242"></omgdi:waypoint>
-        <omgdi:waypoint x="562" y="195"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow13" id="BPMNEdge_flow13">
         <omgdi:waypoint x="615" y="167"></omgdi:waypoint>

@@ -24,9 +24,6 @@ public class FormViewer  extends CustomComponent{
 	@Autowired
 	protected FormService formService;			
 
-
-	private TextField testTestField = null;
-
 	private Button submitButton = null;
 	
 	private UserTaskFormContainer userTaskFormContainer;
@@ -45,7 +42,6 @@ public class FormViewer  extends CustomComponent{
 
 		formContainerLayout = new VerticalLayout();
 		
-//		panel.addComponent(getTestTestField());
 		panel.addComponent(formContainerLayout);
 		panel.addComponent(getSubmitButton());
 
@@ -53,13 +49,6 @@ public class FormViewer  extends CustomComponent{
 
 	}
 	
-	public TextField getTestTestField() {
-		if (testTestField == null){
-			testTestField = new TextField("The Textfield");
-			testTestField.setEnabled(false);
-		}
-		return testTestField;
-	}
 	
 	public Button getSubmitButton() {
 		if(submitButton == null){
@@ -71,6 +60,7 @@ public class FormViewer  extends CustomComponent{
 				@Override
 				public void buttonClick(ClickEvent event) {
 					submitForm(form);
+					hideForm();
 				}
 			});
 		}
@@ -106,6 +96,9 @@ public class FormViewer  extends CustomComponent{
 		formContainerLayout.removeAllComponents();
 		if (currentForm != null) {
 			formContainerLayout.addComponent(currentForm.getFormComponent());
+			getSubmitButton().setEnabled(true);
+		} else {
+			getSubmitButton().setEnabled(false);
 		}
 	}
 	
@@ -118,30 +111,6 @@ public class FormViewer  extends CustomComponent{
 		} else if (form.getFormType().equals(UserTaskForm.Type.TASK_FORM)) {
 			formService.submitTaskFormData(form.getTaskId(),
 					form.getFormProperties());
-		}
-	}
-
-
-//	private void populateForm(TaskFormData formData, String taskId) {
-//
-//		populateFormFields(formData);
-//	}
-//
-//	protected void populateFormFields(FormData formData) {
-//		log.info("Populating form fields");
-//		for (FormProperty property : formData.getFormProperties()) {
-//			String propertyId = property.getId();
-//			String propertyValue = property.getValue();
-//			log.log(Level.INFO, "Populating form field {1} with value {2}",
-//					new Object[] { propertyId, propertyValue });
-//			populateFormField(propertyId, propertyValue);
-//		}
-//	}
-	
-
-	protected void populateFormField(String propertyId, String propertyValue) {
-		if (propertyId.equals("dilution")) {
-			testTestField.setValue(propertyValue);
 		}
 	}
 

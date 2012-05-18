@@ -30,7 +30,7 @@ public class SetupInitialData {
 		log.info("Initializing basic data");
 		createGroupsIfNotPresent();
 		createAdminUserIfNotPresent();
-//		deployProcesses();
+		deployProcesses();
 	}
 
 	private void createAdminUserIfNotPresent() {
@@ -107,6 +107,16 @@ public class SetupInitialData {
 		repositoryService.createDeployment()
 		.addClasspathResource(
 				"ch/erebetez/activititestapp4/bpmn/dilution.bpmn20.xml")
+		.deploy();
+		
+		repositoryService.createDeployment()
+		.addClasspathResource(
+				"ch/erebetez/activititestapp4/bpmn/DoInventoryItem.bpmn20.xml")
+		.deploy();
+		
+		repositoryService.createDeployment()
+		.addClasspathResource(
+				"ch/erebetez/activititestapp4/bpmn/StartInventory.bpmn20.xml")
 		.deploy();
 	}
 }

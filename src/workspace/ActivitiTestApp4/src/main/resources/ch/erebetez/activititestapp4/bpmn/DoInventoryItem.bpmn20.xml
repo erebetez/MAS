@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn"
+	xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+	xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema"
+	expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.erebetez.ch/SubProcess">
+
+	<process id="doInventoryItem" name="Check a Inventory Item">
+
+		<startEvent id="theStart" />
+
+		<sequenceFlow id="flowfromStart" sourceRef="theStart"
+			targetRef="usertask_checkInventoryItem" />
+
+		<userTask id="usertask_checkInventoryItem" name="Check the given Inventory Item"
+			activiti:formKey="isItemOkForm">
+
+			<documentation textFormat="text/plain">
+				Check if the Item is there.
+			</documentation>
+
+			<extensionElements>
+
+				<activiti:formProperty id="isItemOk" name="IsItemOk"
+					required="true" type="boolean" />
+			</extensionElements>
+
+			<potentialOwner>
+
+				<resourceAssignmentExpression>
+
+					<formalExpression>
+						group(analysts)
+					</formalExpression>
+				</resourceAssignmentExpression>
+			</potentialOwner>
+		</userTask>
+
+		<sequenceFlow id="flowToAutoScript" sourceRef="usertask_checkInventoryItem"
+			targetRef="scripttask_print" />
+
+		<scriptTask id="scripttask_print" name="Print Report"
+			scriptFormat="groovy">
+
+			<script>
+				fielpath = 'testItemOut.txt';
+
+				out:println "Printing report to " + fielpath;
+
+				def out = new File(fielpath);
+
+				out.append "Item " + isItemOk;
+				out.append '\n';
+			</script>
+		</scriptTask>
+
+		<sequenceFlow id="flowToEnd" sourceRef="scripttask_print"
+			targetRef="theEnd" />
+
+		<endEvent id="theEnd" />
+
+	</process>
+</definitions>

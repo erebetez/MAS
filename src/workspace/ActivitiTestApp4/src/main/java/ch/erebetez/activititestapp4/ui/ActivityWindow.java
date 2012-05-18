@@ -1,6 +1,6 @@
 package ch.erebetez.activititestapp4.ui;
 
-import ch.erebetez.activititestapp4.bpmn.forms.DilutionReportForm;
+import ch.erebetez.activititestapp4.bpmn.forms.*;
 import ch.erebetez.activititestapp4.ui.util.UserTaskFormContainer;
 import ch.erebetez.activititestapp4.ui.widgets.FormViewer;
 import ch.erebetez.activititestapp4.ui.widgets.MyTaskViewer;
@@ -43,11 +43,17 @@ public class ActivityWindow extends CustomComponent {
 		return formViewer;
 	}
 
+	// FIXME userTaskContainer does not belong here!
 	private UserTaskFormContainer getUserTaskFormContainer() {
-		if (userTaskFormContainer == null) {
+		if (userTaskFormContainer == null) {			
 			userTaskFormContainer = new UserTaskFormContainer();
+			
 			userTaskFormContainer.registerForm(DilutionReportForm.FORM_KEY,
 					DilutionReportForm.class);
+			userTaskFormContainer.registerForm(IsInventoryItemOkForm.FORM_KEY,
+					IsInventoryItemOkForm.class);			
+			userTaskFormContainer.registerForm(CheckInventoryReportForm.FORM_KEY,
+					CheckInventoryReportForm.class);					
 
 		}
 		return userTaskFormContainer;

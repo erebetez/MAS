@@ -24,8 +24,10 @@ public class MainWindow extends VerticalLayout {
 
 	private static final ThemeResource noteIcon = new ThemeResource(
 			"../runo/icons/32/note.png");
-	private static final ThemeResource userIcon = new ThemeResource(
+	private static final ThemeResource userIcon = new ThemeResource(			
 			"../runo/icons/32/user.png");
+	private static final ThemeResource calendarIcon = new ThemeResource(
+			"../runo/icons/32/calendar.png");	
 	private static final ThemeResource reloadIcon = new ThemeResource(
 			"../runo/icons/16/reload.png");
 	private static final ThemeResource lockIcon = new ThemeResource(
@@ -43,6 +45,7 @@ public class MainWindow extends VerticalLayout {
 
 		tabsheet.addTab(getDashboard(), "Lab Dasboard", noteIcon);
 		tabsheet.addTab(activitWindow, "My Activitys", userIcon);
+		tabsheet.addTab(new VerticalLayout(), "History", calendarIcon);
 //		 tabsheet.addListener(this);
 
 		addComponent(getMenuBar());
