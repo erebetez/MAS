@@ -54,7 +54,8 @@ public class ActivityWindow extends CustomComponent {
 					IsInventoryItemOkForm.class);			
 			userTaskFormContainer.registerForm(CheckInventoryReportForm.FORM_KEY,
 					CheckInventoryReportForm.class);					
-
+			userTaskFormContainer.registerForm(CreateOosForm.FORM_KEY,
+					CreateOosForm.class);
 		}
 		return userTaskFormContainer;
 	}

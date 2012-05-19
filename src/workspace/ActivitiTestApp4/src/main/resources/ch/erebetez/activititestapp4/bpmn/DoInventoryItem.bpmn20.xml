@@ -35,7 +35,8 @@
 			</potentialOwner>
 		</userTask>
 
-
+        <sequenceFlow id="flowfromInput" sourceRef="usertask_checkInventoryItem"
+            targetRef="checkOosFork" />
 
         <inclusiveGateway id="checkOosFork" />
         
@@ -64,7 +65,7 @@
                 <resourceAssignmentExpression>
 
                     <formalExpression>
-                        group(analysts, labmanagers)
+                        group(analysts), group(labmanagers)
                     </formalExpression>
                 </resourceAssignmentExpression>
             </potentialOwner>
@@ -90,8 +91,13 @@
 
                 out.append "Item " + isItemOk;
                 out.append '\n';
-                out.append "OOS " + oosNumber;
-                out.append '\n';
+                
+                try {
+	                out.append "OOS " + oosNumber;
+	                out.append '\n';
+				} catch (MissingPropertyExceptionmpe) {				   
+				}
+
             </script>
         </scriptTask>
 

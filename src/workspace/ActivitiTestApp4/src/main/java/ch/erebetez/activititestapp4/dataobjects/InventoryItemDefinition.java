@@ -17,9 +17,14 @@ public class InventoryItemDefinition implements InventoryItem {
 	private RuntimeService runtimeservice;
 
 	private String getVariable(String key) {
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings("unchecked")		
 		Map<String, String> itemData = (Map<String, String>) runtimeservice
 				.getVariable(task.getExecutionId(), "itemData");
+		
+		if(itemData  == null){
+			return null;
+		}
+		
 		return itemData.get(key);
 	}
 
