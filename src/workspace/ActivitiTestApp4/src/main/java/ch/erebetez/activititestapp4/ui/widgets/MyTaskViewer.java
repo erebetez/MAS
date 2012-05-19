@@ -88,8 +88,9 @@ public class MyTaskViewer extends CustomComponent implements RefreshListener{
 				Task.class, taskList);
 		
 		getmyTasksTable().setContainerDataSource(dataSource);
-		getmyTasksTable().setVisibleColumns( new String[] { "id", "name", "description", "priority",
-				"dueDate", "createTime" });
+//		getmyTasksTable().setVisibleColumns( new String[] { "id", "name", "description", "priority",
+//				"dueDate", "createTime" });
+		getmyTasksTable().setVisibleColumns( new String[] { "name", "description" });		
 	}
 
 

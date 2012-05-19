@@ -29,18 +29,22 @@ public class ActivityWindow extends CustomComponent implements ShowFormListener{
 	
 	
 	public ActivityWindow() {
-
 		setCaption("My Activitys");
 
-		VerticalLayout layout = new VerticalLayout();
-		setCompositionRoot(layout);
+		VerticalLayout taskLayout = new VerticalLayout();
 
-		layout.addComponent(new Label("Select a task to activate the Form"));
-
-		layout.addComponent(getTaskByName());
-		layout.addComponent(getMytaskViewer());
+		taskLayout.addComponent(getTaskByName());
+		taskLayout.addComponent(getMytaskViewer());
+		
+		
+		HorizontalLayout layout = new HorizontalLayout();
+		
+		layout.setSpacing(true);
+		
+		layout.addComponent(taskLayout);
 		layout.addComponent(getFormViewer());
 
+		setCompositionRoot(layout);
 	}
 
 	
