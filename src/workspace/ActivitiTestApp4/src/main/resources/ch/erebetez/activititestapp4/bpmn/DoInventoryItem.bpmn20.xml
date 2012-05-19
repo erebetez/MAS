@@ -35,28 +35,71 @@
 			</potentialOwner>
 		</userTask>
 
-		<sequenceFlow id="flowToAutoScript" sourceRef="usertask_checkInventoryItem"
-			targetRef="scripttask_print" />
 
-		<scriptTask id="scripttask_print" name="Print Report"
-			scriptFormat="groovy">
 
-			<script>
-				fielpath = 'testItemOut.txt';
+        <inclusiveGateway id="checkOosFork" />
+        
+	    <sequenceFlow sourceRef="checkOosFork" targetRef="checkOosJoin" >
+	         <conditionExpression xsi:type="tFormalExpression">${isItemOk == true}</conditionExpression>
+	    </sequenceFlow>
+	    
+	    <sequenceFlow sourceRef="checkOosFork" targetRef="usertask_startOOS" >
+	         <conditionExpression xsi:type="tFormalExpression">${isItemOk == false}</conditionExpression>
+	    </sequenceFlow>
+ 
+        <userTask id="usertask_startOOS" name="${itemData['lot']}"
+            activiti:formKey="startOOS">
 
-				out:println "Printing report to " + fielpath;
+            <documentation textFormat="text/plain">
+                Start a OOS Process because the sample was not ok.
+            </documentation>
 
-				def out = new File(fielpath);
+            <extensionElements>
+                <activiti:formProperty id="oosNumber" name="OOS Number"
+                    required="true" type="string" />
+            </extensionElements>
 
-				out.append "Item " + isItemOk;
-				out.append '\n';
-			</script>
-		</scriptTask>
+            <potentialOwner>
 
-		<sequenceFlow id="flowToEnd" sourceRef="scripttask_print"
-			targetRef="theEnd" />
+                <resourceAssignmentExpression>
 
+                    <formalExpression>
+                        group(analysts, labmanagers)
+                    </formalExpression>
+                </resourceAssignmentExpression>
+            </potentialOwner>
+        </userTask>
+
+        <sequenceFlow id="fromOOSstart" sourceRef="usertask_startOOS"
+            targetRef="checkOosJoin" />
+
+        <inclusiveGateway id="checkOosJoin" />
+
+        <sequenceFlow id="flowToPrint" sourceRef="checkOosJoin"
+            targetRef="scripttask_print" />
+
+        <scriptTask id="scripttask_print" name="Print Report"
+            scriptFormat="groovy">
+
+            <script>
+                fielpath = itemData['lot']  +'_ItemOut.txt';
+
+                out:println "Printing report to " + fielpath;
+
+                def out = new File(fielpath);
+
+                out.append "Item " + isItemOk;
+                out.append '\n';
+                out.append "OOS " + oosNumber;
+                out.append '\n';
+            </script>
+        </scriptTask>
+
+        <sequenceFlow id="flowToEnd" sourceRef="scripttask_print"
+            targetRef="theEnd" />
+            
 		<endEvent id="theEnd" />
+
 
 	</process>
 </definitions>
