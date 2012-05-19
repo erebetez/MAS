@@ -80,6 +80,7 @@ public class TaskViewer extends CustomComponent implements RefreshListener {
 		if (taskTable == null) {
 			taskTable = new Table();
 			taskTable.setSizeFull();
+			taskTable.setWidth("100%");
 
 			taskTable.setSelectable(true);
 

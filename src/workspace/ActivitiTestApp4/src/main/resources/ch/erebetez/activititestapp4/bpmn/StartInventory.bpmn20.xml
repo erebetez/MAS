@@ -20,15 +20,15 @@
         <sequenceFlow id="flowToGenerateItemTask" sourceRef="servicetask_getInventoryData"
             targetRef="callInventoryItem" />
 
-
 		<callActivity id="callInventoryItem" calledElement="doInventoryItem" >
              <extensionElements>
-                     <activiti:in source="itemDataParent" target="itemData" />
-<!--                     <activiti:out source="name" target="name" /> -->
+                    <activiti:in source="itemDataParent" target="itemData" />
+<!--                   out not working for multi instances: http://jira.codehaus.org/browse/ACT-825 -->
+<!--                     <activiti:out source="itemData" target="itemDataReturn" /> -->
              </extensionElements> 
              <multiInstanceLoopCharacteristics isSequential="false" >
-				 <loopDataInputRef>InventoryData</loopDataInputRef>
-				 <inputDataItem name="itemDataParent" />
+			        <loopDataInputRef>InventoryData</loopDataInputRef>
+					<inputDataItem name="itemDataParent" />
              </multiInstanceLoopCharacteristics>    
 		</callActivity>
 

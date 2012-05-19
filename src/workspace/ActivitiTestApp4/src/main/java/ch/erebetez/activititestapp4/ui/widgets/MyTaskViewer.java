@@ -1,5 +1,6 @@
 package ch.erebetez.activititestapp4.ui.widgets;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.activiti.engine.TaskService;
@@ -31,10 +32,9 @@ public class MyTaskViewer extends CustomComponent implements RefreshListener{
 	
 	private Task task;
 	
-	private FormViewer formViewer;
-	
-	public MyTaskViewer(FormViewer formViewer){
-		this.formViewer = formViewer;
+	private List<ShowFormListener> showFormListeners = new ArrayList<ShowFormListener>();
+
+	public MyTaskViewer(){
 		Panel panel = new Panel("My Tasks");
 		panel.setContent(new VerticalLayout());
 
@@ -62,8 +62,11 @@ public class MyTaskViewer extends CustomComponent implements RefreshListener{
 		                if (event.getButton() == ItemClickEvent.BUTTON_LEFT) {
 		                	
 		                	task = (Task) event.getItemId();
-		                	formViewer.showTaskForm(task);
-		                			                	
+		                	
+		            		for(ShowFormListener listener : showFormListeners){
+		            			listener.showFormForTask(task);
+		            		}
+
 		                    System.out.println("Show................." + task.toString() );
 		                }
 		            }
@@ -89,6 +92,11 @@ public class MyTaskViewer extends CustomComponent implements RefreshListener{
 				"dueDate", "createTime" });
 	}
 
+
+	public void addListener(ShowFormListener listener){
+		showFormListeners.add(listener);
+	}
+	
 	@Override
 	public void refresh() {
 		populateTaskTable();

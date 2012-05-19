@@ -1,8 +1,12 @@
 package ch.erebetez.activititestapp4.bpmn.forms;
 
+import java.util.List;
 import java.util.Map;
 
+import ch.erebetez.activititestapp4.dataobjects.InventoryItem;
 import ch.erebetez.activititestapp4.ui.util.AbstractUserTaskForm;
+
+import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 
 public class CheckInventoryReportForm extends AbstractUserTaskForm {
@@ -25,22 +29,34 @@ public class CheckInventoryReportForm extends AbstractUserTaskForm {
 
 	@Override
 	protected void populateFormInit(String taskId, String executionId) {
-		// TODO Auto-generated method stub
+		// TODO show some actuall data from the subprocesses.
 		
+		@SuppressWarnings("unchecked")
+		List<Map<String, String>> var = (List<Map<String, String>>) getVariable("itemDataReturn");
+
+		if (var == null) {
+			addComponent(new Label("No data from sub."));
+		} else {
+			for (int i = 0; i < var.size(); ++i) {
+				String loc = var.get(0).get(InventoryItem.LOCATION);
+				addComponent(new Label("local : " + loc));
+			}
+		}
+
 	}
 
 	@Override
 	protected void populateFormField(String propertyId, String propertyValue) {
 		if (propertyId.equals("checkComment")) {
-//			comments.setValue(propertyValue);
+			// comments.setValue(propertyValue);
 		}
 	}
-	
+
 	@Override
 	public void copyFormProperties(Map<String, String> destination) {
 		destination.put("checkComment", (String) comments.getValue());
 	}
-	
+
 	@Override
 	protected void init() {
 		comments = new TextField("Comment");

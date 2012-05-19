@@ -1,5 +1,7 @@
 package ch.erebetez.activititestapp4.ui.widgets;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.activiti.engine.FormService;
@@ -9,6 +11,7 @@ import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
+import ch.erebetez.activititestapp4.ui.RefreshListener;
 import ch.erebetez.activititestapp4.ui.util.AbstractUserTaskForm;
 import ch.erebetez.activititestapp4.ui.util.UserTaskForm;
 import ch.erebetez.activititestapp4.ui.util.UserTaskFormContainer;
@@ -17,7 +20,7 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 
 @Configurable(preConstruction = true)
-public class FormViewer  extends CustomComponent{
+public class FormViewer  extends CustomComponent implements ShowFormListener{
 	private static final long serialVersionUID = -6103590408722895618L;
 
 	private static Logger log = Logger.getLogger(AbstractUserTaskForm.class
@@ -36,6 +39,8 @@ public class FormViewer  extends CustomComponent{
 	private VerticalLayout formContainerLayout;
 	
 	private UserTaskForm form;
+	
+	private List<RefreshListener> refreshListeners = new ArrayList<RefreshListener>();
 	
 	public FormViewer(UserTaskFormContainer userTaskFormContainer){
 		this.userTaskFormContainer = userTaskFormContainer;
@@ -64,6 +69,7 @@ public class FormViewer  extends CustomComponent{
 				public void buttonClick(ClickEvent event) {
 					submitForm(form);
 					hideForm();
+					
 				}
 			});
 		}
@@ -90,7 +96,6 @@ public class FormViewer  extends CustomComponent{
 	}
 
 	private void updateControls() {
-//		updateHeaderLabel();
 //		submitButton.setVisible(currentForm != null);
 		formContainerLayout.removeAllComponents();
 		if (currentForm != null) {
@@ -99,6 +104,10 @@ public class FormViewer  extends CustomComponent{
 		} else {
 			getSubmitButton().setEnabled(false);
 		}
+		
+        for (RefreshListener listener : refreshListeners) {
+            listener.refresh();
+        }
 	}
 	
 	
@@ -111,6 +120,15 @@ public class FormViewer  extends CustomComponent{
 			formService.submitTaskFormData(form.getTask().getId(),
 					form.getFormProperties());
 		}
+	}
+
+	public void addListener(RefreshListener listener){
+		refreshListeners.add(listener);
+	}	
+
+	@Override
+	public void showFormForTask(Task task) {
+		showTaskForm(task);		
 	}
 
 

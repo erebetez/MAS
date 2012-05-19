@@ -9,8 +9,6 @@ import org.activiti.engine.delegate.JavaDelegate;
 import ch.erebetez.activititestapp4.dataadapter.*;
 
 public class GetInventoryData implements JavaDelegate {
-
-	private final List<String> lotIDs = Arrays.asList( "123456", "123455", "125476", "122234", "123457" );
 	
 	public void execute(DelegateExecution execution) {		
 		

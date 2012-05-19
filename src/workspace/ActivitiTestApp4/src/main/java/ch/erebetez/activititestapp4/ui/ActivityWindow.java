@@ -1,46 +1,72 @@
 package ch.erebetez.activititestapp4.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.activiti.engine.task.Task;
+
 import ch.erebetez.activititestapp4.bpmn.forms.*;
 import ch.erebetez.activititestapp4.ui.util.UserTaskFormContainer;
 import ch.erebetez.activititestapp4.ui.widgets.FormViewer;
+import ch.erebetez.activititestapp4.ui.widgets.GetTaskByName;
 import ch.erebetez.activititestapp4.ui.widgets.MyTaskViewer;
+import ch.erebetez.activititestapp4.ui.widgets.ShowFormListener;
 
 import com.vaadin.ui.*;
 
-public class ActivityWindow extends CustomComponent {
+public class ActivityWindow extends CustomComponent implements ShowFormListener{
 	private static final long serialVersionUID = -7213851977742853381L;
 
 
-	FormViewer formViewer = null;
-	MyTaskViewer mytaskViewer = null;
-	UserTaskFormContainer userTaskFormContainer = null;
+	private FormViewer formViewer = null;
+	private MyTaskViewer mytaskViewer = null;
+	private GetTaskByName getTaskByNameLineInput = null;
+	private UserTaskFormContainer userTaskFormContainer = null;
+	
+//	private RefreshListener refreshListener;
 
+	private List<ShowFormListener> showFormListeners = new ArrayList<ShowFormListener>();
+	
+	
 	public ActivityWindow() {
 
-		setCaption("My Activiys");
+		setCaption("My Activitys");
 
 		VerticalLayout layout = new VerticalLayout();
 		setCompositionRoot(layout);
 
 		layout.addComponent(new Label("Select a task to activate the Form"));
 
+		layout.addComponent(getTaskByName());
 		layout.addComponent(getMytaskViewer());
 		layout.addComponent(getFormViewer());
 
 	}
 
-	public MyTaskViewer getMytaskViewer() {
-		if (mytaskViewer == null) {
-			mytaskViewer = new MyTaskViewer(getFormViewer());
-		}
-		return mytaskViewer;
-	}
-
+	
 	public FormViewer getFormViewer() {
 		if (formViewer == null) {
 			formViewer = new FormViewer(getUserTaskFormContainer());
+			showFormListeners.add(formViewer);
 		}
 		return formViewer;
+	}	
+	
+	public MyTaskViewer getMytaskViewer() {
+		if (mytaskViewer == null) {
+			mytaskViewer = new MyTaskViewer();
+			mytaskViewer.addListener(this);
+			getFormViewer().addListener(mytaskViewer);
+		}
+		return mytaskViewer;
+	}
+	
+	public GetTaskByName getTaskByName() {
+		if (getTaskByNameLineInput == null) {
+			getTaskByNameLineInput = new GetTaskByName();
+			getTaskByNameLineInput.addListener(this);
+		}
+		return getTaskByNameLineInput;
 	}
 
 	// FIXME userTaskContainer does not belong here!
@@ -58,6 +84,15 @@ public class ActivityWindow extends CustomComponent {
 					CreateOosForm.class);
 		}
 		return userTaskFormContainer;
+	}
+
+
+	@Override
+	public void showFormForTask(Task task) {
+		for(ShowFormListener listener : showFormListeners){
+			listener.showFormForTask(task);
+		}
+		
 	}
 
 }
