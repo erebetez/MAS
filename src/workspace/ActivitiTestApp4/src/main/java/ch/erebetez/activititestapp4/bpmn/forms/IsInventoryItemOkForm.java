@@ -3,6 +3,7 @@ package ch.erebetez.activititestapp4.bpmn.forms;
 import java.util.Map;
 
 
+import ch.erebetez.activititestapp4.dataobjects.InventoryItem;
 import ch.erebetez.activititestapp4.ui.util.AbstractUserTaskForm;
 
 import com.vaadin.ui.*;
@@ -71,11 +72,11 @@ public class IsInventoryItemOkForm extends AbstractUserTaskForm {
 		Map<String, String> itemData = (Map<String, String>) getVariable("itemData");
 		
 		if( itemData == null ){
-			addComponent(new Label("No Data ."));
+			addComponent(new Label("No Data."));
 			
 		} else {
-			addComponent(new Label(itemData.get("Lot")));
-			addComponent(new Label(itemData.get("Location")));
+			addComponent(new Label(itemData.get(InventoryItem.LOT)));
+			addComponent(new Label(itemData.get(InventoryItem.LOCATION)));
 			addComponent(new Label("Is that thing ok?"));
 		}
 		

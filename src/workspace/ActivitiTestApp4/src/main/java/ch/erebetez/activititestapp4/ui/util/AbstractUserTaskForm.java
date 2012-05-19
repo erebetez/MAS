@@ -96,8 +96,6 @@ public abstract class AbstractUserTaskForm extends VerticalLayout implements
 	
 	
 	public Object getVariable(String key){
-
-				
 		return runtimeservice.getVariable(task.getExecutionId(), key); 
 	}
 

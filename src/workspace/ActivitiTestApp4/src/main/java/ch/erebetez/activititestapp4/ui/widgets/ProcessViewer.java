@@ -124,7 +124,7 @@ public class ProcessViewer extends CustomComponent{
 
 		List<ProcessDefinition> definitionList = repositoryService
 			.createProcessDefinitionQuery()
-			.latestVersion().list();
+			.latestVersion().processDefinitionCategory("http://www.erebetez.ch/mainProcess").list();
 		
 		BeanItemContainer<ProcessDefinition> dataSource = new BeanItemContainer<ProcessDefinition>(
 				ProcessDefinition.class, definitionList);

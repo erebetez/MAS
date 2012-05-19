@@ -16,7 +16,6 @@ public class GetInventoryData implements JavaDelegate {
 		
 		DataAdapter dataList = new DummyDataAdapter();
 	
-//		execution.setVariable("InventorySize", dataList.size());
 		execution.setVariable("InventoryData", dataList.getData());
         
 	}

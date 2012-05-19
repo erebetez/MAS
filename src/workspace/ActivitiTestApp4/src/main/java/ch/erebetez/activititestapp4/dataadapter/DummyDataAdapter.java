@@ -2,6 +2,8 @@ package ch.erebetez.activititestapp4.dataadapter;
 
 import java.util.*;
 
+import ch.erebetez.activititestapp4.dataobjects.InventoryItem;
+
 public class DummyDataAdapter implements DataAdapter{
 	
 	private final List<String> lotIDs = Arrays.asList( "123456", "123455", "125476", "122234", "123457" );
@@ -15,9 +17,8 @@ public class DummyDataAdapter implements DataAdapter{
 			
 			Map<String, String> data = new HashMap<String, String>();
 			
-			// FIXME Put the names as constants somewhere else.
-			data.put("Lot", lotIDs.get(i));
-			data.put("Location", rooms.get(i));			
+			data.put(InventoryItem.LOT, lotIDs.get(i));
+			data.put(InventoryItem.LOCATION, rooms.get(i));			
 			
 			dataList.add(data);
 		}
