@@ -2,17 +2,16 @@ package ch.erebetez.activititestapp4.ui.widgets;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.activiti.engine.FormService;
-import org.activiti.engine.RuntimeService;
+
 import org.activiti.engine.form.TaskFormData;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
+import ch.erebetez.activititestapp4.*;
 import ch.erebetez.activititestapp4.ui.RefreshListener;
-import ch.erebetez.activititestapp4.ui.util.AbstractUserTaskForm;
 import ch.erebetez.activititestapp4.ui.util.UserTaskForm;
 import ch.erebetez.activititestapp4.ui.util.UserTaskFormContainer;
 
@@ -23,9 +22,6 @@ import com.vaadin.ui.Button.ClickEvent;
 public class FormViewer  extends CustomComponent implements ShowFormListener{
 	private static final long serialVersionUID = -6103590408722895618L;
 
-	private static Logger log = Logger.getLogger(AbstractUserTaskForm.class
-			.getName());	
-	
 	@Autowired
 	protected FormService formService;
 
@@ -45,8 +41,9 @@ public class FormViewer  extends CustomComponent implements ShowFormListener{
 	public FormViewer(UserTaskFormContainer userTaskFormContainer){
 		this.userTaskFormContainer = userTaskFormContainer;
 		
-		Panel panel = new Panel("Form");
+		Panel panel = new Panel(App.get().i18n(Messages.ACTIVITI_FORM));
 		panel.setContent(new VerticalLayout());
+		panel.setSizeFull();
 
 		formContainerLayout = new VerticalLayout();
 		
@@ -60,7 +57,7 @@ public class FormViewer  extends CustomComponent implements ShowFormListener{
 	
 	public Button getSubmitButton() {
 		if(submitButton == null){
-			submitButton = new Button("Submit");
+			submitButton = new Button(App.get().i18n(Messages.BUTTON_SUBMIT));
 			
 			submitButton.addListener(new Button.ClickListener() {
 				private static final long serialVersionUID = -6441664988506039946L;
@@ -69,7 +66,6 @@ public class FormViewer  extends CustomComponent implements ShowFormListener{
 				public void buttonClick(ClickEvent event) {
 					submitForm(form);
 					hideForm();
-					
 				}
 			});
 		}
@@ -96,8 +92,9 @@ public class FormViewer  extends CustomComponent implements ShowFormListener{
 	}
 
 	private void updateControls() {
-//		submitButton.setVisible(currentForm != null);
+
 		formContainerLayout.removeAllComponents();
+
 		if (currentForm != null) {
 			formContainerLayout.addComponent(currentForm.getFormComponent());
 			getSubmitButton().setEnabled(true);

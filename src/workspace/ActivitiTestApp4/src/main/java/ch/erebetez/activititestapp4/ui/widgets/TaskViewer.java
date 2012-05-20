@@ -1,11 +1,10 @@
 package ch.erebetez.activititestapp4.ui.widgets;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.mail.Message;
 
 import org.activiti.engine.TaskService;
 import org.activiti.engine.task.Task;
@@ -13,7 +12,6 @@ import org.activiti.engine.task.TaskQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
-import ch.erebetez.activititestapp4.I18nManager;
 import ch.erebetez.activititestapp4.Messages;
 import ch.erebetez.activititestapp4.App;
 import ch.erebetez.activititestapp4.dataobjects.InventoryItem;
@@ -21,7 +19,6 @@ import ch.erebetez.activititestapp4.dataobjects.InventoryItemDefinition;
 import ch.erebetez.activititestapp4.ui.RefreshListener;
 
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.event.Action;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.ItemClickEvent.ItemClickListener;
 import com.vaadin.ui.*;
@@ -42,11 +39,14 @@ public class TaskViewer extends CustomComponent implements RefreshListener {
 	private Button claimTaskButton = null;
 
 	private InventoryItem task;
+	
+	private List<RefreshListener> refreshListeners = new ArrayList<RefreshListener>();
 
 	public TaskViewer() {
 		Panel panel = new Panel(App.get().i18n(Messages.ACTIVIT_TASKS));
 		panel.setContent(new VerticalLayout());
-
+		panel.setSizeFull();
+		
 		panel.addComponent(getclaimTaskButton());
 		panel.addComponent(gettaskTable());
 
@@ -68,6 +68,10 @@ public class TaskViewer extends CustomComponent implements RefreshListener {
 				@Override
 				public void buttonClick(ClickEvent event) {
 					assignTaskToCurrentUser(task.getId());
+			        // refresh the Listeners
+					for (RefreshListener listener : refreshListeners) {
+			            listener.refresh();
+			        }	
 				}
 			});
 		}
@@ -116,6 +120,7 @@ public class TaskViewer extends CustomComponent implements RefreshListener {
 				.taskCandidateUser(App.get().user())
 				.orderByTaskPriority().desc().orderByDueDate().desc().list();
 
+		// TODO Find better solution for cutom task objects
 //		BeanItemContainer<Task> dataSource = new BeanItemContainer<Task>(
 //				Task.class, taskList);
 //
@@ -149,7 +154,12 @@ public class TaskViewer extends CustomComponent implements RefreshListener {
 		String currentUserId = App.get().user();
 
 		log.log(Level.INFO, "Assigning task {1} to user {2}", new Object[] {
-				taskId, currentUserId });
+				taskId, currentUserId });		
+		
+		if (currentUserId == null){
+			return;
+		}
+
 		try {
 			taskService.claim(taskId, currentUserId);
 
@@ -176,6 +186,10 @@ public class TaskViewer extends CustomComponent implements RefreshListener {
 						Notification.TYPE_ERROR_MESSAGE);
 	}
 
+	public void addListener(RefreshListener listener){
+		refreshListeners.add(listener);
+	}	
+	
 	@Override
 	public void refresh() {
 		populateTaskTable();

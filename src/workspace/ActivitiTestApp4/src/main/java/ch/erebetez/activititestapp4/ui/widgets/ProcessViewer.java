@@ -2,7 +2,7 @@ package ch.erebetez.activititestapp4.ui.widgets;
 
 
 
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -11,6 +11,10 @@ import org.activiti.engine.RuntimeService;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
+
+import ch.erebetez.activititestapp4.App;
+import ch.erebetez.activititestapp4.Messages;
+import ch.erebetez.activititestapp4.ui.RefreshListener;
 
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.ItemClickEvent;
@@ -33,17 +37,31 @@ public class ProcessViewer extends CustomComponent{
 	@Autowired
 	protected RuntimeService runtimeservice;
 
+	private List<RefreshListener> refreshListeners = new ArrayList<RefreshListener>();
 	
-	Table processTable = null;
+	private Table processTable = null;
 
-	Button startNewInstanceButton = null;
+	private Button startNewInstanceButton = null;
+
+	private ProcessDefinition processDefinition;
 	
 	
-	ProcessDefinition processDefinition;
+	public ProcessViewer(){
+		Panel panel = new Panel(App.get().i18n(Messages.ACTIVIT_PROCESS));
+		panel.setContent(new VerticalLayout());
+    	
+    	panel.addComponent(getStartNewInstanceButton());
+		panel.addComponent(getprocessTable());  	
+		
+        setCompositionRoot(panel);
+        
+        populateProcessTable();
+  
+	}
 	
 	public Button getStartNewInstanceButton() {
 		if(startNewInstanceButton == null){
-	    	startNewInstanceButton = new Button("Start Process");
+	    	startNewInstanceButton = new Button(App.get().i18n(Messages.ACTIVIT_START_PROCESS));
 	    	startNewInstanceButton.setEnabled(false);
 	    	
 	 		startNewInstanceButton.addListener(new Button.ClickListener() {
@@ -52,6 +70,10 @@ public class ProcessViewer extends CustomComponent{
 				@Override
 				public void buttonClick(ClickEvent event) {
 					startNewInstance(processDefinition);
+					// Signal the listeners
+			        for (RefreshListener listener : refreshListeners) {
+			            listener.refresh();
+			        }	
 				}
 			});			
 
@@ -60,11 +82,6 @@ public class ProcessViewer extends CustomComponent{
 		return startNewInstanceButton;
 	}
 	
-	
-	public void setButtonCaption(String caption){
-		getStartNewInstanceButton().setCaption(caption);
-		getStartNewInstanceButton().setEnabled(true);
-	}
 
 	public Table getprocessTable() {
 		if(processTable == null){
@@ -83,43 +100,16 @@ public class ProcessViewer extends CustomComponent{
 
 				public void itemClick(ItemClickEvent event) {
 	                if (event.getButton() == ItemClickEvent.BUTTON_LEFT) {
-	                	
+	                	getStartNewInstanceButton().setEnabled(true);
 	                	processDefinition = (ProcessDefinition) event.getItemId();
-
-	                	setButtonCaption("Start process " + processDefinition.getName() );
-	                    System.out.println("Hallo................." + processDefinition.toString() );
-	                    
 	                }
-
 	            }
-
-
 	        });
-
 		}
 		return processTable;
 	}
 
-	
 
-	public ProcessViewer(){
-		Panel panel = new Panel("Processes");
-		panel.setContent(new VerticalLayout());
-
-    	
-    	panel.addComponent(getStartNewInstanceButton());
-		panel.addComponent(getprocessTable());  	
-		
-		
-        // The composition root MUST be set
-        setCompositionRoot(panel);
-        
-        populateProcessTable();
-  
-        
-	}
-
-	
 	private void populateProcessTable(){
 
 		List<ProcessDefinition> definitionList = repositoryService
@@ -172,12 +162,9 @@ public class ProcessViewer extends CustomComponent{
 								process.getName()),
 						Notification.TYPE_ERROR_MESSAGE);
 	}	
-//    @Override
-//    public void attach() {
-//    	super.attach(); // Must call.
-//  	
-//    }
-    
 
-	
+	public void addListener(RefreshListener listener){
+		refreshListeners.add(listener);
+	}	
+
 }

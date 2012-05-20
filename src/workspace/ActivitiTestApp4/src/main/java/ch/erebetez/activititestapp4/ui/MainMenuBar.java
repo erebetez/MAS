@@ -24,11 +24,13 @@ public class MainMenuBar extends MenuBar{
 	public MainMenuBar() {
 		
 		
+		@SuppressWarnings("unused")
 		final MenuBar.MenuItem refresh = addItem("Refresh",
 				reloadIcon, refreshCommand);
 
 		
 		String user = App.get().user();
+		@SuppressWarnings("unused")		
 		final MenuBar.MenuItem logout = addItem("Logout " + user,
 				lockIcon, logoutCommand);
 	}
