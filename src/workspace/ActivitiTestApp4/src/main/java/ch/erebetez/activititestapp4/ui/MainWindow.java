@@ -4,49 +4,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.erebetez.activititestapp4.App;
-import ch.erebetez.activititestapp4.ui.login.LoginListener;
 import ch.erebetez.activititestapp4.ui.widgets.ProcessViewer;
 import ch.erebetez.activititestapp4.ui.widgets.TaskViewer;
 
-import com.vaadin.terminal.ThemeResource;
-import com.vaadin.ui.*;
-import com.vaadin.ui.MenuBar.Command;
-import com.vaadin.ui.MenuBar.MenuItem;
 
-public class MainWindow extends VerticalLayout {
+import com.vaadin.ui.*;
+
+
+public class MainWindow extends VerticalLayout implements MenuListener {
 	private static final long serialVersionUID = 8659686516723461688L;
 
-	private MenuBar menubar = null;
-	private TabSheet tabsheet;
+	private MainMenuBar menubar = null;
 	private ActivityWindow activitWindow;
 
 	private List<RefreshListener> refreshListeners = new ArrayList<RefreshListener>();
 
-	private static final ThemeResource noteIcon = new ThemeResource(
-			"../runo/icons/32/note.png");
-	private static final ThemeResource userIcon = new ThemeResource(			
-			"../runo/icons/32/user.png");
-	private static final ThemeResource calendarIcon = new ThemeResource(
-			"../runo/icons/32/calendar.png");	
-	private static final ThemeResource reloadIcon = new ThemeResource(
-			"../runo/icons/16/reload.png");
-	private static final ThemeResource lockIcon = new ThemeResource(
-			"../runo/icons/16/lock.png");
 
 	public MainWindow() {
-		// setCaption("Laboratory Execution");
+
 		setMargin(false, true, true, true);
 		setSpacing(true);
 
-		tabsheet = new TabSheet();
+		MainTabSheet tabsheet = new MainTabSheet();
 
 		activitWindow = new ActivityWindow();
 		this.addListener(activitWindow.getMytaskViewer());
 
-		tabsheet.addTab(getDashboard(), "Lab Dasboard", noteIcon);
-		tabsheet.addTab(activitWindow, "My Activitys", userIcon);
-		tabsheet.addTab(new VerticalLayout(), "History", calendarIcon);
-//		 tabsheet.addListener(this);
+		tabsheet.addDashboardTab(getDashboard());
+		tabsheet.addMyActivitysTab(activitWindow);
+		tabsheet.addHistoryTab(new VerticalLayout());
+
 
 		addComponent(getMenuBar());
 		addComponent(tabsheet);
@@ -68,45 +55,46 @@ public class MainWindow extends VerticalLayout {
 		return layout;
 	}
 
-	private MenuBar getMenuBar() {
+	
+	
+	
+	private MainMenuBar getMenuBar() {
 		if (menubar == null) {
-			menubar = new MenuBar();
-
-			String user = App.get().user();
-
-			final MenuBar.MenuItem refresh = menubar.addItem("Refresh",
-					reloadIcon, refreshCommand);
-
-			final MenuBar.MenuItem logout = menubar.addItem("Logout " + user,
-					lockIcon, logoutCommand);
-
+			menubar = new MainMenuBar();
+			menubar.addListener(this);
 		}
 		return menubar;
 	}
 
-	private Command refreshCommand = new Command() {
-		private static final long serialVersionUID = 1443125922710133298L;
+	
+	private void refreshComponents(){
+		// TODO add some logic to reduce overhead.
+		for (RefreshListener listener : refreshListeners) {
+            listener.refresh();
+        }
+		getWindow().showNotification("Refreshed all Tables");
+	}
 
-		@Override
-		public void menuSelected(MenuItem selectedItem) {
-            for (RefreshListener listener : refreshListeners) {
-                listener.refresh();
-            }
-            getWindow().showNotification("Refreshed all Tables");
-		}
-	};
-
-	private Command logoutCommand = new Command() {
-		private static final long serialVersionUID = 7337147243184703259L;
-
-		@Override
-		public void menuSelected(MenuItem selectedItem) {
-			App.get().logoutUser();
-		}
-	};
-
+	
 	public void addListener(RefreshListener listener) {
 		this.refreshListeners.add(listener);
 	}
 
+
+	@Override
+	public void menuEvent(MenuEventKey key) {
+		
+		switch(key){
+		case RELOAD:
+			refreshComponents();
+			break;
+		
+		case LOGOUT:
+			App.get().logoutUser();
+			break;
+		}
+
+	}
+	
+	
 }
