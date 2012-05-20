@@ -42,7 +42,7 @@ public class GetTaskByName extends TextField {
 
         TaskQuery query = taskService.createTaskQuery();
         
-        Task task  = query.taskAssignee(App.instance().getUser())
+        Task task  = query.taskAssignee(App.get().user())
 		   .taskName(name).singleResult();
 
         // TODO Show a message when more than two results are found. (.list())

@@ -12,7 +12,7 @@ public class Activititestapp4 extends Application {
 
 	private Window baseWindow = new Window();
 
-	protected I18nManager i18nManager;
+	private I18nManager i18nManager;
 
 	private MainWindow mainWindow = null;
 	private LoginWindow loginWindow = null;
@@ -23,9 +23,9 @@ public class Activititestapp4 extends Application {
 		SetupInitialData setup = new SetupInitialData();
 		setup.init();
 
-		App.instance().setApplication(this);
+		App.get().setApplication(this);
 
-        baseWindow.setCaption(App.instance().i18n(Messages.APP_TITLE));
+        baseWindow.setCaption(App.get().i18n(Messages.APP_TITLE));
 		baseWindow.setBorder(Window.BORDER_DEFAULT);
 		setMainWindow(baseWindow);
 
@@ -75,11 +75,7 @@ public class Activititestapp4 extends Application {
 	    }
     	return i18nManager;
 	}
-    
-    public void setI18nManager(I18nManager i18nManager) {
-        this.i18nManager = i18nManager;
-    }
-	
+
 	public void logout(){
 		setUser(null);
 		loginWindow.logout();

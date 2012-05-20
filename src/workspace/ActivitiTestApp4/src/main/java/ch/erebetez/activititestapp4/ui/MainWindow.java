@@ -72,7 +72,7 @@ public class MainWindow extends VerticalLayout {
 		if (menubar == null) {
 			menubar = new MenuBar();
 
-			String user = App.instance().getUser();
+			String user = App.get().user();
 
 			final MenuBar.MenuItem refresh = menubar.addItem("Refresh",
 					reloadIcon, refreshCommand);
@@ -101,7 +101,7 @@ public class MainWindow extends VerticalLayout {
 
 		@Override
 		public void menuSelected(MenuItem selectedItem) {
-			App.instance().logoutUser();
+			App.get().logoutUser();
 		}
 	};
 

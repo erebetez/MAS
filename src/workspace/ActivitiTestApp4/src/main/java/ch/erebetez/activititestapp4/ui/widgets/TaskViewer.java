@@ -44,7 +44,7 @@ public class TaskViewer extends CustomComponent implements RefreshListener {
 	private InventoryItem task;
 
 	public TaskViewer() {
-		Panel panel = new Panel("Tasks");
+		Panel panel = new Panel(App.get().i18n(Messages.ACTIVIT_TASKS));
 		panel.setContent(new VerticalLayout());
 
 		panel.addComponent(getclaimTaskButton());
@@ -59,7 +59,7 @@ public class TaskViewer extends CustomComponent implements RefreshListener {
 
 	public Button getclaimTaskButton() {
 		if (claimTaskButton == null) {
-			claimTaskButton = new Button(App.instance().i18n(Messages.ACTIVIT_CLAIM_TASK));
+			claimTaskButton = new Button(App.get().i18n(Messages.ACTIVIT_CLAIM_TASK));
 			claimTaskButton.setEnabled(false);
 
 			claimTaskButton.addListener(new Button.ClickListener() {
@@ -73,11 +73,6 @@ public class TaskViewer extends CustomComponent implements RefreshListener {
 		}
 
 		return claimTaskButton;
-	}
-
-	public void setButtonCaption(String caption) {
-		getclaimTaskButton().setCaption(caption);
-		getclaimTaskButton().setEnabled(true);
 	}
 
 	public Table gettaskTable() {
@@ -103,9 +98,7 @@ public class TaskViewer extends CustomComponent implements RefreshListener {
 
 						task = (InventoryItem) event.getItemId();
 
-						setButtonCaption("Claim task " + task.getName());
-						System.out.println("Hallo................."
-								+ task.toString());
+						getclaimTaskButton().setEnabled(true);
 
 					}
 				}
@@ -120,7 +113,7 @@ public class TaskViewer extends CustomComponent implements RefreshListener {
 		TaskQuery query = taskService.createTaskQuery();
 
 		List<Task> taskList = query.taskUnnassigned()
-				.taskCandidateUser(App.instance().getUser())
+				.taskCandidateUser(App.get().user())
 				.orderByTaskPriority().desc().orderByDueDate().desc().list();
 
 //		BeanItemContainer<Task> dataSource = new BeanItemContainer<Task>(
@@ -153,7 +146,7 @@ public class TaskViewer extends CustomComponent implements RefreshListener {
 	}
 
 	public void assignTaskToCurrentUser(String taskId) {
-		String currentUserId = App.instance().getUser();
+		String currentUserId = App.get().user();
 
 		log.log(Level.INFO, "Assigning task {1} to user {2}", new Object[] {
 				taskId, currentUserId });

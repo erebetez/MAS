@@ -13,6 +13,8 @@ public interface Messages {
   static final String BUTTON_CANCEL = "button.cancel";
   
   // Activiti
+  static final String ACTIVIT_TASKS = "activit.tasks";
   static final String ACTIVIT_CLAIM_TASK = "activit.claim.task";
+  
   
 }
