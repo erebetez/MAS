@@ -45,7 +45,7 @@ public class I18nManager implements Serializable {
   }
   
   public void createResourceBundle() {
-    Locale locale = ValueHandler.instance().getLocale();
+    Locale locale = App.instance().getLocale();
     this.messages = ResourceBundle.getBundle(RESOURCE_BUNDLE, locale);
   }
   

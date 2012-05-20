@@ -4,15 +4,15 @@ import java.util.Locale;
 
 import com.vaadin.Application;
 
-public class ValueHandler {
+public class App {
 
-    private static ValueHandler instance = null;
+    private static App instance = null;
 	
     private Activititestapp4 application;
 	
-	public static ValueHandler instance(){
+	public static App instance(){
 		if(instance == null){
-			instance = new ValueHandler();
+			instance = new App();
 		}
 		return instance;
 	}
@@ -25,6 +25,14 @@ public class ValueHandler {
 		return application.getLocale();
 	}
 	
+	public String i18n(String key){
+		return application.getI18nManager().getMessage(key);
+	}
+	
+	public String i18n(String key, Object... arguments){
+		return application.getI18nManager().getMessage(key, arguments);
+	}	
+	
 
 	public void setApplication(Activititestapp4 application) {
 		this.application = application;
@@ -35,7 +43,9 @@ public class ValueHandler {
 		application.logout();
 	}
 	
-	private ValueHandler(){
+
+	
+	private App(){
 		
 	}
 	

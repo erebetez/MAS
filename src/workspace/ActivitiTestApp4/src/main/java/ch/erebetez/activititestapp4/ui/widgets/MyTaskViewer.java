@@ -9,7 +9,7 @@ import org.activiti.engine.task.TaskQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
-import ch.erebetez.activititestapp4.ValueHandler;
+import ch.erebetez.activititestapp4.App;
 import ch.erebetez.activititestapp4.ui.RefreshListener;
 
 import com.vaadin.data.util.BeanItemContainer;
@@ -80,7 +80,7 @@ public class MyTaskViewer extends CustomComponent implements RefreshListener{
 		
         TaskQuery query = taskService.createTaskQuery();
         
-        List<Task> taskList  = query.taskAssignee(ValueHandler.instance().getUser())
+        List<Task> taskList  = query.taskAssignee(App.instance().getUser())
 		    .orderByTaskPriority().desc().orderByDueDate().desc().list();
 
 		

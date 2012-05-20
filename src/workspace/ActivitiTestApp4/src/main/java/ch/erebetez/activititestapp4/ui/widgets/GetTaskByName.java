@@ -9,7 +9,7 @@ import org.activiti.engine.task.TaskQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
-import ch.erebetez.activititestapp4.ValueHandler;
+import ch.erebetez.activititestapp4.App;
 
 import com.vaadin.data.Property;
 import com.vaadin.ui.TextField;
@@ -42,7 +42,7 @@ public class GetTaskByName extends TextField {
 
         TaskQuery query = taskService.createTaskQuery();
         
-        Task task  = query.taskAssignee(ValueHandler.instance().getUser())
+        Task task  = query.taskAssignee(App.instance().getUser())
 		   .taskName(name).singleResult();
 
         // TODO Show a message when more than two results are found. (.list())

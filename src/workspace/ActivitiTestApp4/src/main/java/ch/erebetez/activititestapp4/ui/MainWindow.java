@@ -3,7 +3,7 @@ package ch.erebetez.activititestapp4.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.erebetez.activititestapp4.ValueHandler;
+import ch.erebetez.activititestapp4.App;
 import ch.erebetez.activititestapp4.ui.login.LoginListener;
 import ch.erebetez.activititestapp4.ui.widgets.ProcessViewer;
 import ch.erebetez.activititestapp4.ui.widgets.TaskViewer;
@@ -72,7 +72,7 @@ public class MainWindow extends VerticalLayout {
 		if (menubar == null) {
 			menubar = new MenuBar();
 
-			String user = ValueHandler.instance().getUser();
+			String user = App.instance().getUser();
 
 			final MenuBar.MenuItem refresh = menubar.addItem("Refresh",
 					reloadIcon, refreshCommand);
@@ -101,7 +101,7 @@ public class MainWindow extends VerticalLayout {
 
 		@Override
 		public void menuSelected(MenuItem selectedItem) {
-			ValueHandler.instance().logoutUser();
+			App.instance().logoutUser();
 		}
 	};
 

@@ -5,13 +5,17 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.mail.Message;
+
 import org.activiti.engine.TaskService;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
-import ch.erebetez.activititestapp4.ValueHandler;
+import ch.erebetez.activititestapp4.I18nManager;
+import ch.erebetez.activititestapp4.Messages;
+import ch.erebetez.activititestapp4.App;
 import ch.erebetez.activititestapp4.dataobjects.InventoryItem;
 import ch.erebetez.activititestapp4.dataobjects.InventoryItemDefinition;
 import ch.erebetez.activititestapp4.ui.RefreshListener;
@@ -55,7 +59,7 @@ public class TaskViewer extends CustomComponent implements RefreshListener {
 
 	public Button getclaimTaskButton() {
 		if (claimTaskButton == null) {
-			claimTaskButton = new Button("Claim Taks");
+			claimTaskButton = new Button(App.instance().i18n(Messages.ACTIVIT_CLAIM_TASK));
 			claimTaskButton.setEnabled(false);
 
 			claimTaskButton.addListener(new Button.ClickListener() {
@@ -116,7 +120,7 @@ public class TaskViewer extends CustomComponent implements RefreshListener {
 		TaskQuery query = taskService.createTaskQuery();
 
 		List<Task> taskList = query.taskUnnassigned()
-				.taskCandidateUser(ValueHandler.instance().getUser())
+				.taskCandidateUser(App.instance().getUser())
 				.orderByTaskPriority().desc().orderByDueDate().desc().list();
 
 //		BeanItemContainer<Task> dataSource = new BeanItemContainer<Task>(
@@ -149,7 +153,7 @@ public class TaskViewer extends CustomComponent implements RefreshListener {
 	}
 
 	public void assignTaskToCurrentUser(String taskId) {
-		String currentUserId = ValueHandler.instance().getUser();
+		String currentUserId = App.instance().getUser();
 
 		log.log(Level.INFO, "Assigning task {1} to user {2}", new Object[] {
 				taskId, currentUserId });

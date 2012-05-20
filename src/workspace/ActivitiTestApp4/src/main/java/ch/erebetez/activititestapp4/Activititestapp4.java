@@ -10,7 +10,9 @@ import com.vaadin.ui.*;
 public class Activititestapp4 extends Application {
 	private static final long serialVersionUID = 8718633567934963964L;
 
-	private Window baseWindow = new Window("Lab Execution");
+	private Window baseWindow = new Window();
+
+	protected I18nManager i18nManager;
 
 	private MainWindow mainWindow = null;
 	private LoginWindow loginWindow = null;
@@ -21,9 +23,9 @@ public class Activititestapp4 extends Application {
 		SetupInitialData setup = new SetupInitialData();
 		setup.init();
 
-		ValueHandler.instance().setApplication(this);
+		App.instance().setApplication(this);
 
-		// setUser("admin");
+        baseWindow.setCaption(App.instance().i18n(Messages.APP_TITLE));
 		baseWindow.setBorder(Window.BORDER_DEFAULT);
 		setMainWindow(baseWindow);
 
@@ -65,6 +67,19 @@ public class Activititestapp4 extends Application {
 		return mainWindow;
 	}
 
+	
+
+    public I18nManager getI18nManager() {
+	    if( i18nManager == null){
+	    	i18nManager = new I18nManager();
+	    }
+    	return i18nManager;
+	}
+    
+    public void setI18nManager(I18nManager i18nManager) {
+        this.i18nManager = i18nManager;
+    }
+	
 	public void logout(){
 		setUser(null);
 		loginWindow.logout();
