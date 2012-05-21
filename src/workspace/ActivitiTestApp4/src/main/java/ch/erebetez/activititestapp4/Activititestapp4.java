@@ -1,5 +1,8 @@
 package ch.erebetez.activititestapp4;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+
 import ch.erebetez.activititestapp4.ui.*;
 import ch.erebetez.activititestapp4.ui.login.LoginListener;
 import ch.erebetez.activititestapp4.ui.login.LoginWindow;
@@ -7,12 +10,14 @@ import ch.erebetez.activititestapp4.ui.login.LoginWindow;
 import com.vaadin.Application;
 import com.vaadin.ui.*;
 
+@Configurable(preConstruction = true)
 public class Activititestapp4 extends Application {
 	private static final long serialVersionUID = 8718633567934963964L;
 
 	private Window baseWindow = new Window();
 
-	private I18nManager i18nManager;
+	@Autowired
+	private I18nManager i18n;
 
 	private MainWindow mainWindow = null;
 	private LoginWindow loginWindow = null;
@@ -25,7 +30,7 @@ public class Activititestapp4 extends Application {
 
 		App.get().setApplication(this);
 
-        baseWindow.setCaption(App.get().i18n(Messages.APP_TITLE));
+        baseWindow.setCaption(i18n.get(Messages.APP_TITLE));
 		baseWindow.setBorder(Window.BORDER_DEFAULT);
 		setMainWindow(baseWindow);
 
@@ -65,15 +70,6 @@ public class Activititestapp4 extends Application {
 		}
 
 		return mainWindow;
-	}
-
-	
-
-    public I18nManager getI18nManager() {
-	    if( i18nManager == null){
-	    	i18nManager = new I18nManager();
-	    }
-    	return i18nManager;
 	}
 
 	public void logout(){

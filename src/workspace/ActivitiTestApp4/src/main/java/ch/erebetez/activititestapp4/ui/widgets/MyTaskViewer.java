@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import ch.erebetez.activititestapp4.App;
+import ch.erebetez.activititestapp4.I18nManager;
+import ch.erebetez.activititestapp4.Messages;
 import ch.erebetez.activititestapp4.ui.RefreshListener;
 
 import com.vaadin.data.util.BeanItemContainer;
@@ -22,85 +24,88 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 
 @Configurable(preConstruction = true)
-public class MyTaskViewer extends CustomComponent implements RefreshListener{
+public class MyTaskViewer extends CustomComponent implements RefreshListener {
 	private static final long serialVersionUID = 3727005920258717798L;
+
+	@Autowired
+	private TaskService taskService;
 	
 	@Autowired
-	private TaskService taskService;	
+	private I18nManager i18n;
 
 	private Table myTasksTable = null;
-	
+
 	private Task task;
-	
+
 	private List<ShowFormListener> showFormListeners = new ArrayList<ShowFormListener>();
 
-	public MyTaskViewer(){
-		Panel panel = new Panel("My Tasks");
+	public MyTaskViewer() {
+		Panel panel = new Panel(i18n.get(Messages.ACTIVIT_MY_TASKS));
 		panel.setContent(new VerticalLayout());
+		panel.setSizeFull();
 
-		panel.addComponent(getmyTasksTable());  	
+		panel.addComponent(getmyTasksTable());
 
-        setCompositionRoot(panel);
-        
-        populateTaskTable();
-		
+		setCompositionRoot(panel);
+
+		populateTaskTable();
+
 	}
-	
+
 	public Table getmyTasksTable() {
-		if(myTasksTable == null){
-		   myTasksTable = new Table();
-		   myTasksTable.setSizeFull();
-	        
-	       // Allow selecting items from the table.
-	       myTasksTable.setSelectable(true);
+		if (myTasksTable == null) {
+			myTasksTable = new Table();
+			myTasksTable.setSizeFull();
 
-	       
-	       myTasksTable.addListener(new ItemClickListener() {	        	
-					private static final long serialVersionUID = 1L;
+			// Allow selecting items from the table.
+			myTasksTable.setSelectable(true);
 
-					public void itemClick(ItemClickEvent event) {
-		                if (event.getButton() == ItemClickEvent.BUTTON_LEFT) {
-		                	
-		                	task = (Task) event.getItemId();
-		                	
-		            		for(ShowFormListener listener : showFormListeners){
-		            			listener.showFormForTask(task);
-		            		}
+			myTasksTable.addListener(new ItemClickListener() {
+				private static final long serialVersionUID = 1L;
 
-		                    System.out.println("Show................." + task.toString() );
-		                }
-		            }
-		        });	       
+				public void itemClick(ItemClickEvent event) {
+					if (event.getButton() == ItemClickEvent.BUTTON_LEFT) {
+
+						task = (Task) event.getItemId();
+
+						for (ShowFormListener listener : showFormListeners) {
+							listener.showFormForTask(task);
+						}
+
+						System.out.println("Show................."
+								+ task.toString());
+					}
+				}
+			});
 		}
 		return myTasksTable;
-	}	
-	
-	
-	private void populateTaskTable(){
-		
-        TaskQuery query = taskService.createTaskQuery();
-        
-        List<Task> taskList  = query.taskAssignee(App.get().user())
-		    .orderByTaskPriority().desc().orderByDueDate().desc().list();
+	}
 
-		
+	private void populateTaskTable() {
+
+		TaskQuery query = taskService.createTaskQuery();
+
+		List<Task> taskList = query.taskAssignee(App.get().user())
+				.orderByTaskPriority().desc().orderByDueDate().desc().list();
+
 		BeanItemContainer<Task> dataSource = new BeanItemContainer<Task>(
 				Task.class, taskList);
-		
+
 		getmyTasksTable().setContainerDataSource(dataSource);
-//		getmyTasksTable().setVisibleColumns( new String[] { "id", "name", "description", "priority",
-//				"dueDate", "createTime" });
-		getmyTasksTable().setVisibleColumns( new String[] { "name", "description" });		
+		// getmyTasksTable().setVisibleColumns( new String[] { "id", "name",
+		// "description", "priority",
+		// "dueDate", "createTime" });
+		getmyTasksTable().setVisibleColumns(
+				new String[] { "name", "description" });
 	}
 
-
-	public void addListener(ShowFormListener listener){
+	public void addListener(ShowFormListener listener) {
 		showFormListeners.add(listener);
 	}
-	
+
 	@Override
 	public void refresh() {
 		populateTaskTable();
 	}
-	
+
 }

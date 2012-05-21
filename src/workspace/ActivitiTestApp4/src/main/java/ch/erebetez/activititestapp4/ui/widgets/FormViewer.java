@@ -25,6 +25,8 @@ public class FormViewer  extends CustomComponent implements ShowFormListener{
 	@Autowired
 	protected FormService formService;
 
+	@Autowired
+	private I18nManager i18n;
 
 	private Button submitButton = null;
 	
@@ -41,7 +43,7 @@ public class FormViewer  extends CustomComponent implements ShowFormListener{
 	public FormViewer(UserTaskFormContainer userTaskFormContainer){
 		this.userTaskFormContainer = userTaskFormContainer;
 		
-		Panel panel = new Panel(App.get().i18n(Messages.ACTIVITI_FORM));
+		Panel panel = new Panel(i18n.get(Messages.ACTIVITI_FORM));
 		panel.setContent(new VerticalLayout());
 		panel.setSizeFull();
 
@@ -57,7 +59,7 @@ public class FormViewer  extends CustomComponent implements ShowFormListener{
 	
 	public Button getSubmitButton() {
 		if(submitButton == null){
-			submitButton = new Button(App.get().i18n(Messages.BUTTON_SUBMIT));
+			submitButton = new Button(i18n.get(Messages.BUTTON_SUBMIT));
 			
 			submitButton.addListener(new Button.ClickListener() {
 				private static final long serialVersionUID = -6441664988506039946L;

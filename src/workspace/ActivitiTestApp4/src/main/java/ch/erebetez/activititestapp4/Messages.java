@@ -13,7 +13,8 @@ public interface Messages {
   static final String BUTTON_CANCEL = "button.cancel";
   static final String BUTTON_SUBMIT = "button.submit";
   
-  
+  // GUI
+  static final String GUI_INPUT_TASK_NAME = "gui.inputtaskname";
   
   // Activiti Process
   static final String ACTIVIT_PROCESS = "activiti.process";
@@ -22,6 +23,7 @@ public interface Messages {
   // Activiti Tasks
   static final String ACTIVIT_TASKS = "activit.tasks";
   static final String ACTIVIT_CLAIM_TASK = "activit.claim.task";
+  static final String ACTIVIT_MY_TASKS = "activit.my.tasks";
   
   // Activit Forms
   static final String ACTIVITI_FORM = "activiti.form";

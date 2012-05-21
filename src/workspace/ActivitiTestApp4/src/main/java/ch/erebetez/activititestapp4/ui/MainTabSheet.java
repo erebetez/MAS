@@ -16,7 +16,7 @@ public class MainTabSheet extends TabSheet {
 	
 	
 	public MainTabSheet() {
-		
+		this.setSizeFull();
 	}
 	
 	public void addDashboardTab(Layout dashboard){
@@ -24,7 +24,7 @@ public class MainTabSheet extends TabSheet {
 	}
 
 	public void addMyActivitysTab(Layout myActivitys){
-		this.addTab(myActivitys, "My Activitys", userIcon);	
+		this.addTab(myActivitys, "My Activitys", userIcon);
 	}
 	
 	public void addHistoryTab(Layout history){

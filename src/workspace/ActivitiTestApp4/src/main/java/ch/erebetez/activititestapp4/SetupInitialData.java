@@ -30,6 +30,7 @@ public class SetupInitialData {
 		log.info("Initializing basic data");
 		createGroupsIfNotPresent();
 		createAdminUserIfNotPresent();
+		createDummyUserIfNotPresent();
 		deployProcesses();
 	}
 
@@ -39,6 +40,12 @@ public class SetupInitialData {
 		}
 	}
 
+	private void createDummyUserIfNotPresent() {
+		if (!isDummyUserPresent()) {
+			createDummyUser();
+		}
+	}	
+	
 	private void createGroupsIfNotPresent() {
 		if (!isGroupPresent("labmanagers")) {
 			createGroup("labmanagers", "Labmanagers");
@@ -62,6 +69,12 @@ public class SetupInitialData {
 		query.userId("admin");
 		return query.count() > 0;
 	}
+	
+	private boolean isDummyUserPresent() {
+		UserQuery query = identityService.createUserQuery();
+		query.userId("dummy");
+		return query.count() > 0;
+	}
 
 	private void createAdminUser() {
 		log.info("Creating an administration user with the username 'admin' and password 'password'");
@@ -73,6 +86,16 @@ public class SetupInitialData {
 		assignAdminUserToGroups();
 	}
 
+	private void createDummyUser() {
+		log.info("Creating an dummyuser user with the username 'dummy' and password 'dummy'");
+		User dummyUser = identityService.newUser("dummy");
+		dummyUser.setFirstName("Dummy");
+		dummyUser.setLastName("User");
+		dummyUser.setPassword("dummy");
+		identityService.saveUser(dummyUser);
+		assignDummyUserToGroups();
+	}	
+	
 	private void assignAdminUserToGroups() {
 		identityService.createMembership("admin", "labmanagers");
 		identityService.createMembership("admin", "reviewers");
@@ -80,6 +103,11 @@ public class SetupInitialData {
 		identityService.createMembership("admin", "001");
 		identityService.createMembership("admin", "002");		
 	}
+	
+	private void assignDummyUserToGroups() {
+		identityService.createMembership("dummy", "analysts");
+		identityService.createMembership("dummy", "001");		
+	}	
 
 	private boolean isGroupPresent(String groupId) {
 		GroupQuery query = identityService.createGroupQuery();

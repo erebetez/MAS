@@ -52,9 +52,12 @@ public class MainWindow extends VerticalLayout implements MenuListener {
 	private Layout getDashboard(){
 		HorizontalLayout layout = new HorizontalLayout();
 		layout.setSpacing(true);
+		layout.setSizeFull();
 
-		layout.addComponent(getProcessViewer() );
+		layout.addComponent(getProcessViewer());
+		layout.setExpandRatio(getProcessViewer(), 1);
 		layout.addComponent(getTaskViewer());
+		layout.setExpandRatio(getTaskViewer(), 3);
 		
 		return layout;
 	}
@@ -84,9 +87,12 @@ public class MainWindow extends VerticalLayout implements MenuListener {
 		VerticalLayout taskLayout = new VerticalLayout();
 		taskLayout.addComponent(getTaskByName());
 		taskLayout.addComponent(getMytaskViewer());
+		taskLayout.setSizeFull();
+		
 
 		HorizontalLayout layout = new HorizontalLayout();
 		layout.setSpacing(true);
+		layout.setSizeFull();		
 		
 		layout.addComponent(taskLayout);
 		layout.addComponent(getFormViewer());	

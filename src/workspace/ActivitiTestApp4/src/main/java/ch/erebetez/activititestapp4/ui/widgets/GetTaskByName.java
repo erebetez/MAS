@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import ch.erebetez.activititestapp4.App;
+import ch.erebetez.activititestapp4.I18nManager;
+import ch.erebetez.activititestapp4.Messages;
 
 import com.vaadin.data.Property;
 import com.vaadin.ui.TextField;
@@ -19,12 +21,15 @@ public class GetTaskByName extends TextField {
 	private static final long serialVersionUID = 8173557303490394828L;
 
 	@Autowired
-	private TaskService taskService;	
+	private TaskService taskService;
+	
+	@Autowired
+	private I18nManager i18n;
 	
 	private List<ShowFormListener> showFormListeners = new ArrayList<ShowFormListener>();
 
 	public GetTaskByName(){
-        this.setCaption("Input Sample Name:");
+        this.setCaption(i18n.get(Messages.GUI_INPUT_TASK_NAME));
 	    this.setImmediate(true);
 		this.addListener(new Property.ValueChangeListener() {
 			private static final long serialVersionUID = 1006498268256748042L;

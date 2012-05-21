@@ -12,6 +12,7 @@ import org.activiti.engine.task.TaskQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
+import ch.erebetez.activititestapp4.I18nManager;
 import ch.erebetez.activititestapp4.Messages;
 import ch.erebetez.activititestapp4.App;
 import ch.erebetez.activititestapp4.dataobjects.InventoryItem;
@@ -29,10 +30,14 @@ import com.vaadin.ui.Window.Notification;
 public class TaskViewer extends CustomComponent implements RefreshListener {
 	private static final long serialVersionUID = 7765912131071411327L;
 
-	private static Logger log = Logger.getLogger(ProcessViewer.class.getName());
+	private static Logger log = Logger.getLogger(TaskViewer.class.getName());
 
 	@Autowired
 	private TaskService taskService;
+	
+	@Autowired
+	private I18nManager i18n;
+	
 
 	private Table taskTable = null;
 
@@ -43,7 +48,7 @@ public class TaskViewer extends CustomComponent implements RefreshListener {
 	private List<RefreshListener> refreshListeners = new ArrayList<RefreshListener>();
 
 	public TaskViewer() {
-		Panel panel = new Panel(App.get().i18n(Messages.ACTIVIT_TASKS));
+		Panel panel = new Panel(i18n.get(Messages.ACTIVIT_TASKS));
 		panel.setContent(new VerticalLayout());
 		panel.setSizeFull();
 		
@@ -59,7 +64,7 @@ public class TaskViewer extends CustomComponent implements RefreshListener {
 
 	public Button getclaimTaskButton() {
 		if (claimTaskButton == null) {
-			claimTaskButton = new Button(App.get().i18n(Messages.ACTIVIT_CLAIM_TASK));
+			claimTaskButton = new Button(i18n.get(Messages.ACTIVIT_CLAIM_TASK));
 			claimTaskButton.setEnabled(false);
 
 			claimTaskButton.addListener(new Button.ClickListener() {
@@ -146,8 +151,11 @@ public class TaskViewer extends CustomComponent implements RefreshListener {
 
 		gettaskTable().setContainerDataSource(dataSource);
 		gettaskTable().setVisibleColumns(
-				new String[] { "id", "name", "description", "location",
-						"priority", "dueDate", "createTime" });
+				new String[] { "name", "description", "location",
+						"createTime" });
+//		gettaskTable().setVisibleColumns(
+//				new String[] { "id", "name", "description", "location",
+//						"priority", "dueDate", "createTime" });
 	}
 
 	public void assignTaskToCurrentUser(String taskId) {

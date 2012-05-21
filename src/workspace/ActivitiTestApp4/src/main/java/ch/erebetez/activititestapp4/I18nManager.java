@@ -30,14 +30,14 @@ public class I18nManager implements Serializable {
   // Resource bundle name
   public static final String RESOURCE_BUNDLE = "messages";
   
-  public String getMessage(String key) {
+  public String get(String key) {
     if (messages == null) {
       createResourceBundle();
     }
     return messages.getString(key);
   }
 
-  public String getMessage(String key, Object... arguments) {
+  public String get(String key, Object... arguments) {
     if (messages == null) {
       createResourceBundle();
     }

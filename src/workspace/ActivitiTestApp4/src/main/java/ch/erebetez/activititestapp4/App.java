@@ -23,13 +23,6 @@ public class App {
 		return application.getLocale();
 	}
 	
-	public String i18n(String key){
-		return application.getI18nManager().getMessage(key);
-	}
-	
-	public String i18n(String key, Object... arguments){
-		return application.getI18nManager().getMessage(key, arguments);
-	}	
 	
 
 	public void setApplication(Activititestapp4 application) {

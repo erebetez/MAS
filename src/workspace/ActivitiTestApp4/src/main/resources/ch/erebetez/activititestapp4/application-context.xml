@@ -64,5 +64,8 @@
 		factory-method="getFormService" />
 
 	<context:component-scan base-package="ch.erebetez.activititestapp4" />
+	
+	
+	<import resource="ui-context.xml" />
 
 </beans>

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import ch.erebetez.activititestapp4.App;
+import ch.erebetez.activititestapp4.I18nManager;
 import ch.erebetez.activititestapp4.Messages;
 import ch.erebetez.activititestapp4.ui.RefreshListener;
 
@@ -36,6 +37,9 @@ public class ProcessViewer extends CustomComponent{
 
 	@Autowired
 	protected RuntimeService runtimeservice;
+	
+	@Autowired
+	private I18nManager i18n;
 
 	private List<RefreshListener> refreshListeners = new ArrayList<RefreshListener>();
 	
@@ -47,8 +51,9 @@ public class ProcessViewer extends CustomComponent{
 	
 	
 	public ProcessViewer(){
-		Panel panel = new Panel(App.get().i18n(Messages.ACTIVIT_PROCESS));
+		Panel panel = new Panel(i18n.get(Messages.ACTIVIT_PROCESS));
 		panel.setContent(new VerticalLayout());
+		panel.setSizeFull();
     	
     	panel.addComponent(getStartNewInstanceButton());
 		panel.addComponent(getprocessTable());  	
@@ -61,7 +66,7 @@ public class ProcessViewer extends CustomComponent{
 	
 	public Button getStartNewInstanceButton() {
 		if(startNewInstanceButton == null){
-	    	startNewInstanceButton = new Button(App.get().i18n(Messages.ACTIVIT_START_PROCESS));
+	    	startNewInstanceButton = new Button(i18n.get(Messages.ACTIVIT_START_PROCESS));
 	    	startNewInstanceButton.setEnabled(false);
 	    	
 	 		startNewInstanceButton.addListener(new Button.ClickListener() {
