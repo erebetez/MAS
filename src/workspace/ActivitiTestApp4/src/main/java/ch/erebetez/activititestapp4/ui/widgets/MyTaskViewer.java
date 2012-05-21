@@ -85,7 +85,7 @@ public class MyTaskViewer extends CustomComponent implements RefreshListener {
 
 		TaskQuery query = taskService.createTaskQuery();
 
-		List<Task> taskList = query.taskAssignee(App.get().user())
+		List<Task> taskList = query.taskAssignee(App.instance().user())
 				.orderByTaskPriority().desc().orderByDueDate().desc().list();
 
 		BeanItemContainer<Task> dataSource = new BeanItemContainer<Task>(

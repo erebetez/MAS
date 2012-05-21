@@ -8,7 +8,7 @@ public class App {
 	
     private Activititestapp4 application;
 	
-	public static App get(){
+	public static App instance(){
 		if(instance == null){
 			instance = new App();
 		}

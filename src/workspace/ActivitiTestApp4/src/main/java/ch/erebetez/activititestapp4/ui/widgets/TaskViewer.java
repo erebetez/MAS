@@ -122,7 +122,7 @@ public class TaskViewer extends CustomComponent implements RefreshListener {
 		TaskQuery query = taskService.createTaskQuery();
 
 		List<Task> taskList = query.taskUnnassigned()
-				.taskCandidateUser(App.get().user())
+				.taskCandidateUser(App.instance().user())
 				.orderByTaskPriority().desc().orderByDueDate().desc().list();
 
 		// TODO Find better solution for cutom task objects
@@ -159,7 +159,7 @@ public class TaskViewer extends CustomComponent implements RefreshListener {
 	}
 
 	public void assignTaskToCurrentUser(String taskId) {
-		String currentUserId = App.get().user();
+		String currentUserId = App.instance().user();
 
 		log.log(Level.INFO, "Assigning task {1} to user {2}", new Object[] {
 				taskId, currentUserId });		

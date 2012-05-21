@@ -14,6 +14,9 @@ public interface Messages {
   static final String BUTTON_SUBMIT = "button.submit";
   
   // GUI
+  static final String REFRESH = "gui.refresh";
+  static final String LOGOUT = "gui.logout";
+  static final String OFFLINE_MODE = "gui.offline.mode";
   static final String GUI_INPUT_TASK_NAME = "gui.inputtaskname";
   
   // Activiti Process

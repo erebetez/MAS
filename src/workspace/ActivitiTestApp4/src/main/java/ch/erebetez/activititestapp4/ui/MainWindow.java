@@ -23,7 +23,6 @@ public class MainWindow extends VerticalLayout implements MenuListener {
 	private static final long serialVersionUID = 8659686516723461688L;
 
 	private MainMenuBar menubar = null;
-
 	private FormViewer formViewer = null;
 	private MyTaskViewer mytaskViewer = null;
 	private GetTaskByName getTaskByNameLineInput = null;
@@ -144,23 +143,24 @@ public class MainWindow extends VerticalLayout implements MenuListener {
 		}
 		return userTaskFormContainer;
 	}
-		
-	
 
-	private MainMenuBar getMenuBar() {
+
+	public MainMenuBar getMenuBar() {
 		if (menubar == null) {
 			menubar = new MainMenuBar();
-			menubar.addListener(this);
+			menubar.addListener(this);	
 		}
+		menubar.setUser(App.instance().user());
 		return menubar;
 	}
 
 	
 	private void refreshComponents(){
-		// TODO add some logic to reduce overhead.
+		// TODO add some logic to reduce overhead. only visible stuff etc.
 		for (RefreshListener listener : refreshListeners) {
             listener.refresh();
         }
+		getMenuBar().setUser(App.instance().user());
 	}
 
 	
@@ -168,6 +168,18 @@ public class MainWindow extends VerticalLayout implements MenuListener {
 		this.refreshListeners.add(listener);
 	}
 
+	public void logoutUser(){
+		App.instance().logoutUser();
+
+		menubar = null;
+		formViewer = null;
+		mytaskViewer = null;
+		getTaskByNameLineInput = null;
+		userTaskFormContainer = null;
+		processViewer = null;
+	    taskViewer = null;			
+	}
+	
 
 	@Override
 	public void menuEvent(MenuEventKey key) {
@@ -179,7 +191,7 @@ public class MainWindow extends VerticalLayout implements MenuListener {
 			break;
 		
 		case LOGOUT:
-			App.get().logoutUser();
+			logoutUser();
 			break;
 		}
 

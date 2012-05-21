@@ -28,7 +28,7 @@ public class Activititestapp4 extends Application {
 		SetupInitialData setup = new SetupInitialData();
 		setup.init();
 
-		App.get().setApplication(this);
+		App.instance().setApplication(this);
 
         baseWindow.setCaption(i18n.get(Messages.APP_TITLE));
 		baseWindow.setBorder(Window.BORDER_DEFAULT);
@@ -54,14 +54,14 @@ public class Activititestapp4 extends Application {
 			});
 		}
 		baseWindow.setContent(loginWindow);
-
 	}
 
-	public VerticalLayout getMyMainWindow() {
+	public MainWindow getMyMainWindow() {
 		System.out.println("User: " + this.getUser());
 
 		if (this.getUser() == null) {
-			showLoginWindow();
+			loginWindow.logout();
+//			showLoginWindow();
 			return null;
 		}
 
@@ -73,7 +73,7 @@ public class Activititestapp4 extends Application {
 	}
 
 	public void logout(){
-		setUser(null);
+		this.setUser(null);		
 		loginWindow.logout();
 	}
 	
