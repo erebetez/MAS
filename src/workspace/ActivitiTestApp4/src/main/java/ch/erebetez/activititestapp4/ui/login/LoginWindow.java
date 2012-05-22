@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 
+import ch.erebetez.activititestapp4.I18nManager;
+import ch.erebetez.activititestapp4.Messages;
+
 import com.vaadin.ui.*;
 import com.vaadin.ui.LoginForm.LoginEvent;
 import com.vaadin.ui.Window.Notification;
@@ -17,7 +20,10 @@ public class LoginWindow extends VerticalLayout{
 	private static final long serialVersionUID = -2459727691241360040L;
 
 	@Autowired
-	protected IdentityService identityervice;		
+	private IdentityService identityervice;
+	
+	@Autowired
+	private I18nManager i18n;
 	
 	LoginForm login = null;
 	
@@ -32,7 +38,7 @@ public class LoginWindow extends VerticalLayout{
 	private LoginForm getLoginForm(){
 		if(login == null){
 			login = new LoginForm();	
-			
+			login.setLoginButtonCaption(i18n.get(Messages.LOGIN_LOGIN));
 		    login.addListener(new LoginForm.LoginListener() {
 				private static final long serialVersionUID = 6867079190478454445L;
 

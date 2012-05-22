@@ -13,6 +13,11 @@ public interface Messages {
   static final String BUTTON_CANCEL = "button.cancel";
   static final String BUTTON_SUBMIT = "button.submit";
   
+  // Login
+  static final String LOGIN_USERNAME = "login.username";
+  static final String LOGIN_PASSWORD = "login.password";
+  static final String LOGIN_LOGIN = "login.login";
+  
   // GUI
   static final String REFRESH = "gui.refresh";
   static final String LOGOUT = "gui.logout";
