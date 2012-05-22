@@ -83,6 +83,7 @@
             scriptFormat="groovy">
 
             <script>
+
                 fielpath = itemData['lot']  +'_ItemOut.txt';
 
                 out:println "Printing report to " + fielpath;
@@ -92,16 +93,33 @@
                 out.append "Item " + isItemOk;
                 out.append '\n';
                 
+                itemData.put('isItemOk', isItemOk);
+                
                 try {
 	                out.append "OOS " + oosNumber;
 	                out.append '\n';
-				} catch (MissingPropertyExceptionmpe) {				   
+	                
+	                itemData.put('oosNumber', oosNumber);
+	                
+				} catch (MissingPropertyExceptionmpe) {
+				    itemData.put('oosNumber', 0);		   
 				}
 
+
+                
+                execution.setVariable("calcHost", "localhost");
+                execution.setVariable("calcPort", 9998);
             </script>
         </scriptTask>
 
-        <sequenceFlow id="flowToEnd" sourceRef="scripttask_print"
+        <sequenceFlow id="flowToExtern" sourceRef="scripttask_print"
+            targetRef="servicetask_externappadapter" />
+
+        <serviceTask id="servicetask_externappadapter" name="Send Data to extern programm"
+            activiti:class="ch.erebetez.activititestapp4.bpmn.services.ExternAppAdapter" >
+        </serviceTask>
+
+        <sequenceFlow id="flowToEnd" sourceRef="servicetask_externappadapter"
             targetRef="theEnd" />
             
 		<endEvent id="theEnd" />

@@ -1,4 +1,4 @@
-package ch.erebetez.marshall;
+package ch.erebetez.activititestapp4.utils.marshall;
 
 import java.text.DecimalFormat;
 import java.util.*;
@@ -125,7 +125,11 @@ public class EatMarshaller {
 				
 		} else if (className == "java.lang.Integer") {
 			 strType = "integer";
-			 strLexical = varValue.toString();		
+			 strLexical = varValue.toString();
+			 
+		} else if (className == "java.lang.Boolean") {
+			 strType = "boolean";
+			 strLexical = (String) new Boolean((Boolean) varValue).toString();					 
 		}
 
 		return String.format(cstrTag, strType, strLexical);
@@ -144,6 +148,7 @@ public class EatMarshaller {
 
 			return marshallArray((List<Object>) varSource);
 
+			
 		} else if (className == "java.lang.String") {
 
 			return marshallAtom(varSource);
@@ -152,6 +157,11 @@ public class EatMarshaller {
 
 			return marshallAtom(varSource);
 
+		} else if (className == "java.lang.Boolean") {
+
+			return marshallAtom(varSource);
+			
+			
 		} else {
 
 			throw new IllegalArgumentException("Objekte des Types '"
@@ -160,3 +170,4 @@ public class EatMarshaller {
 		}
 	}
 }
+
