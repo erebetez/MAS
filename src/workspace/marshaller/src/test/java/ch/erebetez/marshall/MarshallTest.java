@@ -80,40 +80,40 @@ public class MarshallTest {
 		}
 	}
 	
-	@Test	
-	public void umMarshallTest() throws ParserConfigurationException{
-		
-		Eatxml xml = new Eatxml();
-		EatUnmarshaller umarsh = new EatUnmarshaller();
-
-		Object dict = null;
-		
-		try {
-			
-		    xml.setXml(FileWriters.readFile("resources/test/long.xml"));
-		    
-		    Document mydoc = xml.getDoc();
-		    
-		    Element root = mydoc.getDocumentElement();
-		    System.out.println( "root" + root.toString() );
-		    
-			dict = umarsh.unmarshall(xml.getDoc());
-			
-		} catch (XMLStreamException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SAXException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		System.out.println(dict);
-		
-	}
-	
+//	@Test	
+//	public void umMarshallTest() throws ParserConfigurationException{
+//		
+//		Eatxml xml = new Eatxml();
+//		EatUnmarshaller umarsh = new EatUnmarshaller();
+//
+//		Object dict = null;
+//		
+//		try {
+//			
+//		    xml.setXml(FileWriters.readFile("resources/test/long.xml"));
+//		    
+//		    Document mydoc = xml.getDoc();
+//		    
+//		    Element root = mydoc.getDocumentElement();
+//		    System.out.println( "root" + root.toString() );
+//		    
+//			dict = umarsh.unmarshall(xml.getDoc());
+//			
+//		} catch (XMLStreamException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (SAXException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		} catch (IOException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+//		
+//		System.out.println(dict);
+//		
+//	}
+//	
 	
 	
 	@Test	
@@ -156,6 +156,25 @@ public class MarshallTest {
 		
 		System.out.println(returnList.get(0));
 		
+		EatMarshaller marsh = new EatMarshaller();
+		String xml = marsh.marshall(dict);
+		
+		System.out.println(xml);
+		
+		Eatxml eatXml = new Eatxml();
+		
+		try {
+			eatXml.setXml(xml);
+			Assert.assertTrue(eatXml.isValid());
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Assert.fail();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Assert.fail();
+		}
 		
 		
 		
