@@ -3,6 +3,9 @@ package ch.erebetez.activititestapp4.bpmn.forms;
 import java.util.List;
 import java.util.Map;
 
+import org.activiti.engine.history.HistoricDetail;
+import org.activiti.engine.history.HistoricProcessInstance;
+
 import ch.erebetez.activititestapp4.dataobjects.InventoryItem;
 import ch.erebetez.activititestapp4.ui.util.AbstractUserTaskForm;
 
@@ -16,10 +19,16 @@ public class CheckInventoryReportForm extends AbstractUserTaskForm {
 	public static final String FORM_KEY = "checkInventoryResultsForm";
 
 	private TextField comments;
+	
+	private class invetoryTaskDao {
+		
+		
+	}
+	
 
 	@Override
 	public String getDisplayName() {
-		return "Is the inventory Ok";
+		return "Is the inventory review Ok";
 	}
 
 	@Override
@@ -30,17 +39,12 @@ public class CheckInventoryReportForm extends AbstractUserTaskForm {
 	@Override
 	protected void populateFormInit(String taskId, String executionId) {
 		// TODO show some actuall data from the subprocesses.
-		
-		@SuppressWarnings("unchecked")
-		List<Map<String, String>> var = (List<Map<String, String>>) getVariable("itemDataReturn");
 
-		if (var == null) {
-			addComponent(new Label("No data from sub."));
-		} else {
-			for (int i = 0; i < var.size(); ++i) {
-				String loc = var.get(0).get(InventoryItem.LOCATION);
-				addComponent(new Label("local : " + loc));
-			}
+		List<HistoricProcessInstance> subHist = getHistoryService().createHistoricProcessInstanceQuery().superProcessInstanceId(getTask().getProcessInstanceId()).list();
+		
+		for(HistoricProcessInstance subInst: subHist){
+			List<HistoricDetail> detailHist = getHistoryService().createHistoricDetailQuery().processInstanceId(subInst.getId()).list();
+			
 		}
 
 	}

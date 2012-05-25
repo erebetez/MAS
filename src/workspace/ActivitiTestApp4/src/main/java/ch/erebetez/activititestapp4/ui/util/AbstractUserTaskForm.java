@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.activiti.engine.HistoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.form.FormData;
 import org.activiti.engine.form.FormProperty;
@@ -24,6 +25,9 @@ public abstract class AbstractUserTaskForm extends VerticalLayout implements
 	
 	@Autowired
 	private RuntimeService runtimeservice;
+	
+	@Autowired
+	private HistoryService historyService;	
 	
 	private static Logger log = Logger.getLogger(AbstractUserTaskForm.class
 			.getName());
@@ -93,10 +97,14 @@ public abstract class AbstractUserTaskForm extends VerticalLayout implements
 		copyFormProperties(map);
 		return map;
 	}
-	
+
 	
 	public Object getVariable(String key){
 		return runtimeservice.getVariable(task.getExecutionId(), key); 
+	}
+	
+	public HistoryService getHistoryService(){
+		return this.historyService;
 	}
 
 	protected abstract void copyFormProperties(Map<String, String> destination);
