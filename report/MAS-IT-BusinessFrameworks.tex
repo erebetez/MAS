@@ -101,45 +101,32 @@ Text
 \section{Introduction}
 Laborprocesses. Wath is that all about?
 
-Usualy it goas like this. A phyical sample is brought to the analytical laboratory. The lab determins certain physical propertys and the thell the customer about it.
+Usualy it goas like this. A phyical sample is brought to the quality control (QC) analytic laboratory. The laboratory determines certain physical property's and then tell the customer about it.
+
+A simplified view looks like this. A sample of a certain substance comes into the QC lab. What analysis have to be made etc. is given by the Labor information and management system (LIMS). The LIMS also says when and what sample has to be analyzed.
+The lab performs then the analysis. All used solutions, instruments and steps have to be documented. That is traditionally done on paper. At this point it is important to emphasize that everything that is not documented isn't done from an audit point of view. Also the standard operating procedure (SOP) has to be followed exactly.
+After the analysis it is mostly used to have a calculation step where certain parameters are calculated to the final value. The final value is then transferred back to the LIMS. These are mainly manual steps. These manual steps can lead to errors and are time consuming.
+Since the operating of balances, creation of solution or other practical tasks cannot be automated, the data flow and the process can.
+
+This report aims to look at the layer between LIMS and the instruments and the analysis method. In the past few years there has been a ton of programs that aim to solve that problem. Some try to achieve that with an almighty LIMS. But since most LIMS date from the 90's the implementation is not easy and you end up haven a not maintainable monolith. There was also the idea of electronic lab notebooks (ELN) these ELN where usually conceived for R&D laboratory. That means more freedom and less strict processes.
+Then there is the software for the instruments, that can perform more and more tasks. This looks like a good idea, but there are so many instruments, methods and manufactures that there is just no solution that fits all. Also it is still the case, that one solution of one manufacturer is in no way compatible to the solution of another manufacturer.
+
+So the question came up, why not look at something completely different. The lab is not the only business that has processes. There could be other business frameworks that provide the needed functionality. This system should be able to integrate and interface these different islands of programs. It would be like a laboratory middle ware.
 
 
 
-Der stark abstrahierte Fall ist der folgende. Ein Physische Probe kommt in ein Analyselabor, bestimmte physikalische Parameter werden 
-von der Probe erhoben und diese Resultate werden dem Auftraggeber bekanntgegeben.
-
-In diesem Bericht wird ein Labor als Qualitätsicherungslabor betrachtet. Das heisst, die Prozesse und Methoden sind vorgeben und können bzw. dürfen nicht 
-einfach abgeändert werden.
-
-Traditionell wird die Probenverwaltung von einem LIMS (Labor Informations und Management System) geregelt. Traditionellerweise ist es auch so, dass
-sobald die Probe welche analysiert werden muss im Labor steht, viele Schritte Manuell geschehen. Dies ist aufwendig und Fehleranfällig. 
-Es darf natürlich nicht vergessen werden, dass unter Manuell auch Handarbeiten wie einwägen, Lösungen erstellen oder Analysegeräte befüllen fallen.
-Für diese Aufgaben wird es noch lange Menschen geben welche diese Arbeit ausführen müssen.
-
-Will man nun diese Laborprozesse Automatisieren, geht es vor allem um die Datenübertragung. 
-Was muss gemessen werden, welche Methode soll verwendet werden,
-welches qualifizierte Gerät darf verwendet werden, 
-wie werden die Daten verrechnet und schlussendlich wie werden die Resultate wieder an das nächst höhere System weitergegeben.
-Gleichzeitig solle das System den Laborarbeiter unterstützen und die durchgeführten Schritte sollten in alle nachvollziehbar sein.
-
-
-<Geräte Software>
-
-
-
-Menschen sind ausserordentlich gut darin Informationen 
-
-
-\section{The Laboratory}
+\section{The Laboratory landscape}
+%FIXME translate
 Im Labor gibt es nun verschiedenste Methoden welche unterschiedliche Historische Ursprünge haben. So ist eine Chemische Titration ein
 vollkommen anderes Konzept als z.B eine Biochemische Elisa Analyse.
 Dies ergibt ein äusserst Heterogene Landschaft an Analysegeräten mit und ohne Software. Resultate oder Rohdaten liegen in unterschiedlichsten Formaten und Layouts vor.
 
 
+% Image sdms, lims, lab ...
 
 
-
-\section{Conzept}
+\section{Concept}
+%FIXME translate
 Um eine Automatisierung in diesem Heterogenen Umfeld realisieren zu können, braucht es eine Engine die einerseits den Status der einzelnen
 Abläufe kennt und auch weiss welcher Businessprozess als nächster aufgerufen werden soll. Diese Statemachien oder Sheduler währe somit das
 Herzstück der Automatisierung. Häufig fällt auch der Begriff SOA (Service Oriented Architecture).
@@ -155,17 +142,22 @@ Die Konfiguration dieser Engines geschieht über standardisierte XML Files. Dabe
 
 Beide sind offene Standards vom OMG \cite{omg}.
 
+
+\subsection{Requirements}
+%FIXME translate
 Neben dieser Zentralen Steuerungseinheit, soll es dann auch möglich sein, Komponenten wie Webapplikationen (Formulare, Listen, etc),
 Reports oder Mobile Geräte einbinden zu können. In den Labors ist es zudem Historisch so, das viele MS Excel Berechnungen existieren. Diese
 sollten, dann auch in den Prozessen eingebunden werden können.
 
 
 \section{BPEL}
+%FIXME translate
 Die BPEL (Business Process Execution Language) Beschreibungsprache kommt aus der Informatikwelt. Diese wird hat Beschreibungen zu
 Schleifen, Bedingugnen und anderes Konstrukte die man aus der Programmierung kennt. 
 
 
 \section{BPMN}
+%FIXME translate
 BPMN (Business Process Model and Notation) kommt aus dem Business und war gedacht erstmals auf dem Papier die Prozesse einheitlich
 beschreiben zu können. Grob gesagt, handelt es sich um Flowcharts. 
 Mit der Version 2 vom BPMN können diese Flowcharts nun auch programmatisch ausgeführt werden. 
@@ -174,6 +166,7 @@ Mit der Version 2 vom BPMN können diese Flowcharts nun auch programmatisch ausg
 
 
 \section{Prozess Engines}
+%FIXME translate
 Die Engine ist nun eine Implementierung einer solchen Business Prozess Beschreibung. Die Engines erfüllen nun die Logik. 
 \begin{itemize}
   \item Welche Prozesse gibt es?
@@ -189,19 +182,19 @@ Es folgt nun ein verglich verschiedener Engines. Die getroffene Auswahl ist weit
 
 
 \subsection{activVOS}
-Hersteller: Active Endpoints, Inc.
+Programmer: Active Endpoints, Inc.
 
-Sprache: java
+Language: java
 
-Lizenz: proprietär (setzt aber auf offenen standards)
+License: proprietary (setzt aber auf offenen standards)
 
 
-Preise?
+Cost?
 
 Dokumentation: Diverse Videos mit Demos und Tutorials.
 
-Bemerkungen: Ist als eclipse Plugin aufgebaut. \\
-Hat zum Beispiel ein Report designer. \\
+Remarks: It's basically an eclipse Plugin. \\
+Has a report designer. \\
 Viele GUI's
 
 
@@ -220,6 +213,7 @@ Dokumentation:
 Bemerkungen:
 Zusammenspiel mit Sharpoint.
 nur für BPEL
+
 
 
 \subsection{Apache ODE}
@@ -298,9 +292,11 @@ hätte.
 
 
 \section{Example Application}
-The process takes an anuall Inventoryitem review. 
-Der Prozess beschreibt eine Jährliche Inventarkontrolle von Rückstellmustern.
+The process takes an annual inventory item review. These items are reference samples of the substance that were sold.
 
+% BPMN imagr
+
+First 
 Liste der Rückstellmuster wird aus dem übergeordneten System geholt (z.B LIMS). 
 
 Liste wird anschliessend abgearbeitet. Dies kann von verschiedenne Personen Blockweise geschehen. Abarbeitung muss auch Offline passieren
@@ -310,7 +306,12 @@ Zusammenfassende Liste mit Resultaten und eventuellen fails wird als Report gedr
 
 Reports werden in der elektronischen Datenbank abgelegt (anderes system). 
 
-Der Prozess wird von nun an als Beispiel herangezogen.
+
+
+This process is used to illustrate the further examples and references.
+
+
+
 
 \subsection{Technology}
 As the main language Java is choosen.
@@ -462,6 +463,8 @@ For the maven repository nexus from (xxxx) would be a nice chois. It supports al
 
 \addcontentsline{toc}{section}{Literaturverzeichnis}
 \begin{thebibliography}{99}
+
+\bibitem{middleware} \url{wiki}
 
 \bibitem{activiti} \url{http://www.activiti.org/}
 
