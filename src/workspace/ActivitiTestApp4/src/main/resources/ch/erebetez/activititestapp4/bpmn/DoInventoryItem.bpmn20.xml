@@ -105,10 +105,6 @@
 				    itemData.put('oosNumber', 0);		   
 				}
 
-
-                
-                execution.setVariable("calcHost", "localhost");
-                execution.setVariable("calcPort", 9998);
             </script>
         </scriptTask>
 
@@ -117,6 +113,10 @@
 
         <serviceTask id="servicetask_externappadapter" name="Send Data to extern programm"
             activiti:class="ch.erebetez.activititestapp4.bpmn.services.ExternAppAdapter" >
+            <extensionElements>
+                <activiti:field name="host" stringValue="localhost" />
+                <activiti:field name="port" stringValue="9998" />
+            </extensionElements>
         </serviceTask>
 
         <sequenceFlow id="flowToEnd" sourceRef="servicetask_externappadapter"

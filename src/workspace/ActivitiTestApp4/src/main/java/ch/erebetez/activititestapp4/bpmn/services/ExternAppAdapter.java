@@ -20,6 +20,7 @@
 package ch.erebetez.activititestapp4.bpmn.services;
 
 import org.activiti.engine.delegate.DelegateExecution;
+import org.activiti.engine.delegate.Expression;
 import org.activiti.engine.delegate.JavaDelegate;
 import org.xml.sax.SAXException;
 
@@ -42,19 +43,26 @@ import javax.xml.transform.TransformerException;
 
 public class ExternAppAdapter implements JavaDelegate {
 
+	private Expression host;	
+	private Expression port;
+	
+	
+	public void setHost(Expression host) {
+		this.host = host;
+	}
+
+
+	public void setPort(Expression port) {
+		this.port = port;
+	}
+
+
 	public void execute(DelegateExecution execution) {
 
-		String host = (String) execution.getVariable("calcHost");
-		Integer port = (Integer) execution.getVariable("calcPort");
-
-		System.out.println("sending to app at " + host + ":" + port);
+		System.out.println("sending to app at " + host.getExpressionText() + " : " + port.getExpressionText());
 
 		Map<String,String> itemData = (Map<String,String>) execution.getVariable("itemData");
 		
-		
-		// 
-
-
 		EatMarshaller marshall = new EatMarshaller();
 		String xmlString = marshall.marshall(itemData);
 		
@@ -104,7 +112,7 @@ public class ExternAppAdapter implements JavaDelegate {
 			PrintWriter out = null;
 			BufferedReader in = null;
 
-			echoSocket = new Socket(host, port.intValue());
+			echoSocket = new Socket(host.getExpressionText(), Integer.parseInt(port.getExpressionText()) );
 			out = new PrintWriter(echoSocket.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(
 					echoSocket.getInputStream()));
