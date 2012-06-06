@@ -13,7 +13,7 @@ public class GetInventoryData implements JavaDelegate {
 	public void execute(DelegateExecution execution) {		
 		
 		DataAdapter dataList = new DummyDataAdapter();
-	
+
 		execution.setVariable("InventoryData", dataList.getData());
         
 	}

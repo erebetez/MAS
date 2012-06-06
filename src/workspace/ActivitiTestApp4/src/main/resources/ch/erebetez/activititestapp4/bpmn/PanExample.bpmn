@@ -6,22 +6,22 @@
       <startEvent id="startevent1" name="Start"></startEvent>
       <userTask id="usertaskCollectData" name="Collect Data"></userTask>
       <serviceTask id="servicetaskPrintResults" name="Print Inventory Item Result"></serviceTask>
-      <serviceTask id="servicetaskCreateOOS" name="Create OOS"></serviceTask>
       <inclusiveGateway id="inclusivegateway1" name="Inclusive Gateway"></inclusiveGateway>
       <inclusiveGateway id="inclusivegateway2" name="Inclusive Gateway"></inclusiveGateway>
       <endEvent id="endevent3" name="End"></endEvent>
       <sequenceFlow id="flow1" name="" sourceRef="startevent1" targetRef="usertaskCollectData"></sequenceFlow>
-      <sequenceFlow id="flow21" name="" sourceRef="inclusivegateway1" targetRef="servicetaskCreateOOS"></sequenceFlow>
+      <sequenceFlow id="flow21" name="" sourceRef="inclusivegateway1" targetRef="usertask1"></sequenceFlow>
       <sequenceFlow id="flow22" name="" sourceRef="inclusivegateway1" targetRef="inclusivegateway2"></sequenceFlow>
-      <sequenceFlow id="flow24" name="" sourceRef="servicetaskCreateOOS" targetRef="inclusivegateway2"></sequenceFlow>
+      <sequenceFlow id="flow24" name="" sourceRef="usertask1" targetRef="inclusivegateway2"></sequenceFlow>
       <sequenceFlow id="flow25" name="" sourceRef="usertaskCollectData" targetRef="inclusivegateway1"></sequenceFlow>
       <sequenceFlow id="flow26" name="" sourceRef="inclusivegateway2" targetRef="servicetaskPrintResults"></sequenceFlow>
       <sequenceFlow id="flow27" name="" sourceRef="servicetaskPrintResults" targetRef="endevent3"></sequenceFlow>
+      <userTask id="usertask1" name="Create OOS"></userTask>
     </subProcess>
     <userTask id="usertaskCheckTask" name="Check Inventory List"></userTask>
     <serviceTask id="servicetaskPrintFinalList" name="Print Inventory List"></serviceTask>
     <endEvent id="endevent2" name="End"></endEvent>
-    <callActivity id="callactivity1" name="Start Inventory Processes" default="" activiti:async="true">
+    <callActivity id="callactivity1" name="Start Inventory Processes" activiti:async="true">
       <multiInstanceLoopCharacteristics isSequential="false">
         <loopCardinality>5</loopCardinality>
       </multiInstanceLoopCharacteristics>
@@ -51,9 +51,6 @@
       <bpmndi:BPMNShape bpmnElement="servicetaskPrintResults" id="BPMNShape_servicetaskPrintResults">
         <omgdc:Bounds height="55" width="105" x="600" y="346"></omgdc:Bounds>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="servicetaskCreateOOS" id="BPMNShape_servicetaskCreateOOS">
-        <omgdc:Bounds height="55" width="105" x="410" y="410"></omgdc:Bounds>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="inclusivegateway1" id="BPMNShape_inclusivegateway1">
         <omgdc:Bounds height="40" width="40" x="320" y="353"></omgdc:Bounds>
       </bpmndi:BPMNShape>
@@ -62,6 +59,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="endevent3" id="BPMNShape_endevent3">
         <omgdc:Bounds height="35" width="35" x="740" y="356"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="usertask1" id="BPMNShape_usertask1">
+        <omgdc:Bounds height="55" width="105" x="410" y="410"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
         <omgdi:waypoint x="149" y="373"></omgdi:waypoint>
