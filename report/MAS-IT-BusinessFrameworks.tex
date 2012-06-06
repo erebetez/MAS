@@ -98,43 +98,35 @@ Text
 
 % --- Einleitung --- %
 \newpage
-\section{Einleitung}
-Laborprozesse. Was versteht man eigentlich darunter? 
-Der stark abstrahierte Fall ist der folgende. Ein Physische Probe kommt in ein Analyselabor, bestimmte physikalische Parameter werden 
-von der Probe erhoben und diese Resultate werden dem Auftraggeber bekanntgegeben.
+\section{Introduction}
+Laborprocesses. Wath is that all about?
 
-In diesem Bericht wird ein Labor als Qualitätsicherungslabor betrachtet. Das heisst, die Prozesse und Methoden sind vorgeben und können bzw. dürfen nicht 
-einfach abgeändert werden.
+Usualy it goas like this. A phyical sample is brought to the quality control (QC) analytic laboratory. The laboratory determines certain physical property's and then tell the customer about it.
 
-Traditionell wird die Probenverwaltung von einem LIMS (Labor Informations und Management System) geregelt. Traditionellerweise ist es auch so, dass
-sobald die Probe welche analysiert werden muss im Labor steht, viele Schritte Manuell geschehen. Dies ist aufwendig und Fehleranfällig. 
-Es darf natürlich nicht vergessen werden, dass unter Manuell auch Handarbeiten wie einwägen, Lösungen erstellen oder Analysegeräte befüllen fallen.
-Für diese Aufgaben wird es noch lange Menschen geben welche diese Arbeit ausführen müssen.
+A simplified view looks like this. A sample of a certain substance comes into the QC lab. What analysis have to be made etc. is given by the Labor information and management system (LIMS). The LIMS also says when and what sample has to be analyzed.
+The lab performs then the analysis. All used solutions, instruments and steps have to be documented. That is traditionally done on paper. At this point it is important to emphasize that everything that is not documented isn't done from an audit point of view. Also the standard operating procedure (SOP) has to be followed exactly.
+After the analysis it is mostly used to have a calculation step where certain parameters are calculated to the final value. The final value is then transferred back to the LIMS. These are mainly manual steps. These manual steps can lead to errors and are time consuming.
+Since the operating of balances, creation of solution or other practical tasks cannot be automated, the data flow and the process can.
 
-Will man nun diese Laborprozesse Automatisieren, geht es vor allem um die Datenübertragung. 
-Was muss gemessen werden, welche Methode soll verwendet werden,
-welches qualifizierte Gerät darf verwendet werden, 
-wie werden die Daten verrechnet und schlussendlich wie werden die Resultate wieder an das nächst höhere System weitergegeben.
-Gleichzeitig solle das System den Laborarbeiter unterstützen und die durchgeführten Schritte sollten in alle nachvollziehbar sein.
+This report aims to look at the layer between LIMS and the instruments and the analysis method. In the past few years there has been a ton of programs that aim to solve that problem. Some try to achieve that with an almighty LIMS. But since most LIMS date from the 90's the implementation is not easy and you end up haven a not maintainable monolith. There was also the idea of electronic lab notebooks (ELN) these ELN where usually conceived for R&D laboratory. That means more freedom and less strict processes.
+Then there is the software for the instruments, that can perform more and more tasks. This looks like a good idea, but there are so many instruments, methods and manufactures that there is just no solution that fits all. Also it is still the case, that one solution of one manufacturer is in no way compatible to the solution of another manufacturer.
 
-
-<Geräte Software>
+So the question came up, why not look at something completely different. The lab is not the only business that has processes. There could be other business frameworks that provide the needed functionality. This system should be able to integrate and interface these different islands of programs. It would be like a laboratory middle ware.
 
 
 
-Menschen sind ausserordentlich gut darin Informationen 
-
-
-\section{Die Laborumgebung}
+\section{The Laboratory landscape}
+%FIXME translate
 Im Labor gibt es nun verschiedenste Methoden welche unterschiedliche Historische Ursprünge haben. So ist eine Chemische Titration ein
 vollkommen anderes Konzept als z.B eine Biochemische Elisa Analyse.
 Dies ergibt ein äusserst Heterogene Landschaft an Analysegeräten mit und ohne Software. Resultate oder Rohdaten liegen in unterschiedlichsten Formaten und Layouts vor.
 
 
+% Image sdms, lims, lab ...
 
 
-
-\section{Konzept}
+\section{Concept}
+%FIXME translate
 Um eine Automatisierung in diesem Heterogenen Umfeld realisieren zu können, braucht es eine Engine die einerseits den Status der einzelnen
 Abläufe kennt und auch weiss welcher Businessprozess als nächster aufgerufen werden soll. Diese Statemachien oder Sheduler währe somit das
 Herzstück der Automatisierung. Häufig fällt auch der Begriff SOA (Service Oriented Architecture).
@@ -150,17 +142,22 @@ Die Konfiguration dieser Engines geschieht über standardisierte XML Files. Dabe
 
 Beide sind offene Standards vom OMG \cite{omg}.
 
+
+\subsection{Requirements}
+%FIXME translate
 Neben dieser Zentralen Steuerungseinheit, soll es dann auch möglich sein, Komponenten wie Webapplikationen (Formulare, Listen, etc),
 Reports oder Mobile Geräte einbinden zu können. In den Labors ist es zudem Historisch so, das viele MS Excel Berechnungen existieren. Diese
 sollten, dann auch in den Prozessen eingebunden werden können.
 
 
 \section{BPEL}
+%FIXME translate
 Die BPEL (Business Process Execution Language) Beschreibungsprache kommt aus der Informatikwelt. Diese wird hat Beschreibungen zu
 Schleifen, Bedingugnen und anderes Konstrukte die man aus der Programmierung kennt. 
 
 
 \section{BPMN}
+%FIXME translate
 BPMN (Business Process Model and Notation) kommt aus dem Business und war gedacht erstmals auf dem Papier die Prozesse einheitlich
 beschreiben zu können. Grob gesagt, handelt es sich um Flowcharts. 
 Mit der Version 2 vom BPMN können diese Flowcharts nun auch programmatisch ausgeführt werden. 
@@ -168,7 +165,8 @@ Mit der Version 2 vom BPMN können diese Flowcharts nun auch programmatisch ausg
 
 
 
-\section{Engines}
+\section{Prozess Engines}
+%FIXME translate
 Die Engine ist nun eine Implementierung einer solchen Business Prozess Beschreibung. Die Engines erfüllen nun die Logik. 
 \begin{itemize}
   \item Welche Prozesse gibt es?
@@ -184,19 +182,19 @@ Es folgt nun ein verglich verschiedener Engines. Die getroffene Auswahl ist weit
 
 
 \subsection{activVOS}
-Hersteller: Active Endpoints, Inc.
+Programmer: Active Endpoints, Inc.
 
-Sprache: java
+Language: java
 
-Lizens: proprietär (setzt aber auf offenen standards)
+License: proprietary (setzt aber auf offenen standards)
 
 
-Preise?
+Cost?
 
 Dokumentation: Diverse Videos mit Demos und Tutorials.
 
-Bemerkungen: Ist als eclipse Plugin aufgebaut. \\
-Hat zum Beispiel ein Report designer. \\
+Remarks: It's basically an eclipse Plugin. \\
+Has a report designer. \\
 Viele GUI's
 
 
@@ -215,6 +213,7 @@ Dokumentation:
 Bemerkungen:
 Zusammenspiel mit Sharpoint.
 nur für BPEL
+
 
 
 \subsection{Apache ODE}
@@ -262,7 +261,7 @@ Programmierung und Konfiguration muss fast eingekauft werden.
 
 
 
-\subsection{Zusammenfassung}
+\subsection{Summary of products}
 BPMN ist auf Grund der Business nähe eher für Laborprozesse geeignet als das BPEL.
 
 Betrachtet man jetzt nur die BPMN Engines, bleibt von den oben genannten nur noch das ActiVOS, activit und ARIS übrig.
@@ -283,18 +282,21 @@ welche in dem Gebiet spezialisiert sind implementiert werden.
 Nimmt man zudem Vaadin als Webframework, spielt es sehr gut mit activiti zusammen.
 
 
-\subsection{Kompatibilität}
+\subsection{Compatibility}
 Trotz des BPMN Standards, haben die verschiedenen implementierunge der Engines eigene Schlüsselwörter, wie z.B für Formulare. 
 Die BPMN Beschreibungen können daher nicht "einfach so" von einer zu anderen engine kopiert werden. 
 Die Wahl der Engine ist demnach schon bindend.
 
-Da aber immerhin die Geschäftslogik schön abgekapselt ist, ist das portieren einfacher, als wenn man alles in reinem Java programmiert
+Da aber immerhin die Geschäftslogik schön abgekapselt ist, ist das portieren einfacher, als wenn man z.B alles in reinem Java programmiert
 hätte.
 
 
-\section{Beispiel Applikation}
-Der Prozess beschreibt eine Jährliche Inventarkontrolle von Rückstellmustern.
+\section{Example Application}
+The process takes an annual inventory item review. These items are reference samples of the substance that were sold.
 
+% BPMN imagr
+
+First 
 Liste der Rückstellmuster wird aus dem übergeordneten System geholt (z.B LIMS). 
 
 Liste wird anschliessend abgearbeitet. Dies kann von verschiedenne Personen Blockweise geschehen. Abarbeitung muss auch Offline passieren
@@ -304,18 +306,153 @@ Zusammenfassende Liste mit Resultaten und eventuellen fails wird als Report gedr
 
 Reports werden in der elektronischen Datenbank abgelegt (anderes system). 
 
-Dier Prozess wird von nun an als Beispiel herangezogen.
-
-\subsection{Technologie Wahl}
 
 
-\subsection{Webapplikation}
-
-\subsection{bpmn}
+This process is used to illustrate the further examples and references.
 
 
-\subsection{}
 
+
+\subsection{Technology}
+As the main language Java is choosen.
+
+
+
+\section{Build tools}
+The question what build tool, if any, came pretty early in the project development. Just starting a Project in Eclipse i the easiest way. 
+At least as long as the project is not to big, is only one project and doesn't really change over time. That was all not the case. So lets have a look at few of them. 
+
+In the Java World there are the usual suspects:
+\begin{itemize}
+ \item Ant
+ \item Maven
+ \item Gradle
+\end{itemize}
+
+\subsection{Ant}
+Ant is the oldest of the three. It allows to define build scripts in xml. 
+It has no own logic, so all tasks or targets have to be written from scratch.
+That allows a big flexibility, it is however also quit complex. There is also the fact,
+that scripting in xml is not really fun.
+
+
+\subsection{Maven}
+Maven also uses also xml for the configuration. Opposed to ant, you define how the project has to be build. The building is then
+made by maven. Maven also resolves dependency. Maven is widely used and therefore has a lot of plugins and additional tools like an eclipse plugin. For our case maven seemed to do the job.
+
+
+\subsection{Gradle}
+Gradle is the newes member in the build tool family. Gradle is not just a Java build tool so i can also handle other languages. The configuration file is writen in groovy. That makes a much nicer looking project definition.
+Gradle also doesn't reinvent the world. It uses the same dependency resolvement as maven. So it can almost do everything that maven can. In addition, it is easy to create custom tasks like in ant.
+
+The downside is, that gradle is still a very young project and has not as much plugins or examples as maven. It is however worth keeping in sight.
+
+\subsection{Usage}
+For the main Webapplicatin it is the simples way to use maven as the buildtool. Since gradle seems very promissing, the plan is to use it in the smaler subprojects. That way it can be easily evaluated and maybe used as the main buildtool in the future.
+
+
+\section{Webapplication}
+Besides the bpmn engine, the webapplication is a central cornerstone of this project. After all thats what the user gets to see.
+The decisions was made to use Vaadin as a webframework. It allows to program the webapplication completely in java on the server side. So there is no need to get in trouble with webtechnology.
+
+As the backend activiti is used. So the user management, transaction safety and business logic is taken care of.
+
+To glue all the frameworks together, spring is used. In spring the configuration is made in a xml file. As a result the code doesn't has to have any knowledge of the environment it is in.
+
+
+\subsection{class design}
+%image of app%
+
+
+
+
+
+
+\subsection{Internationalisation}
+
+
+
+
+\subsection{ldap}
+
+
+
+
+\section{Versioning}
+For the versioning of the source code there are several producs available. Just to name a few of them: svn, mercurial, git.
+During the development of the example git was already used. It is has decentral achitecture. So every developer has always the full power of git at his disposal. It is also easy to create branches and to create labels for realases.
+
+\subsection{using git}
+In order that every user uses the branches the same way, a vew ground rules have to be set.
+Each git repo will have at leas three branches. productive, validation, and master.
+
+Master is always the newes development branch. When the new feature is ready the changes are merged into the validation branch where they are tested. 
+
+
+%FIXME how about always make a new branch?
+
+From the validation branch the code is merged into the productiv branch. it is then taged wit the news version.
+
+The spring configuraton files are unique for each enviroment and will have to be updated manualy or by a script.
+
+
+\section{Deployment}
+
+maven + repo + scripts + gradle
+
+
+\section{Infrastructure}
+This chapter shal give an overview how the infrastrucure that supports the webapp and the development of it, has to look. 
+All named server are planed to be virtual machines.
+
+It would have four servers. 
+\begin{itemize}
+ \item Webapplicatin server
+ \item Database server
+ \item Calculation server (excel, r)
+ \item Repository server
+\end{itemize}
+
+\subsection{Webbapplication server}
+This server is a classic webapplication server that can run war Archives. 
+So it runs an jee enviroment like jBoss or tomcat.
+The operating system is therefore not so relevant. 
+
+To keep things simpel linux was choosen for the example server.
+
+\subsubsection{configuration}
+%configs....
+
+
+\subsection{Database server}
+De database server would be used to store the activiti data. The databases supported by activiti are mysql, oracle. Mssql is jet in experimental state.
+ 
+For the example a linux server with a mysql database was setup.
+To manage the database phpmyadmin is used.
+
+Since the database is configured in the webapplication with spring, it is very easy to change the used database.
+
+
+\subsection{Calculation server}
+This is a rahter exotic configuration. This server should be able to run excel. Therefore windows is the only option al the operating system. On this server there will also run the calculation server (java) wich listens to the querrys of an activiti task.
+
+
+
+\subsection{Repository server}
+This server would not be used in the productiv setting. It is just there to facilitate the developers work.
+The server would provide a maven repository and a git repository. 
+
+The operating system would be preferably linux. That is because git is native to linux.
+For the maven repository nexus from (xxxx) would be a nice chois. It supports all neccesery functions and provides a nice web frontend for managing the repositoris.
+
+% see chapter? configuration....
+
+
+
+
+
+
+\section{Migration}
 
 
 \section{Datennormalisierung}
@@ -327,10 +464,38 @@ Dier Prozess wird von nun an als Beispiel herangezogen.
 \addcontentsline{toc}{section}{Literaturverzeichnis}
 \begin{thebibliography}{99}
 
+\bibitem{middleware} \url{wiki}
+
 \bibitem{activiti} \url{http://www.activiti.org/}
 
 \bibitem{omg} \url{http://www.omg.org/}
 
+\bibitem{eclipse} \url{http://www.eclipse.org} %FIXME
+
+\bibitem{vaadin} \url{http://www.vaadin.com}
+
+\bibitem{ant} \url{http://www.vaadin.com}
+
+\bibitem{maven} \url{http://www.vaadin.com}
+
+\bibitem{gradle} \url{http://www.vaadin.com}
+
+\bibitem{spring} \url{} % FIXME
+
+
+\bibitem{activitiDbSupport} \url{}
+
+\bibitem{mysql} \url{}
+
+\bibitem{phpmyadmin} \url{}
+
+\bibitem{oracledb} \url{}
+
+\bibitem{mssql} \url{}
+
+\bibitem{nexus} \url{}
+
+\bibitem{git} \url{}
 
 
 
