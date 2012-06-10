@@ -1,41 +1,35 @@
 package ch.erebetez.unmarshall;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.StringReader;
+import java.math.BigInteger;
 import java.util.*;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-import javax.xml.transform.stream.StreamSource;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 
 import org.w3c.dom.*;
-import org.xml.sax.*;
+
+
+import ch.erebetez.xmlobjects.*;
+import ch.erebetez.xmlobjects.CtDictionary.Member;
+import ch.erebetez.xmlobjects.CtList.Item;
 
 
 public class EatUnmarshaller {
 
-	public enum tagNames{
-	    list, 
-	    dictionary, 
-	    atom;
-	}
+	
 	
 	public enum VariableTypes{
 		vTobject,
 		vTarray,
-		vTstring,
+		vTstring, 
 		vTinteger,
 		vTdateTime,
 		vTdecimal,
 		vTboolean;
 	}
 
-	public Object unmarshall(Document docMarshall) throws XMLStreamException{
+	public Object unmarshall(Document docMarshall) {
 		
 	    if(docMarshall == null){
 	    	return null;
@@ -45,114 +39,94 @@ public class EatUnmarshaller {
 	    
 	    // TODO Check version
 	    
-	    docMarshall.normalize();
+	    JAXBContext jc;
+	    Unmarshaller u;
+	    Marshallenvelop marshallEnv = null;
 	    
-	    Node element = docMarshall.getDocumentElement();
+		try {
+			jc = JAXBContext.newInstance( "ch.erebetez.xmlobjects" );
+			
+			u = jc.createUnmarshaller();
+			
+			marshallEnv = (Marshallenvelop) u.unmarshal( docMarshall );
+			
+		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+		if(marshallEnv == null){
+			return dictionary;
+		}
+	    
 
 	    
-	    System.out.println("unmarshall start " + element.getNodeName());
-	    element = element.getLastChild();
-	    System.out.println("unmarshall start " + element.getNodeName());
-	    System.out.println("unmarshall type " + element.getNodeType());
+	    System.out.println("Major " + marshallEnv.getMajor());
+
+	    System.out.println("Minor " + marshallEnv.getMinor());
+
 	    
-     	// TODO return long...
-	    unmarshall01(element, dictionary, 1);
+	    // FIXME it is not always a dictionara as root.
+	    CtDictionary firstDict = marshallEnv.getDictionary();
+	    
+
+	    dictionary = (Map<String, Object>) unmarshall01(firstDict, 1);
 
 	    return dictionary;
 	}
 	
-	private VariableTypes unmarshall01(Node docElement, Object varDestination, int lngMinor){
+	
+	private Object unmarshall01(Object docElement, int lngMinor){
 
-		
+// FIXME remove?		
 		if( docElement == null ){
 			return null;
 		}
 		
-		if( docElement.getNodeType() != Node.ELEMENT_NODE){
-			return null;
-		}
-		
-		System.out.println("unmarshall node type " + docElement.getNodeType());
-		
-		System.out.println(docElement.getLocalName());
-		
-	    String strNodeName = docElement.getNodeName();
-        
-        System.out.println( "Node:" + strNodeName );
+		System.out.println("unmarshall node type " + docElement.getClass());		
         
         
-        switch (tagNames.valueOf(strNodeName)){
-            case list:
-                varDestination = unmarshallArray01(docElement, lngMinor);
-                return VariableTypes.vTarray;
-            case dictionary:
-                varDestination = unmarshallDictionary01(docElement, lngMinor);
-                return VariableTypes.vTobject;
-            case atom:
-                varDestination = unmarshallAtom01(docElement, lngMinor);
-                return VariableTypes.vTobject;
+        if( docElement.getClass().getName().equals("ch.erebetez.xmlobjects.CtDictionary")){
+        	return unmarshallDictionary01((CtDictionary) docElement, lngMinor);
         }
+        
+        if( docElement.getClass().getName().equals("ch.erebetez.xmlobjects.CtList")){
+        	return unmarshallArray01((CtList) docElement, lngMinor);
+        }
+        
+        if( docElement.getClass().getName().equals("ch.erebetez.xmlobjects.CtAtom")){
+        	return unmarshallAtom01((CtAtom) docElement, lngMinor);
+        }
+        
+        System.out.println("No match for node type " + docElement.getClass());
         
         return null;
 	}
 	
 
-	private Object unmarshallArray01(Node docElement, int lngMinor ){
-		switch (lngMinor){
-		case 1:
-			
-			System.out.println("array node type " + docElement.getNodeType());
-			
-		    List<Object> tmpList = new Vector<Object>();
-		    Object varDestination = new Object();		    
-		    
-	        if( docElement.getChildNodes().getLength() == 0 ){
-	            return tmpList;
-	        }
-	        
-	        NodeList list = docElement.getChildNodes();
-	        
-	        for( int index = 0; index < list.getLength(); ++index){
-	            unmarshall01(list.item(index).getFirstChild(), varDestination, lngMinor);
-	            tmpList.add(varDestination);
-	        }
 
-		    return tmpList;
-
-		    
-		default: 
-			throw new IllegalArgumentException(
-					"Minor Version " + lngMinor + " nicht unterstützt!");
-	    }
-	}
-	
-
-	private Object unmarshallDictionary01(Node docElement, int lngMinor ){
+	private Object unmarshallDictionary01(CtDictionary docElement, int lngMinor ){
 		switch (lngMinor){
 		case 1:
 
-			System.out.println("dict type " + docElement.getNodeType());
 			
 			Object varDestination = new Object();
 		    
 			Map<String, Object> dict = new HashMap<String, Object>();
 		    
-			System.out.println("unmarshallDictionary01 length " + docElement.getChildNodes().getLength());
+			System.out.println("unmarshallDictionary01 with members");
 			
-	        if( docElement.getChildNodes().getLength() == 0 ){
-	        	System.out.println("exiting dictionary");
-	            return dict;
-	        }
+			List<Member> memberList = docElement.getMember(); 
 
-			NodeList list = docElement.getChildNodes();
-		    
-	        for( int index = 0; index < list.getLength(); ++index ){
-	        	System.out.println("dict Item " + index + " :" + list.item(index).getNodeName());
+	        for( int index = 0; index < memberList.size(); ++index ){
+	        	System.out.println("dict Item " + index);
 	        	
-	        	// last child?
-	            unmarshall01(list.item(index).getLastChild(), varDestination, lngMinor);
+	        	List<Object> member = memberList.get(index).getAtomOrDictionaryOrList();
+	        	
+	            varDestination = unmarshall01(member.get(1) , lngMinor);
 	            
-	            String key = (String) unmarshallAtom01(list.item(index).getFirstChild(), lngMinor);
+	            String key = (String) unmarshallAtom01((CtAtom) member.get(0), lngMinor);
                 dict.put(key, varDestination);                		
 	        }
 
@@ -160,40 +134,61 @@ public class EatUnmarshaller {
 	        
 		default: 
 			throw new IllegalArgumentException(
-					"Minor Version " + lngMinor + " nicht unterstützt!");
+					"Minor Version " + lngMinor + " not supported!");
 	    }
 	}
-
-
-
-
-	private Object unmarshallAtom01(Node docElement, int lngMinor ){
+	
+	
+	private Object unmarshallArray01(CtList docElement, int lngMinor ){
 		switch (lngMinor){
 		case 1:
 
-			if(docElement == null){
-				return null;
-			}
 			
-			System.out.println("atom node type " + docElement.getNodeType());	
-			
-			if(docElement.getNodeType() != Node.ELEMENT_NODE){
-				return null;
-			}
-			
-		    System.out.println("atom: " + docElement.getNodeName());
-
-		    if(docElement.getNodeName() != "atom"){
-		    	return null;
-		    }
+		    List<Object> tmpList = new Vector<Object>();
+		    Object varDestination = new Object();
 		    
-		    Node atom = docElement.getFirstChild();
+		    
+	        List<Item> list = docElement.getItem();
+	        
+	        for( int index = 0; index < list.size(); ++index){
+	        	
+	        	// getAtomOrDictionaryOrList has one item. 
+	        	varDestination = unmarshall01(list.get(index).getAtomOrDictionaryOrList().get(0), lngMinor);
+	            tmpList.add(varDestination);
+	            
+	        }
+
+		    return tmpList;
+
+		    
+		default: 
+			throw new IllegalArgumentException(
+					"Minor Version " + lngMinor + " not supported!");
+	    }
+	}
+	
+
+
+
+
+
+	private Object unmarshallAtom01(CtAtom atom, int lngMinor ){
+		switch (lngMinor){
+		case 1:
+
+			if(atom == null){
+				return null;
+			}
+			
+			System.out.println("atom node value " + atom.getValue());	
+			
+			System.out.println("atom node type " + atom.getType());	
 			
 //		    NamedNodeMap attrib = docElement.getAttributes();
 //		    
 //		    System.out.println(attrib.getNamedItem("type").getNodeValue());
 		    
-		    long lngVarType;
+//		    long lngVarType;
 //		    switch (attrib.getNamedItem("type").getNodeValue()){
 //		        case "boolean":
 //		            lngVarType = vbBoolean
@@ -209,14 +204,12 @@ public class EatUnmarshaller {
 		
 //		    System.out.println("node type " + list.item(0).getNodeType());
 		    
-		    System.out.println("Value: " + atom.getNodeValue());
-		    
 //		    return pK009_lexical2Canonical_H(docElement.getNodeValue(), lngVarType);
-		    return atom.getNodeValue();
+		    return atom.getValue();
 		    
 		default: 
 			throw new IllegalArgumentException(
-					"Minor Version " + lngMinor + " nicht unterstützt!");
+					"Minor Version " + lngMinor + " not supported!");
 	    }
 	}
 
