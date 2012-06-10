@@ -23,51 +23,21 @@ import org.xml.sax.SAXException;
 
 public class Eatxml {
 	private String xml;
-	
-	//doc
-	private static DocumentBuilder builder = null;
-	private Document doc = null;
-
-	
-	public void setXml(String xml) throws SAXException, IOException {
-		this.xml = xml;		
 		
-		setDocument();		
-	}
-	
-	public Document getDoc() {
-		return this.doc;
-	}
-
-	public void setDoc(Document doc) {
-		this.doc = doc;
-		
-//        // Prepare the output file
-//        File file = new File(filename);
-//        Result result = new StreamResult(file);
-//
-//        // Write the DOM document to the file
-//        Transformer xformer = TransformerFactory.newInstance().newTransformer();
-//        xformer.transform(source, result);
+	public void setXml(String xml) {
+		this.xml = xml;
 	}	
-	
-	private void setDocument() throws SAXException, IOException {
-		setDoc(builder.parse(new InputSource(new StringReader(this.xml))));
-	}
-	
 	
 	public String getXml(){
 		return this.xml;		
 	}
 	
-	public Eatxml() throws ParserConfigurationException{
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		
-		if(builder == null){
-		    builder = factory.newDocumentBuilder();
-		}
+	public Eatxml(){
 	}
 	
+	public Eatxml(String xml){
+		setXml(xml);
+	}	
 
 	public boolean isValid() throws SAXException, IOException{
 
@@ -99,17 +69,19 @@ public class Eatxml {
 	}
 	
 	public boolean isLong() throws SAXException, IOException{
-		return isValid();		
+		return isValid();
 	}
 
-	public void fromShortToLongXml() throws TransformerConfigurationException,
+	public String fromShortToLongXml() throws TransformerConfigurationException,
 			FileNotFoundException, TransformerException, IOException {
 		transform("resources/xsltShortToLong.xslt");
+		return this.xml;
 	}
 
-	public void fromLongToShortXml() throws TransformerConfigurationException,
+	public String fromLongToShortXml() throws TransformerConfigurationException,
 			FileNotFoundException, TransformerException, IOException {
 		transform("resources/xsltLongToShort.xslt");
+		return this.xml;
 	}
 
 	private void transform(String xslt) throws TransformerException,

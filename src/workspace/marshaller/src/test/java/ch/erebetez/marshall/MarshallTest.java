@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.*;
 
 
+import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.transform.TransformerConfigurationException;
@@ -40,9 +41,6 @@ public class MarshallTest {
 		} catch (TransformerException e) {
 
 			e.printStackTrace();
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		
 		String ref = "<E v=\"1.1\"><D><M><s>K010#META01</s><D><M>";
@@ -67,9 +65,6 @@ public class MarshallTest {
 		} catch (TransformerException e) {
 
 			e.printStackTrace();
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		
 		try {
@@ -91,17 +86,12 @@ public class MarshallTest {
 		try {
 			
 		    xml.setXml(FileWriters.readFile("resources/test/long.xml"));
-
 		    
-			dict = umarsh.unmarshall(xml.getDoc());
+			dict = umarsh.unmarshall(xml.getXml());
 			
-
-		} catch (SAXException e1) {
+		} catch (JAXBException e) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			e.printStackTrace();
 		}
 		
 		System.out.println(dict);
@@ -170,8 +160,17 @@ public class MarshallTest {
 			Assert.fail();
 		}
 		
+		EatUnmarshaller unMarshaller = null;
+	    try {
+			unMarshaller = new EatUnmarshaller(xml);
+		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Assert.fail();
+		}
 		
-		
+	    Assert.assertTrue(unMarshaller.getEatObject().equals(dict));
+	
 	}	
 	
 	

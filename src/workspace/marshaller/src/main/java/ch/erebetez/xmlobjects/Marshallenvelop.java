@@ -48,9 +48,9 @@ public class Marshallenvelop {
     protected CtDictionary dictionary;
     protected CtList list;
     @XmlAttribute(name = "major", required = true)
-    protected BigInteger major;
+    protected int major;
     @XmlAttribute(name = "minor", required = true)
-    protected BigInteger minor;
+    protected int minor;
 
     /**
      * Gets the value of the atom property.
@@ -132,7 +132,7 @@ public class Marshallenvelop {
      *     {@link BigInteger }
      *     
      */
-    public BigInteger getMajor() {
+    public int getMajor() {
         return major;
     }
 
@@ -144,7 +144,7 @@ public class Marshallenvelop {
      *     {@link BigInteger }
      *     
      */
-    public void setMajor(BigInteger value) {
+    public void setMajor(int value) {
         this.major = value;
     }
 
@@ -156,7 +156,7 @@ public class Marshallenvelop {
      *     {@link BigInteger }
      *     
      */
-    public BigInteger getMinor() {
+    public int getMinor() {
         return minor;
     }
 
@@ -168,7 +168,7 @@ public class Marshallenvelop {
      *     {@link BigInteger }
      *     
      */
-    public void setMinor(BigInteger value) {
+    public void setMinor(int value) {
         this.minor = value;
     }
 
