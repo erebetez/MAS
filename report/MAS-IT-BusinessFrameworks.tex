@@ -283,18 +283,18 @@ Nimmt man zudem Vaadin als Webframework, spielt es sehr gut mit activiti zusamme
 
 
 \subsection{Compatibility}
-Trotz des BPMN Standards, haben die verschiedenen implementierunge der Engines eigene Schlüsselwörter, wie z.B für Formulare. 
-Die BPMN Beschreibungen können daher nicht "einfach so" von einer zu anderen engine kopiert werden. 
-Die Wahl der Engine ist demnach schon bindend.
+Although BPMN is a standard and provides most keywords and rules the implementations still adds own keywords or extra functionality (i.e
+forms). So the BPMN files can't just be copied form one engine to another. If you chose one engine it is kinda final and you will stick to it.
 
-Da aber immerhin die Geschäftslogik schön abgekapselt ist, ist das portieren einfacher, als wenn man z.B alles in reinem Java programmiert
-hätte.
+If a engine change realy has to be made it is however simpler to achieve than if you had the complete logic inside the code. If the new engines even
+uses the same programming language, it is very probable, that you can just reuse the business logic classes. 
+
 
 
 \section{Example Application}
 The process takes an annual inventory item review. These items are reference samples of the substance that were sold.
 
-% BPMN imagr
+% BPMN image
 
 First 
 Liste der Rückstellmuster wird aus dem übergeordneten System geholt (z.B LIMS). 
@@ -313,8 +313,63 @@ This process is used to illustrate the further examples and references.
 
 
 
-\subsection{Technology}
+\subsection{Technology and architecture}
 As the main language Java is choosen.
+
+
+
+
+
+\section{Webapplication}
+Besides the bpmn engine, the webapplication is a central cornerstone of this project. After all thats what the user gets to see.
+The decisions was made to use Vaadin as a webframework. It allows to program the webapplication completely in java on the server side. So there is no need to get in trouble with webtechnology.
+
+As the backend activiti is used. So the user management, transaction safety and business logic is taken care of.
+
+To glue all the frameworks together, spring is used. In spring the configuration is made in a xml file. As a result the code doesn't has to have any knowledge of the environment it is in.
+
+
+\subsection{class design}
+%image of app%
+
+
+
+
+
+
+\subsection{Internationalisation}
+
+
+
+
+\subsection{ldap}
+
+
+\section{Extern application server}
+
+
+
+
+
+\section{Componetns}
+Components are reusable functions and classes. In java the classes are put together in a jar file. These jar files can be imported in an other 
+project and so be easyly used.
+Jar files can be tested separately and be provided in an maven repository.
+
+For this project a few of these componetns where created. For one they would have at some point been needed anyway and for the other reason to 
+demonstrate the workflow with the buildtools and repositorys.
+
+
+\subsection{marshaller}
+
+
+\subsection{compression}
+
+
+\subsection{excel adapter}
+
+
+
 
 
 
@@ -351,32 +406,7 @@ The downside is, that gradle is still a very young project and has not as much p
 For the main Webapplicatin it is the simples way to use maven as the buildtool. Since gradle seems very promissing, the plan is to use it in the smaler subprojects. That way it can be easily evaluated and maybe used as the main buildtool in the future.
 
 
-\section{Webapplication}
-Besides the bpmn engine, the webapplication is a central cornerstone of this project. After all thats what the user gets to see.
-The decisions was made to use Vaadin as a webframework. It allows to program the webapplication completely in java on the server side. So there is no need to get in trouble with webtechnology.
-
-As the backend activiti is used. So the user management, transaction safety and business logic is taken care of.
-
-To glue all the frameworks together, spring is used. In spring the configuration is made in a xml file. As a result the code doesn't has to have any knowledge of the environment it is in.
-
-
-\subsection{class design}
-%image of app%
-
-
-
-
-
-
-\subsection{Internationalisation}
-
-
-
-
-\subsection{ldap}
-
-
-
+\section{Testing}
 
 \section{Versioning}
 For the versioning of the source code there are several producs available. Just to name a few of them: svn, mercurial, git.
@@ -455,7 +485,7 @@ For the maven repository nexus from (xxxx) would be a nice chois. It supports al
 \section{Migration}
 
 
-\section{Datennormalisierung}
+\section{Data}
 
 
 
