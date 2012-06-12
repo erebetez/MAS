@@ -1,304 +1,178 @@
 package ch.erebetez.unmarshall;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.StringReader;
 import java.util.*;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-import javax.xml.transform.stream.StreamSource;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 
-import org.w3c.dom.*;
-import org.xml.sax.*;
 
+import ch.erebetez.xmlobjects.*;
+import ch.erebetez.xmlobjects.CtDictionary.Member;
+import ch.erebetez.xmlobjects.CtList.Item;
 
 public class EatUnmarshaller {
 
-	public enum tagNames{
-	    list, 
-	    dictionary, 
-	    atom;
-	}
-	
-	public enum VariableTypes{
-		vTobject,
-		vTarray,
-		vTstring,
-		vTinteger,
-		vTdateTime,
-		vTdecimal,
-		vTboolean;
+	private final static int MAJORVERSION = 1;
+	private final static int MINORVERSION = 1;
+
+	public enum VariableTypes {
+		vTobject, vTarray, vTstring, vTinteger, vTdateTime, vTdecimal, vTboolean;
 	}
 
-	public Object unmarshall(Document docMarshall) throws XMLStreamException{
-		
-	    if(docMarshall == null){
-	    	return null;
-	    }
-	     
-	    Map<String, Object> dictionary = new HashMap<String, Object>();
-	    
-	    // TODO Check version
-	    
-	    docMarshall.normalize();
-	    
-	    Node element = docMarshall.getDocumentElement();
+	private Map<String, Object> eatObject = null;
 
-	    
-	    System.out.println("unmarshall start " + element.getNodeName());
-	    element = element.getLastChild();
-	    System.out.println("unmarshall start " + element.getNodeName());
-	    System.out.println("unmarshall type " + element.getNodeType());
-	    
-     	// TODO return long...
-	    unmarshall01(element, dictionary, 1);
-
-	    return dictionary;
-	}
-	
-	private VariableTypes unmarshall01(Node docElement, Object varDestination, int lngMinor){
-
-		
-		if( docElement == null ){
-			return null;
+	public Map<String, Object> getEatObject() {
+		if (eatObject == null) {
+			eatObject = new HashMap<String, Object>();
 		}
-		
-		if( docElement.getNodeType() != Node.ELEMENT_NODE){
-			return null;
+		return eatObject;
+	}
+
+	private void setEatObject(Map<String, Object> eatObject) {
+		this.eatObject = eatObject;
+	}
+
+	public EatUnmarshaller() {
+	}
+	
+	public EatUnmarshaller(String marshalledString) throws JAXBException {
+		unmarshall(marshalledString);
+	}
+
+	public Object unmarshall(String marshalledString) throws JAXBException {
+
+		runUnmarshall(marshalledString);
+
+		return getEatObject();
+	}
+
+	@SuppressWarnings("unchecked")
+	private void runUnmarshall(String marshalledString) throws JAXBException {
+
+		if (marshalledString == null) {
+			throw new IllegalArgumentException("No parameter was given");
 		}
-		
-		System.out.println("unmarshall node type " + docElement.getNodeType());
-		
-		System.out.println(docElement.getLocalName());
-		
-	    String strNodeName = docElement.getNodeName();
-        
-        System.out.println( "Node:" + strNodeName );
-        
-        
-        switch (tagNames.valueOf(strNodeName)){
-            case list:
-                varDestination = unmarshallArray01(docElement, lngMinor);
-                return VariableTypes.vTarray;
-            case dictionary:
-                varDestination = unmarshallDictionary01(docElement, lngMinor);
-                return VariableTypes.vTobject;
-            case atom:
-                varDestination = unmarshallAtom01(docElement, lngMinor);
-                return VariableTypes.vTobject;
-        }
-        
-        return null;
-	}
-	
 
-	private Object unmarshallArray01(Node docElement, int lngMinor ){
-		switch (lngMinor){
-		case 1:
-			
-			System.out.println("array node type " + docElement.getNodeType());
-			
-		    List<Object> tmpList = new Vector<Object>();
-		    Object varDestination = new Object();		    
-		    
-	        if( docElement.getChildNodes().getLength() == 0 ){
-	            return tmpList;
-	        }
-	        
-	        NodeList list = docElement.getChildNodes();
-	        
-	        for( int index = 0; index < list.getLength(); ++index){
-	            unmarshall01(list.item(index).getFirstChild(), varDestination, lngMinor);
-	            tmpList.add(varDestination);
-	        }
+		JAXBContext jc = JAXBContext.newInstance("ch.erebetez.xmlobjects");
 
-		    return tmpList;
+		Unmarshaller u = jc.createUnmarshaller();
 
-		    
-		default: 
-			throw new IllegalArgumentException(
-					"Minor Version " + lngMinor + " nicht unterstützt!");
-	    }
-	}
-	
+		Marshallenvelop marshallEnv = (Marshallenvelop) u
+				.unmarshal(new StringReader(marshalledString));
 
-	private Object unmarshallDictionary01(Node docElement, int lngMinor ){
-		switch (lngMinor){
-		case 1:
+		if (marshallEnv.getMajor() != MAJORVERSION) {
+			throw new IllegalArgumentException("Major Version "
+					+ marshallEnv.getMajor() + " not supported!");
+		}
 
-			System.out.println("dict type " + docElement.getNodeType());
-			
-			Object varDestination = new Object();
-		    
-			Map<String, Object> dict = new HashMap<String, Object>();
-		    
-			System.out.println("unmarshallDictionary01 length " + docElement.getChildNodes().getLength());
-			
-	        if( docElement.getChildNodes().getLength() == 0 ){
-	        	System.out.println("exiting dictionary");
-	            return dict;
-	        }
+		if (marshallEnv.getMinor() != MINORVERSION) {
+			throw new IllegalArgumentException("Minor Version "
+					+ marshallEnv.getMinor() + " not supported!");
+		}
 
-			NodeList list = docElement.getChildNodes();
-		    
-	        for( int index = 0; index < list.getLength(); ++index ){
-	        	System.out.println("dict Item " + index + " :" + list.item(index).getNodeName());
-	        	
-	        	// last child?
-	            unmarshall01(list.item(index).getLastChild(), varDestination, lngMinor);
-	            
-	            String key = (String) unmarshallAtom01(list.item(index).getFirstChild(), lngMinor);
-                dict.put(key, varDestination);                		
-	        }
+		// FIXME it is not always a dictionara as root.
+		CtDictionary firstDict = marshallEnv.getDictionary();
 
-		    return dict;
-	        
-		default: 
-			throw new IllegalArgumentException(
-					"Minor Version " + lngMinor + " nicht unterstützt!");
-	    }
+		setEatObject((Map<String, Object>) unmarshall01(firstDict));
+
 	}
 
+	private Object unmarshall01(Object docElement) {
 
+		if (docElement.getClass().getName()
+				.equals("ch.erebetez.xmlobjects.CtDictionary")) {
+			return unmarshallDictionary01((CtDictionary) docElement);
+		}
 
+		if (docElement.getClass().getName()
+				.equals("ch.erebetez.xmlobjects.CtList")) {
+			return unmarshallArray01((CtList) docElement);
+		}
 
-	private Object unmarshallAtom01(Node docElement, int lngMinor ){
-		switch (lngMinor){
-		case 1:
+		if (docElement.getClass().getName()
+				.equals("ch.erebetez.xmlobjects.CtAtom")) {
+			return unmarshallAtom01((CtAtom) docElement);
+		}
 
-			if(docElement == null){
-				return null;
-			}
-			
-			System.out.println("atom node type " + docElement.getNodeType());	
-			
-			if(docElement.getNodeType() != Node.ELEMENT_NODE){
-				return null;
-			}
-			
-		    System.out.println("atom: " + docElement.getNodeName());
+		throw new IllegalArgumentException("No match for node type " + docElement.getClass());
+	}
 
-		    if(docElement.getNodeName() != "atom"){
-		    	return null;
-		    }
-		    
-		    Node atom = docElement.getFirstChild();
-			
-//		    NamedNodeMap attrib = docElement.getAttributes();
-//		    
-//		    System.out.println(attrib.getNamedItem("type").getNodeValue());
-		    
-		    long lngVarType;
-//		    switch (attrib.getNamedItem("type").getNodeValue()){
-//		        case "boolean":
-//		            lngVarType = vbBoolean
-//		        case "integer":
-//		            lngVarType = vbLong
-//		        case "decimal":
-//		            lngVarType = vbDecimal
-//		        case "string":
-//		            lngVarType = vbString
-//		        case "dateTime":
-//		            lngVarType = vbDate
-//		    }
+	private Object unmarshallDictionary01(CtDictionary unMarshallDict) {
+
+		Map<String, Object> dict = new HashMap<String, Object>();
+
+		List<Member> memberList = unMarshallDict.getMember();
+
+		for (int index = 0; index < memberList.size(); ++index) {
+
+			List<Object> member = memberList.get(index)
+					.getAtomOrDictionaryOrList();
+
+			// The first member argument is the dictionary key.
+			String key = (String) unmarshallAtom01((CtAtom) member.get(0));
+						
+			// The second member argument is the value
+			Object returnValue = unmarshall01(member.get(1));
+
+			dict.put(key, returnValue);
+		}
+
+		return dict;
+	}
+
+	private Object unmarshallArray01(CtList unMarshallList) {
+
+		List<Object> tmpList = new Vector<Object>();
+
+		List<Item> list = unMarshallList.getItem();
+
+		for (int index = 0; index < list.size(); ++index) {
+
+			// getAtomOrDictionaryOrList has one item.
+			Object returnValue = unmarshall01(list.get(index)
+					.getAtomOrDictionaryOrList().get(0));
+
+			tmpList.add(returnValue);
+		}
+
+		return tmpList;
+
+	}
+
+	private Object unmarshallAtom01(CtAtom atom) {
+
+		System.out.println("atom value " + atom.getValue());
+
+		System.out.println("atom type " + atom.getType());
+
+		// TODO
 		
-//		    System.out.println("node type " + list.item(0).getNodeType());
-		    
-		    System.out.println("Value: " + atom.getNodeValue());
-		    
-//		    return pK009_lexical2Canonical_H(docElement.getNodeValue(), lngVarType);
-		    return atom.getNodeValue();
-		    
-		default: 
-			throw new IllegalArgumentException(
-					"Minor Version " + lngMinor + " nicht unterstützt!");
-	    }
+		// NamedNodeMap attrib = docElement.getAttributes();
+		//
+		// System.out.println(attrib.getNamedItem("type").getNodeValue());
+
+		// long lngVarType;
+		// switch (attrib.getNamedItem("type").getNodeValue()){
+		// case "boolean":
+		// lngVarType = vbBoolean
+		// case "integer":
+		// lngVarType = vbLong
+		// case "decimal":
+		// lngVarType = vbDecimal
+		// case "string":
+		// lngVarType = vbString
+		// case "dateTime":
+		// lngVarType = vbDate
+		// }
+
+		// System.out.println("node type " + list.item(0).getNodeType());
+
+		// return pK009_lexical2Canonical_H(docElement.getNodeValue(),
+		// lngVarType);
+		return atom.getValue();
+
 	}
 
 }
-
-
-//public static Document getDocument(String file) throws Exception {
-//    
-//    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-//
-//    DocumentBuilder db = dbf.newDocumentBuilder();
-//
-//    Document doc = db.parse(new File(file));
-//    return doc;
-//}
-//  
-//public static void start( String[] argv )
-//{
-//if( argv.length != 2 )
-//{
-//  System.err.println( "Usage:   java ExampleDomShowNodes <XmlFile> <TagName>" );
-//  System.err.println( "Example: java ExampleDomShowNodes MyXmlFile.xml Button" );
-//  System.exit( 1 );
-//}
-//try {
-//  // ---- Parse XML file ----
-//  DocumentBuilderFactory factory  = DocumentBuilderFactory.newInstance();
-//  DocumentBuilder        builder  = factory.newDocumentBuilder();
-//  Document               document = builder.parse( new File( argv[0] ) );
-//  // ---- Get list of nodes to given element tag name ----
-//  NodeList ndList = document.getElementsByTagName( argv[1] );
-//  printNodesFromList( ndList );  // printNodesFromList see below
-//  // ---- Error handling ----
-//} catch( SAXParseException spe ) {
-//    System.out.println( "\n** Parsing error, line " + spe.getLineNumber()
-//                                        + ", uri "  + spe.getSystemId() );
-//    System.out.println( "   " + spe.getMessage() );
-//    Exception e = ( spe.getException() != null ) ? spe.getException() : spe;
-//    e.printStackTrace();
-//} catch( SAXException sxe ) {
-//    Exception e = ( sxe.getException() != null ) ? sxe.getException() : sxe;
-//    e.printStackTrace();
-//} catch( ParserConfigurationException pce ) {
-//    pce.printStackTrace();
-//} catch( IOException ioe ) {
-//    ioe.printStackTrace();
-//}
-//}
-//
-//// ---- Helper methods ----
-//
-//private static void printObjIfVisible( String sValName, Object obj )
-//{
-//if( null == obj )  return;
-//String s = obj.toString();
-//if( null != s && 0 < s.trim().length() && !s.trim().equals( "\n" ) )
-//  System.out.println( sValName + s );
-//}
-//
-//public static void printNodeInfos( String sNodeName, Node node )
-//{
-//System.out.println(  "\n---------------------- " + sNodeName );
-//if( null != node )
-//{
-//  printObjIfVisible(   "getNodeType()        = ", "" + node.getNodeType() );
-//  printObjIfVisible(   "getNodeName()        = ", node.getNodeName() );
-//  printObjIfVisible(   "getLocalName()       = ", node.getLocalName() );
-//  printObjIfVisible(   "getNodeValue()       = ", node.getNodeValue() );
-//  if( node.hasAttributes() )
-//    printObjIfVisible( "getAttributes()      = ", node.getAttributes() );
-//  if( node.hasChildNodes() ) {
-//    printObjIfVisible( "getChildNodes()      = ", node.getChildNodes() );
-//    printObjIfVisible( "getFirstChild()      = ", node.getFirstChild() );
-//  }
-//  printObjIfVisible(   "getPreviousSibling() = ", node.getPreviousSibling() );
-//  printObjIfVisible(   "getNextSibling()     = ", node.getNextSibling() );
-//}
-//System.out.println(    "----------------------\n" );
-//}
-//
-//public static void printNodesFromList( NodeList ndList )
-//{
-//for( int i=0; i<ndList.getLength(); i++ )
-//  printNodeInfos( "ndList.item("+i+")", ndList.item(i) );
-//}

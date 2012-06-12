@@ -11,6 +11,7 @@ import ch.erebetez.activititestapp4.bpmn.forms.IsInventoryItemOkForm;
 import ch.erebetez.activititestapp4.ui.util.UserTaskFormContainer;
 import ch.erebetez.activititestapp4.ui.widgets.FormViewer;
 import ch.erebetez.activititestapp4.ui.widgets.GetTaskByName;
+import ch.erebetez.activititestapp4.ui.widgets.HistoryViewer;
 import ch.erebetez.activititestapp4.ui.widgets.MyTaskViewer;
 import ch.erebetez.activititestapp4.ui.widgets.ProcessViewer;
 import ch.erebetez.activititestapp4.ui.widgets.TaskViewer;
@@ -28,7 +29,8 @@ public class MainWindow extends VerticalLayout implements MenuListener {
 	private GetTaskByName getTaskByNameLineInput = null;
 	private UserTaskFormContainer userTaskFormContainer = null;
 	private ProcessViewer processViewer = null;
-    private TaskViewer taskViewer = null;	
+    private TaskViewer taskViewer = null;
+    private HistoryViewer historyViewer = null;
 	
 	private List<RefreshListener> refreshListeners = new ArrayList<RefreshListener>();
 
@@ -41,7 +43,7 @@ public class MainWindow extends VerticalLayout implements MenuListener {
 
 		tabsheet.addDashboardTab(getDashboard());
 		tabsheet.addMyActivitysTab(getMyActivitys());
-		tabsheet.addHistoryTab(new VerticalLayout());
+		tabsheet.addHistoryTab(getHistory());
 
 		addComponent(getMenuBar());
 		addComponent(tabsheet);
@@ -145,6 +147,25 @@ public class MainWindow extends VerticalLayout implements MenuListener {
 	}
 
 
+	
+	private Layout getHistory(){
+		HorizontalLayout layout = new HorizontalLayout();
+		layout.setSpacing(true);
+		layout.setSizeFull();
+
+		layout.addComponent(getHistoryViewer());
+		
+		return layout;
+	}
+	
+	private HistoryViewer getHistoryViewer(){		
+		if(historyViewer == null){
+			historyViewer = new HistoryViewer();
+		}
+		return historyViewer;		
+	}
+	
+	
 	public MainMenuBar getMenuBar() {
 		if (menubar == null) {
 			menubar = new MainMenuBar();

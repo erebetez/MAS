@@ -151,4 +151,15 @@ public class ExternAppAdapter implements JavaDelegate {
 		execution.setVariable("varResult", returnValue);
 
 	}
+	
+//	TODO: Add this code: http://activiti.org/userguide/index.html#bpmnReceiveTask
+//	ProcessInstance pi = runtimeService.startProcessInstanceByKey("receiveTask");
+//	Execution execution = runtimeService.createExecutionQuery()
+//	  .processInstanceId(pi.getId())
+//	  .activityId("wait")
+//	  .singleResult();
+//	assertNotNull(execution);
+//	    
+//	runtimeService.signal(execution.getId());   
+	
 }
