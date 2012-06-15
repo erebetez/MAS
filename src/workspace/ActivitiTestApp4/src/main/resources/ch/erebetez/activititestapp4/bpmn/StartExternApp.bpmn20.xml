@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn"
+    xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+    xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema"
+    expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.erebetez.ch/subProcess">
+    
+    <process id="startExternApp" name="Starts an extern application">
+
+        <startEvent id="theStart" />
+
+        <sequenceFlow id="flowfromStart" sourceRef="theStart"
+            targetRef="servicetask_externappadapter" />
+           
+
+        <serviceTask id="servicetask_externappadapter" name="Send Data to extern programm"
+            activiti:class="ch.erebetez.activititestapp4.bpmn.services.ExternAppAdapter" >
+        </serviceTask>
+
+        <sequenceFlow id="flow" sourceRef="servicetask_externappadapter"
+            targetRef="wait_forresponse" />
+
+        <receiveTask id="wait_forresponse" name="wait" />  
+
+        <sequenceFlow id="flowToEnd" sourceRef="wait_forresponse"
+            targetRef="theEnd" />
+            
+		<endEvent id="theEnd" />
+
+    </process>
+</definitions>
