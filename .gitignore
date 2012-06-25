@@ -8,6 +8,8 @@
 *.class
 *.out
 *.db
+*.aux
+*.backup
 
 target/
 
