@@ -1,0 +1,48 @@
+apply plugin: 'maven'
+   
+sourceCompatibility = 1.5
+version = '1.0-SNAPSHOT'
+
+project.ext.set("activitiVersion", "5.9")
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Calculation adapter', 'Implementation-Version': version
+    }
+}
+
+configurations {
+    deployerJars
+}
+
+
+dependencies{
+    
+    // decode and marshalling 
+    compile group:'ch.erebetez.components', name:'decode', version: '1.0-SNAPSHOT'
+    compile group:'ch.erebetez.components', name:'marshaller', version: '1.0-SNAPSHOT'
+    
+    // Activiti
+    compile group:'org.activiti', name:'activiti-engine', version:project.activitiVersion
+
+    deployerJars "org.apache.maven.wagon:wagon-http:1.0-beta-2"
+
+}
+
+
+uploadArchives {
+    repositories {
+	mavenDeployer {
+	    configuration = configurations.deployerJars
+	    
+	    pom.groupId = 'ch.erebetez.calcserver'
+
+	    repository(url: "${reposerverhostname}/snapshots/"){
+		    authentication(userName: "admin", password: "admin123")
+	    }
+		
+
+	}
+    }
+} 
+

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn"
+	xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+	xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema"
+	expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.erebetez.ch/test">
+	
+	<process id="easyProcess" name="Dummy test Process">
+
+		<startEvent id="theStart" />
+
+        <sequenceFlow id="flowfromStart" sourceRef="theStart"
+            targetRef="usertask_getdata" />
+
+		<userTask id="usertask_getdata" name="Do somthing">
+
+			<documentation textFormat="text/plain">
+				A User Task. sudo get me a sandwich.
+			</documentation>
+
+			<extensionElements>
+
+				<activiti:formProperty id="idFormValue01"
+					name="DummyForm" required="true" type="string" />
+			</extensionElements>
+
+			<potentialOwner>
+
+				<resourceAssignmentExpression>
+
+					<formalExpression>
+						group(analysts)
+					</formalExpression>
+				</resourceAssignmentExpression>
+			</potentialOwner>
+		</userTask>
+
+		<sequenceFlow id="flowToAutoScript" sourceRef="usertask_getdata"
+			targetRef="scripttask_print" />
+
+        <scriptTask
+            id="scripttask_print"
+            name="Print Report"
+            scriptFormat="groovy" >
+
+            <script>
+				fielpath = 'testOut.txt';
+				
+				out:println "Printing report to " + fielpath;
+				
+				def out = new File(fielpath);
+
+			    out.append "Form01 " + idFormValue01;
+			    out.append '\n';
+            </script>
+        </scriptTask>
+
+		<sequenceFlow id="flowToEnd" sourceRef="scripttask_print"
+			targetRef="theEnd" />
+
+        <endEvent id="theEnd" />
+
+	</process>
+</definitions>

@@ -1,0 +1,13 @@
+
+sourceCompatibility = 1.5
+version = '1.0-SNAPSHOT'
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Eat Starter', 'Implementation-Version': version
+    }
+}
+
+dependencies {
+
+}
+
