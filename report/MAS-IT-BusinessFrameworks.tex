@@ -359,7 +359,7 @@ The basic concept is a socket client server architecture.
 
 \subsection{server}
 
-The server receives a request to execute a certain excel application. It then executes this application. If multiple request are received the external excel application are run in a serial way.
+The server receives a request to execute a certain excel application. It then executes this application. If multiple request are received the external excel application are run in serial.
 
 %TODO class diagram server.
 
@@ -369,10 +369,10 @@ The server receives a request to execute a certain excel application. It then ex
 \subsection{client}
 
 The client is a process on the bpmn engine server. This process can be called by a parent process (see callActiviy). 
-The first task is a service task. It creates a connection to the server and sends the data. After that a message task waits for the 
-response.
+The first task is a java service task. It creates a connection to the server and sends the data. 
+It waits until the server sends the processed data back.
 
-If there is no response in a given time a boundary event is fired and a user or e-mail task is started. When the problem is resolved the 
+If there is an error a boundary event is fired and a user or e-mail task is started. When the problem is resolved the 
 data is send again to the server.
 
 %TODO image of client process
@@ -388,19 +388,22 @@ data is send again to the server.
 
 
 \section{Componetns}
-Components are reusable functions and classes. In java the classes are put together in a jar file. These jar files can be imported in an other 
-project and so be easyly used.
-Jar files can be tested separately and be provided in an maven repository.
+Components are reusable functions and classes. In java the classes are put together in a jar file. These jar files can be imported in an other project and so be easily used.
+Jar files can be tested separately and be provided in a maven repository.
 
-For this project a few of these componetns where created. For one they would have at some point been needed anyway and for the other reason to 
-demonstrate the workflow with the buildtools and repositorys.
+For this project a few of these componetns where created. For one they would have at some point been needed anyway and for the other reason to demonstrate the work flow with the build tools and repositorys.
 
 
 \subsection{Marshalling}
+One key feature of porting the existing framework to activit and java is the marshalling and unmarshalling of the data objects.
+Being able to marsahll an object into an xml file and sending it over a socket provides a powerful function to communicate with other programs that might even be written in an other programming language.
 
+%recursion, dict, list, values
 
 \subsection{Compression}
-
+Before sending the xml to another socket over the network it is usually good to compress the data.
+In our case the standard inflation and deflation algorithm is used (zlib) \cite{zlib}. After the compression 
+the data bytes are encoded into base64 \cite{base64}. That allows a save transmission over the TCP/IP stack.
 
 
 \subsection{excel adapter}
@@ -434,7 +437,7 @@ made by maven. Maven also resolves dependency. Maven is widely used and therefor
 
 
 \subsection{Gradle}
-Gradle is the newes member in the build tool family. Gradle is not just a Java build tool so i can also handle other languages. The configuration file is writen in groovy. That makes a much nicer looking project definition.
+Gradle is the newes member in the build tool family. Gradle is not just a Java build tool so i can also handle other languages. The configuration file is written in groovy. That makes a much nicer looking project definition.
 Gradle also doesn't reinvent the world. It uses the same dependency resolvement as maven. So it can almost do everything that maven can. In addition, it is easy to create custom tasks like in ant.
 
 The downside is, that gradle is still a very young project and has not as much plugins or examples as maven. It is however worth keeping in sight.
@@ -453,7 +456,7 @@ During the development of the example git was already used. It is has decentral 
 In order that every user uses the branches the same way, a vew ground rules have to be set.
 Each git repo will have at leas three branches. productive, validation, and master.
 
-Master is always the newes development branch. When the new feature is ready the changes are merged into the validation branch where they are tested. This validation branch gets the name of the new version.
+Master is always the newest development branch. When the new feature is ready the changes are merged into the validation branch where they are tested. This validation branch gets the name of the new version.
 The only thing that has to be changed in the application configuration, is the database configuration in the spring context files.
 The same has to be done when the productive package is about to be build. Since the configuration for the validation and productive 
 environment can be in a separate file, the change is minimal. Only some imports have to be changed.
@@ -565,6 +568,10 @@ For the maven repository nexus from (xxxx) would be a nice chois. It supports al
 \bibitem{nexus} \url{}
 
 \bibitem{git} \url{}
+
+\bibitem{zlib} \url{}
+
+\bibitem{base64} \url{}
 
 
 
