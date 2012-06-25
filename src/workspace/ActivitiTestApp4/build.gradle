@@ -1,0 +1,81 @@
+apply plugin: 'war'  
+apply plugin: 'eclipse'  
+apply plugin: 'jetty' 
+
+// Project properties  
+version = "0.0.1"  
+sourceCompatibility = 1.6  
+targetCompatibility = 1.6  
+webAppDirName = 'WebContent'  
+  
+// Repositories  
+repositories{  
+    mavenCentral()
+    
+    maven {
+        url "http://maven.alfresco.com/nexus/content/repositories/activiti"
+    }
+    
+    maven {
+        url "http://maven.vaadin.com/vaadin-addons"
+    }  
+
+    maven {
+        url "http://download.eclipse.org/rt/eclipselink/maven.repo"
+    }      
+    
+}  
+    
+project.ext.set("activitiVersion", "5.9")
+project.ext.set("vaadinVersion", "6.7.5")
+project.ext.set("springVersion", "3.0.3.RELEASE")
+project.ext.set("aspectJVersion", "1.6.11")
+project.ext.set("slf4jVersion", "1.6.2")
+  
+    
+// Dependencies  
+dependencies{
+    
+    // Activiti
+    compile group:'org.activiti', name:'activiti-engine', version:project.activitiVersion
+    compile group:'org.activiti', name:'activiti-spring', version:project.activitiVersion
+    
+    // Vaadin
+    compile group:'com.vaadin', name:'vaadin', version:project.vaadinVersion
+    compile group:'javax.servlet', name:'javax.servlet-api', version:'3.0.1'
+
+    // Database
+    compile group:'com.h2database', name:'h2', version:'1.2.132'
+    compile group:'commons-dbcp', name:'commons-dbcp', version:'1.4'
+    compile group:'org.eclipse.persistence', name:'eclipselink', version:'2.3.0'
+    compile group:'org.eclipse.persistence', name:'javax.persistence', version:'2.0.3'
+
+
+    // Spring
+    compile group:'org.springframework', name:'spring-aop', version:project.springVersion
+    compile group:'org.springframework', name:'spring-aspects', version:project.springVersion
+    compile group:'org.springframework', name:'spring-core', version:project.springVersion
+    compile group:'org.springframework', name:'spring-context', version:project.springVersion
+    compile group:'org.springframework', name:'spring-beans', version:project.springVersion
+    compile group:'org.springframework', name:'spring-web', version:project.springVersion
+    compile group:'org.springframework', name:'spring-jdbc', version:project.springVersion
+
+    // AspectJ    
+    compile group:'org.aspectj', name:'aspectjrt', version:project.aspectJVersion
+
+
+    // Scriptlanguages
+    compile group:'org.codehaus.groovy', name:'groovy', version:'1.8.6'
+
+
+    // Testing
+    testCompile group: 'junit', name: 'junit', version: '4.+'
+
+    // Logging
+    testCompile group: 'org.slf4j', name: 'slf4j-api', version: project.slf4jVersion
+    testCompile group: 'org.slf4j', name: 'slf4j-jcl', version: project.slf4jVersion
+
+
+
+}
+
