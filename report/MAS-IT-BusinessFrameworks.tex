@@ -329,8 +329,9 @@ Java also brings a lot of classes and tools to process xml and other data.
 
 
 \section{Webapplication}
-Besides the bpmn engine, the webapplication is a central cornerstone of this project. After all thats what the user gets to see.
-The decisions was made to use Vaadin as a webframework. It allows to program the webapplication completely in java on the server side. So there is no need to get in trouble with webtechnology.
+Besides the bpmn engine, the web application is a central cornerstone of this project. After all that is what the user gets to see.
+The decisions was made to use Vaadin as a web framework. It allows to program the web application completely in java on the server side. So there is
+no need to get in trouble with web technology.
 
 As the back end activiti is used. So the user management, transaction safety and business logic is taken care of.
 
@@ -345,7 +346,7 @@ To glue all the frameworks together, spring is used. In spring the configuration
 
 
 
-\subsection{Internationalisation}
+\subsection{Internationalization}
 
 
 
@@ -387,16 +388,34 @@ data is send again to the server.
 
 
 
-\section{Componetns}
+\section{Components}
 Components are reusable functions and classes. In java the classes are put together in a jar file. These jar files can be imported in an other project and so be easily used.
 Jar files can be tested separately and be provided in a maven repository.
 
-For this project a few of these componetns where created. For one they would have at some point been needed anyway and for the other reason to demonstrate the work flow with the build tools and repositorys.
+For this project a few of these components where created. For one they would have at some point been needed anyway and for the other reason to
+demonstrate the work flow with the build tools and repositorys.
+
+
+\subsection{Data structure}
+At the moment a specified data structure to store all the needed laboratory data already exists. It was implemented in vba and just consists of
+arrays, dictionary's and values. These structures exists in every programming language. Therefore it is easy to port the existing structure for
+example to java. But since Java is object oriented the laboratory objects can be modeled even better than in plain old vba. A sequence object can be
+created that in turn hold assay objects that also holds result objects. Beside the basic data holding some logic can be implemented or some properties
+can be extended and customized to special objects. A further benefit of having customized data objects (beans), is the fact that vaadin provides
+tables that can be filled whit java beans.
+
+
 
 
 \subsection{Marshalling}
-One key feature of porting the existing framework to activit and java is the marshalling and unmarshalling of the data objects.
-Being able to marsahll an object into an xml file and sending it over a socket provides a powerful function to communicate with other programs that might even be written in an other programming language.
+One key feature of porting the existing excel framework to activiti and java is the marshalling and unmarshalling of the data objects.
+Being able to marshall an object into an xml file and sending it over a socket provides a powerful function to communicate with other programs that
+might even be written in an other programming language.
+
+The ability to marshall objects is already implemented in the existing excel framework. So only the matching java code has to be implemented.
+With the existing xsd definition it is possible to automatically create java objects with (%FIXME%) 
+These objects can than be used with the jaxb classes to easily navigate through the xml data and creating the java objects.
+
 
 %recursion, dict, list, values
 
@@ -407,8 +426,12 @@ the data bytes are encoded into base64 \cite{base64}. That allows a save transmi
 
 
 \subsection{excel adapter}
+In order to use the existing application stack based on excel, it is important to be able to start excel files from java code. 
+The excel adapter has two parts. One is the java package and the other is a special excel spreadsheet. 
 
+The java package takes some arguments starts the excel spreadsheet and gives a signal as soon as the excel process has finished.
 
+The spreadsheet has an on open method, that starts the existing excel applications with the given parameter.
 
 
 
@@ -524,11 +547,10 @@ For the maven repository nexus from (xxxx) would be a nice chois. It supports al
 
 
 
-
 \section{Migration}
 
 
-\section{Data}
+
 
 
 
