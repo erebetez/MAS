@@ -121,11 +121,11 @@ That gives us an extremely heterogeneous landscape.
 
 First we need to look at the current laboratory work flow, with the given programs. Historically, and still so, the lab uses the LIMS to see what samples have do be done and to type the results back. The LIMS is a height level program that was designed to managed samples.
 
-To normalize the data and provide an easy reviewability every step created a report that can be viewed and signed in the SDMS database.
+To normalize the data and provide an easy review ability of every step, a report that can be viewed and signed in the SDMS database is created.
 
 \begin{figure}
     \begin{center}
-      \includegraphics[width=1\textwidth]{./img/Laboverview.eps}\\
+%       \includegraphics[width=1\textwidth]{./img/Laboverview.eps}\\
     \end{center}
   \caption{The current lab work flow}
   \label{CurrentLabWorkflow}
@@ -154,9 +154,12 @@ Both are open standards from OMG \cite{omg}.
 
 \subsection{Requirements}
 %FIXME translate ....
-Neben dieser Zentralen Steuerungseinheit, soll es dann auch möglich sein, Komponenten wie Webapplikationen (Formulare, Listen, etc),
-Reports oder Mobile Geräte einbinden zu können. In den Labors ist es zudem Historisch so, das viele MS Excel Berechnungen existieren. Diese
-sollten, dann auch in den Prozessen eingebunden werden können.
+Beside the central process engine, there are also other aspects to be considered. One is a web application that should provide forms and an overview
+of the tasks. Thes humand interface should also be available on mobile devices.
+Since the current implementation is based on excel sheets, it of importance that the current applications can be implemented in the new framework.
+For instance it should be possible to send data to an excel application and get the results back into the process stream.
+
+
 
 
 \section{BPEL}
@@ -300,7 +303,7 @@ The process takes an annual inventory item review. These items are reference sam
 
 \begin{figure}
     \begin{center}
-      \includegraphics[width=1\textwidth]{./img/PanExampleBPMN.png}\\
+%       \includegraphics[width=1\textwidth]{./img/PanExampleBPMN.png}\\
     \end{center}
   \caption{Example Application work flow}
   \label{panexampleWorkflow}
@@ -321,11 +324,33 @@ The list with all samples is then again printed to the SDMS. That concludes the 
 
 This process is used to illustrate the further examples and references.
 
+% TODO main process and sub processes
 
 
-\subsection{Technology and architecture}
-Since activiti seems a good choice the main language will be Java.
-Java also brings a lot of classes and tools to process xml and other data.
+% \subsection{Technology and architecture}
+% Since activiti seems a good choice the main language will be Java.
+% Java also brings a lot of classes and tools to process xml and other data.
+
+
+\section{Software Architecture}
+
+webapp
+
+activti 
+
+componetns
+
+calc server
+
+db
+
+\begin{figure}
+    \begin{center}
+      \includegraphics[width=0.5\textwidth]{./img/ArchitectrueOverview.pdf}\\
+    \end{center}
+  \caption{Overview of the architecture}
+  \label{architectureoverview}
+\end{figure} 
 
 
 \section{Webapplication}
@@ -335,15 +360,46 @@ no need to get in trouble with web technology.
 
 As the back end activiti is used. So the user management, transaction safety and business logic is taken care of.
 
-To glue all the frameworks together, spring is used. In spring the configuration is made in a xml file. As a result the code doesn't has to have any knowledge of the environment it is in.
+To glue all the frameworks together, spring is used. In spring the configuration is made in a xml file. As a result the code doesn't has to have any 
+knowledge of the environment it is in. The code can therefore be untouched when deployed to a productive system.
 
 
 \subsection{class design}
+The web application is a simple GUI application. There is the main window that holds different widgets in a layout. Each widget shows a certain
+information. For example there is a process viewer that presents the available bpmn processes. 
+The following widgets are implemented in the demo web application.
+
+\begin{itemize}
+ \item process viewer: shows available main processes
+ \item task viewer: unassigned tasks
+ \item my task viewer: shows the assigned tasks of the current user
+ \item start task by id: tasks can be started by a give id
+ \item form viewer: shows the form of the task that is executed
+ \item history view: shows information about finished tasks and processes
+\end{itemize}
+
+There is a listener interface that can be implemented by these widgets. The task viewer listens to the process viewer if a new task is started. The
+my task viewer listens to the task viewer to see if a task is being claimed. And the form viewer checks if a task is executed. When the task is
+finished the task viewers are updated to show the remaining tasks.
+
+\begin{figure}
+    \begin{center}
+      \includegraphics[width=1\textwidth]{./img/uml_webapp_model.png}\\
+    \end{center}
+  \caption{UML diagramm of main web application classes}
+  \label{webapplicationclassuml}
+\end{figure} 
+
+Since activiti is being configured over spring, the activiti instances can be provided as singletons to each widget that needs them. This way the
+process logic is being separated from the user interface.
+
 %TODO class image of app%
 
 
 
-
+\subsection{bpmn deployment}
+The demonstration web application deploys the bpmn processes to the activiti engine at start up. In the future and for productive use of activiti the
+bpmn process deployment should be done over a separate applications or as a function inside the web application. 
 
 
 \subsection{Internationalization}
@@ -396,6 +452,9 @@ For this project a few of these components where created. For one they would hav
 demonstrate the work flow with the build tools and repositorys.
 
 
+
+
+
 \subsection{Data structure}
 At the moment a specified data structure to store all the needed laboratory data already exists. It was implemented in vba and just consists of
 arrays, dictionary's and values. These structures exists in every programming language. Therefore it is easy to port the existing structure for
@@ -413,7 +472,7 @@ Being able to marshall an object into an xml file and sending it over a socket p
 might even be written in an other programming language.
 
 The ability to marshall objects is already implemented in the existing excel framework. So only the matching java code has to be implemented.
-With the existing xsd definition it is possible to automatically create java objects with (%FIXME%) 
+With the existing xsd definition it is possible to automatically create java objects with the xjc \cite{xjc} command line tool.
 These objects can than be used with the jaxb classes to easily navigate through the xml data and creating the java objects.
 
 
@@ -424,6 +483,14 @@ Before sending the xml to another socket over the network it is usually good to 
 In our case the standard inflation and deflation algorithm is used (zlib) \cite{zlib}. After the compression 
 the data bytes are encoded into base64 \cite{base64}. That allows a save transmission over the TCP/IP stack.
 
+\begin{figure}
+    \begin{center}
+      \includegraphics[width=1\textwidth]{./img/uml_decode_model.png}\\
+    \end{center}
+  \caption{UML class structure of the compression classes}
+  \label{compressionClassUml}
+\end{figure} 
+
 
 \subsection{excel adapter}
 In order to use the existing application stack based on excel, it is important to be able to start excel files from java code. 
@@ -433,7 +500,13 @@ The java package takes some arguments starts the excel spreadsheet and gives a s
 
 The spreadsheet has an on open method, that starts the existing excel applications with the given parameter.
 
-
+\begin{figure}
+    \begin{center}
+      \includegraphics[width=1\textwidth]{./img/uml_eatstatreter_model.png}\\
+    \end{center}
+  \caption{UML class structure of the excel starter}
+  \label{eatstarterclassuml}
+\end{figure} 
 
 
 \section{Build tools}
@@ -478,12 +551,13 @@ During the development of the example git was already used. It is has decentral 
 
 \subsection{using git}
 In order that every user uses the branches the same way, a vew ground rules have to be set.
-Each git repo will have at leas three branches. productive, validation, and master.
+Each git repo will have at least three branches. productive, validation, and master.
 
 Master is always the newest development branch. When the new feature is ready the changes are merged into the validation branch where they are tested. This validation branch gets the name of the new version.
 The only thing that has to be changed in the application configuration, is the database configuration in the spring context files.
 The same has to be done when the productive package is about to be build. Since the configuration for the validation and productive 
-environment can be in a separate file, the change is minimal. Only some imports have to be changed.
+environment can be in a separate file, the change is minimal. Only some imports in the spring context xml have to be changed.
+
 
 
 
@@ -596,6 +670,7 @@ For the maven repository nexus from (xxxx) would be a nice chois. It supports al
 
 \bibitem{base64} \url{}
 
+\bibitem{xjc} \url{}
 
 
 \end{thebibliography}
