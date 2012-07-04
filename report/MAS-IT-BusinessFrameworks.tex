@@ -99,87 +99,86 @@ Text
 % --- Einleitung --- %
 \newpage
 \section{Introduction}
-Laborprocesses. Wath is that all about?
+Laboratory processes. What is that all about?
 
-Usualy it goas like this. A phyical sample is brought to the quality control (QC) analytic laboratory. The laboratory determines certain physical property's and then tell the customer about it.
+Usually it goals like this. A physical sample is brought to the quality control (QC) analytic laboratory. The laboratory determines certain physical property's and then tell the customer about it.
 
 A simplified view looks like this. A sample of a certain substance comes into the QC lab. What analysis have to be made etc. is given by the Labor information and management system (LIMS). The LIMS also says when and what sample has to be analyzed.
 The lab performs then the analysis. All used solutions, instruments and steps have to be documented. That is traditionally done on paper. At this point it is important to emphasize that everything that is not documented isn't done from an audit point of view. Also the standard operating procedure (SOP) has to be followed exactly.
 After the analysis it is mostly used to have a calculation step where certain parameters are calculated to the final value. The final value is then transferred back to the LIMS. These are mainly manual steps. These manual steps can lead to errors and are time consuming.
 Since the operating of balances, creation of solution or other practical tasks cannot be automated, the data flow and the process can.
 
-This report aims to look at the layer between LIMS and the instruments and the analysis method. In the past few years there has been a ton of programs that aim to solve that problem. Some try to achieve that with an almighty LIMS. But since most LIMS date from the 90's the implementation is not easy and you end up haven a not maintainable monolith. There was also the idea of electronic lab notebooks (ELN) these ELN where usually conceived for R&D laboratory. That means more freedom and less strict processes.
+This report aims to look at the layer between LIMS and the instruments and the analysis method. In the past few years there has been a ton of programs that aim to solve that problem. Some try to achieve that with an almighty LIMS. But since most LIMS date from the 90's the implementation is not easy and you end up haven a not maintainable monolith. There was also the idea of electronic lab notebooks (ELN) these ELN where usually conceived for R\&D laboratory. That means more freedom and less strict processes.
 Then there is the software for the instruments, that can perform more and more tasks. This looks like a good idea, but there are so many instruments, methods and manufactures that there is just no solution that fits all. Also it is still the case, that one solution of one manufacturer is in no way compatible to the solution of another manufacturer.
-
-So the question came up, why not look at something completely different. The lab is not the only business that has processes. There could be other business frameworks that provide the needed functionality. This system should be able to integrate and interface these different islands of programs. It would be like a laboratory middle ware.
-
 
 
 \section{The Laboratory landscape}
-%FIXME translate
-Im Labor gibt es nun verschiedenste Methoden welche unterschiedliche Historische Ursprünge haben. So ist eine Chemische Titration ein
-vollkommen anderes Konzept als z.B eine Biochemische Elisa Analyse.
-Dies ergibt ein äusserst Heterogene Landschaft an Analysegeräten mit und ohne Software. Resultate oder Rohdaten liegen in unterschiedlichsten Formaten und Layouts vor.
+The laboratory knows many different analytic methods. They all have different requirements and provide different forms of results.
+That gives us an extremely heterogeneous landscape. 
+
+% TODO instrument software exkurs. 
 
 
-% Image sdms, lims, lab ...
+First we need to look at the current laboratory work flow, with the given programs. Historically, and still so, the lab uses the LIMS to see what samples have do be done and to type the results back. The LIMS is a height level program that was designed to managed samples.
+
+To normalize the data and provide an easy reviewability every step created a report that can be viewed and signed in the SDMS database.
+
+\begin{figure}
+    \begin{center}
+      \includegraphics[width=1\textwidth]{./img/Laboverview.eps}\\
+    \end{center}
+  \caption{The current lab work flow}
+  \label{CurrentLabWorkflow}
+\end{figure} 
+
+
 
 
 \section{Concept}
-%FIXME translate
-Um eine Automatisierung in diesem Heterogenen Umfeld realisieren zu können, braucht es eine Engine die einerseits den Status der einzelnen
-Abläufe kennt und auch weiss welcher Businessprozess als nächster aufgerufen werden soll. Diese Statemachien oder Sheduler währe somit das
-Herzstück der Automatisierung. Häufig fällt auch der Begriff SOA (Service Oriented Architecture).
+So the question came up, why not look at something completely different. The lab is not the only business that has processes. There could be other business frameworks that provide the needed functionality. This system should be able to integrate and interface these different islands of programs. It would be like a laboratory middle ware.
 
-Das Labor ist lange nicht der einzige Bereich welcher eine Automatisierung verlangt. Andere Branchen habe grundsätzlich das selbe
-Bedürfnis. Daher gibt es schon eine reihe von Produkten welche diese Statemachienen bereits anbieten.
+To make the automation in such a heterogeneous landscape possible a sort of state machine is needed. This state machine knows how process
+look like, which processes are currently run, in which state they are in and which is the next to execute.
+This pattern is basically the same in every business process. One of the therms is SOA (Service Oriented Architecture). The state machine engine would therefore be the heart of the hole automation process.
 
-Die Konfiguration dieser Engines geschieht über standardisierte XML Files. Dabei haben sich zwei Beschreibungssprachen etabliert:
+Since the lab is obviously not the only place in the world that has predefined process a look at generic state machines was imminent.
+To configure these state  machine engines there are already several standards. Two process definition languages are already well established:
+
 \begin{itemize}
  \item BPEL
  \item BPMN
 \end{itemize}
 
-Beide sind offene Standards vom OMG \cite{omg}.
+Both are open standards from OMG \cite{omg}.
 
 
 \subsection{Requirements}
-%FIXME translate
+%FIXME translate ....
 Neben dieser Zentralen Steuerungseinheit, soll es dann auch möglich sein, Komponenten wie Webapplikationen (Formulare, Listen, etc),
 Reports oder Mobile Geräte einbinden zu können. In den Labors ist es zudem Historisch so, das viele MS Excel Berechnungen existieren. Diese
 sollten, dann auch in den Prozessen eingebunden werden können.
 
 
 \section{BPEL}
-%FIXME translate
-Die BPEL (Business Process Execution Language) Beschreibungsprache kommt aus der Informatikwelt. Diese wird hat Beschreibungen zu
-Schleifen, Bedingugnen und anderes Konstrukte die man aus der Programmierung kennt. 
-
+The BPEL (Business Process Execution Language) was an answer to the process problem that came from the it world. It is very technical and the process description is made with if's, loops that are also known in common programming languages. 
 
 \section{BPMN}
-%FIXME translate
-BPMN (Business Process Model and Notation) kommt aus dem Business und war gedacht erstmals auf dem Papier die Prozesse einheitlich
-beschreiben zu können. Grob gesagt, handelt es sich um Flowcharts. 
-Mit der Version 2 vom BPMN können diese Flowcharts nun auch programmatisch ausgeführt werden. 
-
-
+BPMN (Business Process Model and Notation) has it roots in the business process modulation. It first was only a description language to provide some unified task ore gateway definitions. These are the elements of the common flowcharts.
+With the versin 2 of the BPMN standard these flowcharts can now be interpreted by an engines and be run as a program.
 
 
 \section{Prozess Engines}
-%FIXME translate
-Die Engine ist nun eine Implementierung einer solchen Business Prozess Beschreibung. Die Engines erfüllen nun die Logik. 
+The engines are implementations of these business description language. The engines provide all sort of logic that would be hard to implement every time from scratch.
 \begin{itemize}
-  \item Welche Prozesse gibt es?
-  \item Welche sind aktiv und in welchem zustand?
-  \item Der Prozess wird korrekt weiter geführt, auch wenn der Server Abstürzen würde.
-  \item Was passiert mit einer neuen Version eines Prozessen und so weiter.                      
+  \item What processes are there
+  \item which are in what state
+  \item Processes are recoverable and transaction save. (crash)
+  \item What happens if a new version of the process is deployed.
+  \item Who did what and when.
 \end{itemize}
 
-Das sind alles relativ komplexe aufgaben, welche man im Normalfall nicht selber neu erfinden möchte.
 
-Es folgt nun ein verglich verschiedener Engines. Die getroffene Auswahl ist weit weg von vollständig.
-
-
+The following chapters present some of these engines that are already available. The list is far from complete.
 
 \subsection{activVOS}
 Programmer: Active Endpoints, Inc.
@@ -262,31 +261,36 @@ Programmierung und Konfiguration muss fast eingekauft werden.
 
 
 \subsection{Summary of products}
-BPMN ist auf Grund der Business nähe eher für Laborprozesse geeignet als das BPEL.
+Since either BPMN nor BPEL is in use at the moment the first thing to decide is what specification to use.
+It does not make sense to mix both. 
 
-Betrachtet man jetzt nur die BPMN Engines, bleibt von den oben genannten nur noch das ActiVOS, activit und ARIS übrig.
+BPMN 2.0 seems to be the better choice due to the close process view. BPEL exists longer but seems unnecessary complicated.
+Therefore BPMN is the better choice for the lab process definition. 
 
-ActiVOS bietet vor allem zusätzliche GUI's an um die Konfiguration "einfacher" zu machen. Es geschieht viel im Hintergrund. 
-So gesehen bietet es einen relativen geringen Mehrwert. 
+If we now only look at the BPMN 2.0 engines only ActiVOS, activiti and ARIS remain from the list.
 
-ARIS ist das grosse rundum-sorglos-Paket. Leider wird einem auch alles Code relevante versteckt. Es daher nötig alles bei der anbietenden
-Firma einzukaufen oder extra ein paar Schulungen beim Anbieter zu machen.
+ActiVOS provides some extra GUI's to give "simpler" access to the configuration. It creates xml and configurations in the background.
+They can fortunately be seen and changed from hand. In the bottom line, it seems nice but does not provide a big advantage. 
 
-activit verzichtet auf eigene Gui's. Es bietet eine durchdachte Programmierschnitstelle an. Dadurch bleibt es schlank und beschränkt sich
-auf das wesentliche, nämlich dem verwalten der Prozesse. Die Einarbeitung ist eher schwieriger, da direkt alles im Code implementiert wird.
-Da es aber Opensource ist, gibt es bereits gute Beispiele wie eine Webapplikatione auszusehen hat.
+ARIS is the big all inclusive package. It is however impossible to work yourselves on the project they sell also the programming and support. Therefore there is no code ore xml visible in the hole package. So for each change the external company has to be contracted.
+They provide also some basic training courses.
 
-Der monolytische Ansatz von grossen Systemen die alles können wollen, hat sich in der Vergangenheit nicht bewährt. Mit dieser Anforderung
-sticht das activiti sehr positiv heraus. Weiter Tools die benötigt würden wie das Monitoring oder Reporting, können dann von anderen Tools
-welche in dem Gebiet spezialisiert sind implementiert werden.
-Nimmt man zudem Vaadin als Webframework, spielt es sehr gut mit activiti zusammen.
+Activiti has a total other approach. It has no gui what so ever. I provides an open programming interface that provides all functionality 
+of the engine. The xml can be easily edited directly. It is therefore slim and sticks to the one task it tries to solve.
+The downside is that there is a steep learning curve since everything has to bee implemented in the code. 
+Because it is open source there are already some example web application that can be used out of the box. 
+
+\subsection{Conclusion}
+The monolithic concept of big systems has proven in the past to be inflexible and heavy on the maintenance. 
+The decision was made to use activiti because of its simplicity and possibility to add other functions (i.e monitoring or reporting) in the future over other programs that also have one functionality.
+Activiti plays also well together with the web framework vaadin.
 
 
 \subsection{Compatibility}
 Although BPMN is a standard and provides most keywords and rules the implementations still adds own keywords or extra functionality (i.e
 forms). So the BPMN files can't just be copied form one engine to another. If you chose one engine it is kinda final and you will stick to it.
 
-If a engine change realy has to be made it is however simpler to achieve than if you had the complete logic inside the code. If the new engines even
+If an engine change really has to be made it is however simpler to achieve than if you had the complete logic inside the code. If the new engines even
 uses the same programming language, it is very probable, that you can just reuse the business logic classes. 
 
 
@@ -294,43 +298,47 @@ uses the same programming language, it is very probable, that you can just reuse
 \section{Example Application}
 The process takes an annual inventory item review. These items are reference samples of the substance that were sold.
 
-% BPMN image
+\begin{figure}
+    \begin{center}
+      \includegraphics[width=1\textwidth]{./img/PanExampleBPMN.png}\\
+    \end{center}
+  \caption{Example Application work flow}
+  \label{panexampleWorkflow}
+\end{figure} 
 
-First 
-Liste der Rückstellmuster wird aus dem übergeordneten System geholt (z.B LIMS). 
+First a list of the reference samples that have to be checked is retrieved from the parent system (i.e LIMS). This is done with a SQL query on the database. 
+The sample number and the location is then stored in a process variable as a data object list.
 
-Liste wird anschliessend abgearbeitet. Dies kann von verschiedenne Personen Blockweise geschehen. Abarbeitung muss auch Offline passieren
-können. Die Einzelnen Musterchecks erzeugen anschliessend einen Report zur Bestätigung und Nachverfolgbarkeit.
+For each item in the list a sub process is started in parallel (callActiviy). The sub process is a separate bpmn process definition.
+The data object which represents a sample, is given to the newly created process.
 
-Zusammenfassende Liste mit Resultaten und eventuellen fails wird als Report gedruckt.
+Now the user can claim the tasks or in this case the samples they wish to check. Then they go to the location and provide the verdict of that sample. If the sample is fine a report is created otherwise a OOS (Out of specification) procedure has to be started first. The OOS process is not part of this demonstration application. It would however be very easy create and to call another sub activity in the future.
+To print the reports the existing infrastructure is used. The reports are stored in the SDMS and can be signed there..
+Once all samples have been controlled, the parent process goes to the next task.
 
-Reports werden in der elektronischen Datenbank abgelegt (anderes system). 
-
-
+The laboratory supervisor now gets the task to check the sample list. An overview of the sample list and the verdicts is presented to him.
+The list with all samples is then again printed to the SDMS. That concludes the review process.
 
 This process is used to illustrate the further examples and references.
 
 
 
-
 \subsection{Technology and architecture}
-As the main language Java is choosen.
-
-
-
+Since activiti seems a good choice the main language will be Java.
+Java also brings a lot of classes and tools to process xml and other data.
 
 
 \section{Webapplication}
 Besides the bpmn engine, the webapplication is a central cornerstone of this project. After all thats what the user gets to see.
 The decisions was made to use Vaadin as a webframework. It allows to program the webapplication completely in java on the server side. So there is no need to get in trouble with webtechnology.
 
-As the backend activiti is used. So the user management, transaction safety and business logic is taken care of.
+As the back end activiti is used. So the user management, transaction safety and business logic is taken care of.
 
 To glue all the frameworks together, spring is used. In spring the configuration is made in a xml file. As a result the code doesn't has to have any knowledge of the environment it is in.
 
 
 \subsection{class design}
-%image of app%
+%TODO class image of app%
 
 
 
@@ -345,25 +353,57 @@ To glue all the frameworks together, spring is used. In spring the configuration
 \subsection{ldap}
 
 
-\section{Extern application server}
+\section{External application server}
+
+The basic concept is a socket client server architecture. 
+
+\subsection{server}
+
+The server receives a request to execute a certain excel application. It then executes this application. If multiple request are received the external excel application are run in serial.
+
+%TODO class diagram server.
 
 
+
+
+\subsection{client}
+
+The client is a process on the bpmn engine server. This process can be called by a parent process (see callActiviy). 
+The first task is a java service task. It creates a connection to the server and sends the data. 
+It waits until the server sends the processed data back.
+
+If there is an error a boundary event is fired and a user or e-mail task is started. When the problem is resolved the 
+data is send again to the server.
+
+%TODO image of client process
+
+\begin{figure}
+    \begin{center}
+%       \includegraphics[width=1\textwidth]{./img/Laboverview.png}\\
+    \end{center}
+  \caption{Work flow of external client call process}
+  \label{externClientWorkflow}
+\end{figure} 
 
 
 
 \section{Componetns}
-Components are reusable functions and classes. In java the classes are put together in a jar file. These jar files can be imported in an other 
-project and so be easyly used.
-Jar files can be tested separately and be provided in an maven repository.
+Components are reusable functions and classes. In java the classes are put together in a jar file. These jar files can be imported in an other project and so be easily used.
+Jar files can be tested separately and be provided in a maven repository.
 
-For this project a few of these componetns where created. For one they would have at some point been needed anyway and for the other reason to 
-demonstrate the workflow with the buildtools and repositorys.
+For this project a few of these componetns where created. For one they would have at some point been needed anyway and for the other reason to demonstrate the work flow with the build tools and repositorys.
 
 
-\subsection{marshaller}
+\subsection{Marshalling}
+One key feature of porting the existing framework to activit and java is the marshalling and unmarshalling of the data objects.
+Being able to marsahll an object into an xml file and sending it over a socket provides a powerful function to communicate with other programs that might even be written in an other programming language.
 
+%recursion, dict, list, values
 
-\subsection{compression}
+\subsection{Compression}
+Before sending the xml to another socket over the network it is usually good to compress the data.
+In our case the standard inflation and deflation algorithm is used (zlib) \cite{zlib}. After the compression 
+the data bytes are encoded into base64 \cite{base64}. That allows a save transmission over the TCP/IP stack.
 
 
 \subsection{excel adapter}
@@ -397,13 +437,14 @@ made by maven. Maven also resolves dependency. Maven is widely used and therefor
 
 
 \subsection{Gradle}
-Gradle is the newes member in the build tool family. Gradle is not just a Java build tool so i can also handle other languages. The configuration file is writen in groovy. That makes a much nicer looking project definition.
+Gradle is the newes member in the build tool family. Gradle is not just a Java build tool so i can also handle other languages. The configuration file is written in groovy. That makes a much nicer looking project definition.
 Gradle also doesn't reinvent the world. It uses the same dependency resolvement as maven. So it can almost do everything that maven can. In addition, it is easy to create custom tasks like in ant.
 
 The downside is, that gradle is still a very young project and has not as much plugins or examples as maven. It is however worth keeping in sight.
 
 \subsection{Usage}
-For the main Webapplicatin it is the simples way to use maven as the buildtool. Since gradle seems very promissing, the plan is to use it in the smaler subprojects. That way it can be easily evaluated and maybe used as the main buildtool in the future.
+For the main web application it is the simplest way to use maven as the buildtool. Since gradle seems very promising, the plan is to use it in the
+smaller sub projects. That way it can be easily evaluated and maybe used as the main build tool in the future.
 
 
 \section{Testing}
@@ -416,14 +457,16 @@ During the development of the example git was already used. It is has decentral 
 In order that every user uses the branches the same way, a vew ground rules have to be set.
 Each git repo will have at leas three branches. productive, validation, and master.
 
-Master is always the newes development branch. When the new feature is ready the changes are merged into the validation branch where they are tested. 
+Master is always the newest development branch. When the new feature is ready the changes are merged into the validation branch where they are tested. This validation branch gets the name of the new version.
+The only thing that has to be changed in the application configuration, is the database configuration in the spring context files.
+The same has to be done when the productive package is about to be build. Since the configuration for the validation and productive 
+environment can be in a separate file, the change is minimal. Only some imports have to be changed.
 
 
-%FIXME how about always make a new branch?
 
-From the validation branch the code is merged into the productiv branch. it is then taged wit the news version.
 
-The spring configuraton files are unique for each enviroment and will have to be updated manualy or by a script.
+%FIXME do some drawings
+
 
 
 \section{Deployment}
@@ -526,6 +569,10 @@ For the maven repository nexus from (xxxx) would be a nice chois. It supports al
 \bibitem{nexus} \url{}
 
 \bibitem{git} \url{}
+
+\bibitem{zlib} \url{}
+
+\bibitem{base64} \url{}
 
 
 
