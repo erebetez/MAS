@@ -55,7 +55,7 @@
 	\enlargethispage{3cm}
 	\begin{raggedright}
 	\begin{picture}(0,0)
-		\put(-30,14){\includegraphics[width=7cm]{./img/fhnw-technik-head}}
+		\put(-30,14){\includegraphics[width=7cm]{./img/fhnw-technik-head-eps-converted-to.pdf}}
 	\end{picture}
 
 	\vspace*{6cm}
@@ -264,6 +264,11 @@ Wird eventuel von <Firma> eingekauft/verwendet.
 Programmierung und Konfiguration muss fast eingekauft werden.
 
 
+\subsection{Signavio}
+Produce: Signavio
+
+More consulting. Uses also activit as backend.
+
 
 \subsection{Summary of products}
 Since either BPMN nor BPEL is in use at the moment the first thing to decide is what specification to use.
@@ -452,7 +457,7 @@ Components are reusable functions and classes. In java the classes are put toget
 Jar files can be tested separately and be provided in a maven repository.
 
 For this project a few of these components where created. For one they would have at some point been needed anyway and for the other reason to
-demonstrate the work flow with the build tools and repositorys.
+demonstrate the work flow with the build tools and repository.
 
 
 
@@ -511,6 +516,8 @@ The spreadsheet has an on open method, that starts the existing excel applicatio
   \label{eatstarterclassuml}
 \end{figure} 
 
+\section{Environments}
+develop, validation, prod
 
 \section{Build tools}
 The question what build tool, if any, came pretty early in the project development. Just starting a Project in Eclipse i the easiest way. 
@@ -532,28 +539,54 @@ that scripting in xml is not really fun.
 
 \subsection{Maven}
 Maven also uses also xml for the configuration. Opposed to ant, you define how the project has to be build. The building is then
-made by maven. Maven also resolves dependency. Maven is widely used and therefore has a lot of plugins and additional tools like an eclipse plugin. For our case maven seemed to do the job.
+made by Maven. Maven also resolves dependency. Maven is widely used and therefore has a lot of plugins and additional tools like an eclipse plugin. For our case maven seemed to do the job.
 
 
 \subsection{Gradle}
 Gradle is the newes member in the build tool family. Gradle is not just a Java build tool so i can also handle other languages. The configuration file is written in groovy. That makes a much nicer looking project definition.
 Gradle also doesn't reinvent the world. It uses the same dependency resolvement as maven. So it can almost do everything that maven can. In addition, it is easy to create custom tasks like in ant.
 
-The downside is, that gradle is still a very young project and has not as much plugins or examples as maven. It is however worth keeping in sight.
+The downside is, that gradle is still a very young project and has not as much plug-ins or examples as maven. It is however worth keeping in sight.
 
 \subsection{Usage}
-For the main web application it is the simplest way to use maven as the buildtool. Since gradle seems very promising, the plan is to use it in the
+For the main web application it is the simplest way to use maven as the build tool. Since gradle seems very promising, the plan is to use it in the
 smaller sub projects. That way it can be easily evaluated and maybe used as the main build tool in the future.
 
 
-\section{Testing}
+\section{Testing and Validation}
+Testing and Validation is an very important subject. It begins already with the developer and goes all the way to the qc personnel.
+There are several strategies to be followed.
+
+\subsection{Unit Tests}
+Unit tests are an important tool during and after the development of the code. If possible each function and each class should also have his unit test. 
+Unit tests are low level tests that can be run automatically. By writing unit tests it also forces the developer to create modular and well designed classes.
+The best practice is, to write the unit test first with all the requirements and then implement functionality until all tests passes. This is of course repeated task 
+that goes on forever.
+The big advantage of unit tests is now, that if a change in the code should brake something, at least one unit test will most likely fail.
+The developer then also know where to look and fix the problem right away.
+
+\subparagraph{Validation Tests}
+Once the all functionality is implemented the packages and applications are build and deployed to the validation environment. The validation environment is configured as 
+close as possible the same as the productive environment.
+
+Know the testers can execute the written tests plans to check the high level functionality. This is also a formal test to conform to the regulations. If a error occours 
+the code gets modified in the development environment and redeployed. The tests are then repeated where needed.
+
 
 \section{Versioning}
-For the versioning of the source code there are several producs available. Just to name a few of them: svn, mercurial, git.
-During the development of the example git was already used. It is has decentral achitecture. So every developer has always the full power of git at his disposal. It is also easy to create branches and to create labels for realases.
+For the versioning of the source code there are several producs available. Just to name a few of them: SVN, mercurial, git.
+During the development of the example git was used. It is has a decentralised architecture. So every developer has always the full power of git at his disposal. It is also easy to create branches and to create labels for realises.
+
+\begin{figure}
+    \begin{center}
+       \includegraphics[width=0.9\textwidth]{./img/gitversioning.pdf}\\
+    \end{center}
+  \caption{Concept of the git branches}
+  \label{gitbranchconcept}
+\end{figure} 
 
 \subsection{using git}
-In order that every user uses the branches the same way, a vew ground rules have to be set.
+In order that every user uses the branches the same way, a few ground rules have to be set.
 Each git repo will have at least three branches. productive, validation, and master.
 
 Master is always the newest development branch. When the new feature is ready the changes are merged into the validation branch where they are tested. This validation branch gets the name of the new version.
@@ -561,8 +594,14 @@ The only thing that has to be changed in the application configuration, is the d
 The same has to be done when the productive package is about to be build. Since the configuration for the validation and productive 
 environment can be in a separate file, the change is minimal. Only some imports in the spring context xml have to be changed.
 
+Multiple git repository will be created. The following projects shall have a own repository.
+\begin{itemize}
+ \item Web application
+ \item External calculation Server
+ \item The components
+\end{itemize}
 
-
+This way it is easier to manage branches and versions of each application.
 
 
 %FIXME do some drawings
@@ -577,6 +616,14 @@ maven + repo + scripts + gradle
 \section{Infrastructure}
 This chapter shal give an overview how the infrastrucure that supports the webapp and the development of it, has to look. 
 All named server are planed to be virtual machines.
+
+\begin{figure}
+    \begin{center}
+       \includegraphics[width=0.8\textwidth]{./img/InfrastructureLayout.pdf}\\
+    \end{center}
+  \caption{Infrastrucutre overview}
+  \label{infrastructureoverview}
+\end{figure} 
 
 It would have four servers. 
 \begin{itemize}
