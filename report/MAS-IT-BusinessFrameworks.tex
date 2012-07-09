@@ -121,11 +121,13 @@ That gives us an extremely heterogeneous landscape.
 
 First we need to look at the current laboratory work flow, with the given programs. Historically, and still so, the lab uses the LIMS to see what samples have do be done and to type the results back. The LIMS is a height level program that was designed to managed samples.
 
-To normalize the data and provide an easy review ability of every step, a report that can be viewed and signed in the SDMS database is created.
+To normalize the data and provide an easy review ability of every step, a report, that can be viewed and signed in the SDMS database, is created.
+The problem with heterogeneous data and raw data reports is currently overcome with the SDMS database. It is possible to print reports into the database and tag them automatically. As a result the reports printed into that database can be parsed and data is so available. This currently is in place and works pretty well.
+
 
 \begin{figure}
     \begin{center}
-%       \includegraphics[width=1\textwidth]{./img/Laboverview.eps}\\
+      \includegraphics[width=1\textwidth]{./img/Laboverview.pdf}\\
     \end{center}
   \caption{The current lab work flow}
   \label{CurrentLabWorkflow}
@@ -303,7 +305,7 @@ The process takes an annual inventory item review. These items are reference sam
 
 \begin{figure}
     \begin{center}
-%       \includegraphics[width=1\textwidth]{./img/PanExampleBPMN.png}\\
+      \includegraphics[width=1\textwidth]{./img/PanExampleBPMN.png}\\
     \end{center}
   \caption{Example Application work flow}
   \label{panexampleWorkflow}
@@ -403,7 +405,7 @@ bpmn process deployment should be done over a separate applications or as a func
 
 
 \subsection{Internationalization}
-
+Internationalization is only needed for the web application. Since the web application is written in basic java, the basic resource pattern can be used. That means each view able string is loaded from a resource file that holds the strings of the given local. 
 
 
 
