@@ -295,7 +295,7 @@ The process takes an annual inventory item review. These items are reference sam
 First a list of the reference samples that have to be checked is retrieved from the parent system (i.e LIMS). This is done with a SQL query on the database. 
 The sample number and the location is then stored in a process variable as a data object list.
 
-For each item in the list a sub process is started in parallel (callActiviy). The sub process is a separate bpmn process definition.
+For each item in the list a sub process is started in parallel (callActiviy). The sub process is a separate BPMN process definition.
 The data object which represents a sample, is given to the newly created process.
 
 Now the user can claim the tasks or in this case the samples they wish to check. Then they go to the location and provide the verdict of that sample. If the sample is fine a report is created otherwise a OOS (Out of specification) procedure has to be started first. The OOS process is not part of this demonstration application. It would however be very easy create and to call another sub activity in the future.
@@ -337,7 +337,7 @@ db
 
 
 \section{Webapplication}
-Besides the bpmn engine, the web application is a central cornerstone of this project. After all that is what the user gets to see.
+Besides the BPMN engine, the web application is a central cornerstone of this project. After all that is what the user gets to see.
 The decisions was made to use Vaadin as a web framework. It allows to program the web application completely in java on the server side. So there is
 no need to get in trouble with web technology.
 
@@ -349,7 +349,7 @@ knowledge of the environment it is in. The code can therefore be untouched when 
 
 \subsection{class design}
 The web application is a simple GUI application. There is the main window that holds different widgets in a layout. Each widget shows a certain
-information. For example there is a process viewer that presents the available bpmn processes. 
+information. For example there is a process viewer that presents the available BPMN processes. 
 The following widgets are implemented in the demo web application.
 
 \begin{itemize}
@@ -381,8 +381,8 @@ process logic is being separated from the user interface.
 
 
 \subsection{BPMN deployment}
-The demonstration web application deploys the bpmn processes to the activiti engine at start up. In the future and for productive use of activiti the
-bpmn process deployment should be done over a separate applications or as a function inside the web application. 
+The demonstration web application deploys the BPMN processes to the activiti engine at start up. In the future and for productive use of activiti the
+BPMN process deployment should be done over a separate applications or as a function inside the web application. 
 
 
 \subsection{Internationalization}
@@ -404,12 +404,12 @@ The server receives a request to execute a certain excel application. It then ex
 
 %TODO class diagram server.
 
-\subsection{protocol}
+
 
 
 \subsection{client}
 
-The client is a process on the bpmn engine server. This process can be called by a parent process (see callActiviy). 
+The client is a process on the BPMN engine server. This process can be called by a parent process (see callActiviy). 
 The first task is a java service task. It creates a connection to the server and sends the data. 
 It waits until the server sends the processed data back.
 
@@ -426,6 +426,8 @@ data is send again to the server.
   \label{externClientWorkflow}
 \end{figure} 
 
+\subsection{protocol}
+rpc
 
 
 \section{Components}
