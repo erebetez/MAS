@@ -183,98 +183,50 @@ The engines are implementations of these business description language. The engi
 \end{itemize}
 
 
-The following chapters present some of these engines that are already available. The list is far from complete.
+The following chapters present some of these engines that are already available. The list is far from complete and in alphabetical order.
 
-\subsection{activVOS}
-Programmer: Active Endpoints, Inc.
+\subsection{activeVOS}
+activeVOS \cite{activevos} is a product from Active Endpoints, Inc. It uses open standards to implement its feature. The supported notations are BPEL and new also BPMN. Everything is implemented in Java and XML. The editor you get looks and feels like an eclipse plugin. The application runs on an JavaEE application server.
 
-Language: java
+The documentations look good. It has videos, tutorials and they also provide training. 
 
-License: proprietary (setzt aber auf offenen standards)
+In addition they have some additional tools to the BPEL engine like reporting.
 
-
-Cost?
-
-Dokumentation: Diverse Videos mit Demos und Tutorials.
-
-Remarks: It's basically an eclipse Plugin. \\
-Has a report designer. \\
-Viele GUI's
-
-
-\subsection{biztalk}
-Hersteller: Microsoft
-
-Sprache: .NET
-
-Lizens: proprietär
-
-
-Preise?
-
-Dokumentation:
-
-Bemerkungen:
-Zusammenspiel mit Sharpoint.
-nur für BPEL
-
-
-
-\subsection{Apache ODE}
-Hersteller: apache fundation
-
-Sprache: java
-
-Lizens: open source (Apache License 2.0 )
-
-Bemerkungen:
-Nur BPEL engine
-
+The cost for the implementations will cost around 50'000 USD \cite{activvosscost}.
 
 
 \subsection{activiti}
-Hersteller:
+activiti \cite{activiti} is an open source BPMN engine. It was forked from the jBPM \cite{jbpm} from JBOSS. It is therefore a very young project that has the goal to build a rock solid BPMN engine. Activiti is really only the engine that provide an Java api. There is also a example web application Activiti Explorer that shows and demonstrate the ability of the activiti engine.
 
-Sprache: java
+Because it is open source it is free of charge. Although the effort to get a working product might be bigger. 
 
-Lizens: opensource (Apache License 2.0 )
+There is also a company Signavio \cite{signavio} behind activiti. Signavio provides consulting and BPMN creation tools.
 
+\subsection{Apache ODE}
+Apache ODE \cite{appacheODE} is an open source BPEL engine. There is also an eclipse plugin, that helps create the BPEL XML definition.
 
-Bemerkungen:
-Nur BPMN engine
-Schlank und aufgeräumt. 
-Relativ neu aber Fork aus jBPM.
 
 
 \subsection{ARIS}
-Hersteller: software AG
+ARIS \cite{aris} is a product form software AG. It is a big enterprise BPM solution that brings many tools like process overviews, dashboards, reports or monitoring. ARIS was developed to work well with SAP. Therefore it is by definition an height level implementation.
 
-Sprache: java
+You buy a solution and the code is not accessible. software AG provides training for employees to configure or work with the product. 
 
-Lizens: proprietär
-
-Preis?
-
-Bemerkungen:
-Unterstützt BPMN und BPEL. (xml nicht sichtbar/exportierbar...)
-Viele GUI's. 
-Monitoring, Reporting werkzeuge dabei.
-Hauptsächlich für SAP entwickelt
-Wird eventuel von <Firma> eingekauft/verwendet.
-Programmierung und Konfiguration muss fast eingekauft werden.
+The cost looks to be quit height and is at least 10 Million USD \cite{ariscost}.
 
 
-\subsection{Signavio}
-Produce: Signavio
 
-More consulting. Uses also activit as backend.
+\subsection{biztalk}
+Biztalk \cite{biztalk} is the BPEL implementation from Microsoft. It is sold as biztalk server 2010 and is praised as Business Proces Management (BPM) suite. Since it is a Microsoft product it is written and configured in the .NET programming language. Obviously the integration with other Microsoft products like Sharepoint should be good.
+
+The enterprise edition costs around 44'000 USD \cite{biztalkcost}. For testing and development there is a free license.
 
 
 \subsection{Summary of products}
 
 
 \begin{center}
-\begin{tabular}{l c  c c l}}
+\begin{tabular}{l | c c c p{3cm}}
 \toprule
 
 Name & Notation & Language & License & Extras \\
@@ -286,11 +238,13 @@ activVOS & BPMN/BPEL & Java & proprietary &  uses open standars \\
 Apache ODE & BPEL & Java & Apache 2.0 &   \\
 ARIS & BPMN/BPEL & Java & proprietary &  sold as fully feature product \\
 biztalk & BPEL & .NET & proprietary &  share point integration \\
-Signavio & BPMN & Java & proprietary &  uses open standards (also activiti) \\
 
 
 \bottomrule
 \end{tabular}
+\caption{engine comparison}
+\label{tab:enginecomparison}
+
 \end{center}
 
 Since either BPMN nor BPEL is in use at the moment the first thing to decide is what specification to use.
@@ -315,7 +269,7 @@ Because it is open source there are already some example web application that ca
 \subsection{Conclusion}
 The monolithic concept of big systems has proven in the past to be inflexible and heavy on the maintenance. 
 The decision was made to use activiti because of its simplicity and possibility to add other functions (i.e monitoring or reporting) in the future over other programs that also have one functionality.
-Activiti plays also well together with the web framework vaadin.
+Activiti plays also well together with Java based web frameworks like vaadin.
 
 
 \subsection{Compatibility}
@@ -426,7 +380,7 @@ process logic is being separated from the user interface.
 
 
 
-\subsection{bpmn deployment}
+\subsection{BPMN deployment}
 The demonstration web application deploys the bpmn processes to the activiti engine at start up. In the future and for productive use of activiti the
 bpmn process deployment should be done over a separate applications or as a function inside the web application. 
 
@@ -450,7 +404,7 @@ The server receives a request to execute a certain excel application. It then ex
 
 %TODO class diagram server.
 
-
+\subsection{protocol}
 
 
 \subsection{client}
@@ -705,11 +659,29 @@ For the maven repository nexus from (xxxx) would be a nice chois. It supports al
 \addcontentsline{toc}{section}{Literaturverzeichnis}
 \begin{thebibliography}{99}
 
-\bibitem{middleware} \url{wiki}
+\bibitem{middleware} \url{http://en.wikipedia.org/wiki/Middleware}
+
+\bibitem{omg} \url{http://www.omg.org/}
 
 \bibitem{activiti} \url{http://www.activiti.org/}
 
-\bibitem{omg} \url{http://www.omg.org/}
+\bibitem{jbpm} \url{https://www.jboss.org/jbpm/}
+
+\bibitem{activevos} \url{http://www.activevos.com/}
+
+\bibitem{activvosscost} \url{http://www.activevos.com/content/blog/activevos2009butlergrouptechnicalaudit.pdf}
+
+\bibitem{appacheODE} \url{https://ode.apache.org/}
+
+\bibitem{aris} \url{https://www.softwareag.com/ch/products/wm/bpm/default.asp}
+
+\bibitem{ariscost} \url{http://gothamschools.org/2010/09/15/frustrated-with-citys-data-system-teachers-build-their-own/}
+
+\bibitem{biztalk} \url{http://www.microsoft.com/biztalk}
+
+\bibitem{biztalkcost} \url{http://www.microsoft.com/biztalk/en/us/pricing-licensing.aspx}
+
+\bibitem{signavio} \url{http://www.signavio.com/en.html}
 
 \bibitem{eclipse} \url{http://www.eclipse.org} %FIXME
 
