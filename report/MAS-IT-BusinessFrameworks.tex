@@ -304,7 +304,11 @@ This process is used to illustrate the further examples and references.
 
 
 \section{Software Architecture}
+The environment consists of an user interface, the BPMN engine, the processes (laboratory methods) and universal usable components (jar archives). Most of the code is written in Java. 
 
+To use the existing Excel applications a so called calculation server was written. This is a stand alone application and communicates over sockets with the client.
+
+The BPMN process and forms are put together in an own jar archive. These process definitions can be add as dependency to the main application with the BPMN engine.
 
 
 \begin{figure}
@@ -316,7 +320,7 @@ This process is used to illustrate the further examples and references.
 \end{figure} 
 
 \subsection{Graphical user interface}
-For the graphical user interface (GUI) the web application seems to be a good choise. The web application can be displayed on most devices. With the power of CSS \cite{css} they can even be shown differently on small screens.
+For the graphical user interface (GUI) the web application seems to be a good choice. The web application can be displayed on most devices. With the power of CSS \cite{css} they can even be shown differently on small screens.
 
 To keep things in Java and not being forced to be bothered with the web technology, vaadin \cite{vaadin} is used as a web framework.
 
@@ -336,14 +340,17 @@ db
 
 methods
 
-spring
+\subsection{configuring}
+The Main Application (Web application) is configured using the spring framework \cite{spring}. The Spring framework uses the paradigm of the dependency injection \cite{dependencyInection}.
 
+This allow to configure external components, the database or process parameters in a XML configuration file. The Java code does not have to be modified. 
 
+This way components can be reused in different applications. It is also easy to configure them in unit tests.
 
 
 \section{Webapplication}
 Besides the BPMN engine, the web application is a central cornerstone of this project. After all that is what the user gets to see.
-The decisions was made to use Vaadin as a web framework. It allows to program the web application completely in java on the server side. So there is
+The decisions was made to use Vaadin \cite{vaadin} as a web framework. It allows to program the web application completely in Java on the server side. So there is
 no need to get in trouble with web technology.
 
 As the back end activiti is used. So the user management, transaction safety and business logic is taken care of.
@@ -352,8 +359,11 @@ To glue all the frameworks together, spring is used. In spring the configuration
 knowledge of the environment it is in. The code can therefore be untouched when deployed to a productive system.
 
 
+
 \subsection{class design}
-The web application is a simple GUI application. There is the main window that holds different widgets in a layout. Each widget shows a certain
+The web application is a simple GUI application. As a starting point, the example application how to build a vaadin web application on top of activiti, was taken \cite{vaadinactivitwebapp}, \cite{vaadinactivitwebapp2}.
+
+There is the main window that holds different widgets in a layout. Each widget shows a certain
 information. For example there is a process viewer that presents the available BPMN processes. 
 The following widgets are implemented in the demo web application.
 
@@ -396,14 +406,13 @@ Internationalization is only needed for the web application. Since the web appli
 
 
 \subsection{ldap}
-The user authentication can be done in the BPMN engine.
+The user authentication can be done in the BPMN engine. The engine has to know anyway what user is currently logged in. Activiti can therefore be connected to a ldap server to retrieve the needed user login information.
 
 
 \section{External application server}
 The basic concept is a socket client rpc server architecture. \cite{rpc}
 
 \subsection{server}
-
 The server receives a request to execute a certain excel application. It then executes this application. If multiple request are received they get stored in an array and then the external excel applications are run in serial.
 
 %TODO class diagram server.
@@ -414,7 +423,7 @@ The server receives a request to execute a certain excel application. It then ex
 \subsection{client}
 %FIXME  does not actually work yet.
 The client is a process on the BPMN engine server. This process can be called by a parent process (see callActiviy). 
-The first task is a java service task. It creates a connection to the server and sends the data. 
+The first task is a Java service task. It creates a connection to the server and sends the data. 
 It waits until the server sends the processed data back.
 
 If there is an error a boundary event is fired and a user or e-mail task is started. When the problem is resolved the 
@@ -692,22 +701,21 @@ For the maven repository nexus from (xxxx) would be a nice chois. It supports al
 \addcontentsline{toc}{section}{Literaturverzeichnis}
 \begin{thebibliography}{99}
 
-\bibitem{lims} \url{}
+\bibitem{lims} \url{http://en.wikipedia.org/wiki/Laboratory_information_management_system}
 
 \bibitem{sdms} \url{}
 
+\bibitem{gmp} \url{http://en.wikipedia.org/wiki/Good_manufacturing_practice}
 
-\bibitem{gmp} \url{}
+\bibitem{eln} \url{http://en.wikipedia.org/wiki/Electronic_lab_notebook}
 
-\bibitem{eln} \url{}
+\bibitem{excel} \url{http://office.microsoft.com/en-us/excel}
 
-\bibitem{excel} \url{}
+\bibitem{bpel} \url{http://en.wikipedia.org/wiki/Business_Process_Execution_Language}
 
-\bibitem{bpel} \url{}
+\bibitem{bpmn} \url{http://www.bpmn.org/}
 
-\bibitem{bpmn} \url{}
-
-\bibitem{soa} \url{}
+\bibitem{soa} \url{http://en.wikipedia.org/wiki/Service-oriented_architecture}
 
 \bibitem{middleware} \url{http://en.wikipedia.org/wiki/Middleware}
 
@@ -715,7 +723,7 @@ For the maven repository nexus from (xxxx) would be a nice chois. It supports al
 
 \bibitem{activiti} \url{http://www.activiti.org/}
 
-\bibitem{css} \url{}
+\bibitem{css} \url{http://en.wikipedia.org/wiki/Cascading_Style_Sheets}
 
 \bibitem{jbpm} \url{https://www.jboss.org/jbpm/}
 
@@ -743,6 +751,10 @@ For the maven repository nexus from (xxxx) would be a nice chois. It supports al
 
 \bibitem{vaadin} \url{http://www.vaadin.com}
 
+\bibitem{vaadinactivitwebapp} \url{https://vaadin.com/wiki/-/wiki/Main/Building Vaadin Applications on top of Activiti}
+
+\bibitem{vaadinactivitwebapp2} \url{https://github.com/peholmst/ActivitiVaadinDevoxx11}
+
 \bibitem{ant} \url{https://ant.apache.org/}
 
 \bibitem{maven} \url{https://maven.apache.org/}
@@ -750,6 +762,8 @@ For the maven repository nexus from (xxxx) would be a nice chois. It supports al
 \bibitem{gradle} \url{http://www.gradle.org/}
 
 \bibitem{spring} \url{http://www.springsource.org/}
+
+\bibitem{dependencyInection} \url{http://en.wikipedia.org/wiki/Dependency_injection}
 
 \bibitem{mysql} \url{https://www.mysql.com/}
 
@@ -761,11 +775,11 @@ For the maven repository nexus from (xxxx) would be a nice chois. It supports al
 
 \bibitem{nexus} \url{http://www.sonatype.org/nexus/}
 
-\bibitem{jetty} \url{}
+\bibitem{jetty} \url{http://jetty.codehaus.org/jetty/}
 
-\bibitem{jboss} \url{}
+\bibitem{jboss} \url{http://www.jboss.org/}
 
-\bibitem{tomcat} \url{}
+\bibitem{tomcat} \url{http://tomcat.apache.org/}
 
 \bibitem{git} \url{http://git-scm.com/}
 
