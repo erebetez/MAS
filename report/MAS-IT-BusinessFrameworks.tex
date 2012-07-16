@@ -396,11 +396,11 @@ Internationalization is only needed for the web application. Since the web appli
 
 \section{External application server}
 
-The basic concept is a socket client server architecture. 
+The basic concept is a socket client rpc server architecture. \cite{rpc}
 
 \subsection{server}
 
-The server receives a request to execute a certain excel application. It then executes this application. If multiple request are received the external excel applications are run in serial.
+The server receives a request to execute a certain excel application. It then executes this application. If multiple request are received they get stored in an array and then the external excel applications are run in serial.
 
 %TODO class diagram server.
 
@@ -408,7 +408,7 @@ The server receives a request to execute a certain excel application. It then ex
 
 
 \subsection{client}
-
+%FIXME  does not actually work yet.
 The client is a process on the BPMN engine server. This process can be called by a parent process (see callActiviy). 
 The first task is a java service task. It creates a connection to the server and sends the data. 
 It waits until the server sends the processed data back.
@@ -427,11 +427,32 @@ data is send again to the server.
 \end{figure} 
 
 \subsection{protocol}
-rpc
+For the communication between both parties a protocol has to be defined. 
+First the client send a request to the server that has an UUID \cite{uuid}, the application to start and the marshalled data object.
+Each information is separated by two ::. The Information then looks like that.
+\begin{verbatim}
+ 
+\end{verbatim}
+
+The server is then responding, that it got the request by sending back the UUID with an !!!!ok.
+\begin{verbatim}
+ 
+\end{verbatim}
+
+When the server has processed the request it sends the new marhsall string back to the client. The UUID is still used as prefix to identify the request.
+\begin{verbatim}
+ 
+\end{verbatim}
+
+The client finally sends the ok to close the connection to the server.
+\begin{verbatim}
+ 
+\end{verbatim}
+
 
 
 \section{Components}
-Components are reusable functions and classes. In java the classes are put together in a jar file. These jar files can be imported in an other project and so be easily used.
+Components are reusable packages of functions and classes. In Java the classes are put together in a jar file. These jar files can be imported in an other project and so be easily used.
 Jar files can be tested separately and be provided in a maven repository.
 
 For this project a few of these components where created. For one they would have at some point been needed anyway and for the other reason to
@@ -458,8 +479,8 @@ Being able to marshall an object into an xml file and sending it over a socket p
 might even be written in an other programming language.
 
 The ability to marshall objects is already implemented in the existing excel framework. So only the matching java code has to be implemented.
-With the existing xsd definition it is possible to automatically create java objects with the xjc \cite{xjc} command line tool.
-These objects can than be used with the jaxb classes to easily navigate through the xml data and creating the java objects.
+With the existing XSD definition it is possible to automatically create java objects with the xjc \cite{xjc} command line tool.
+These objects can than be used with the JAXB \cite{jaxb} classes to easily navigate through the XML data and creating the java objects.
 
 
 %recursion, dict, list, values
@@ -517,11 +538,11 @@ that scripting in xml is not really fun.
 
 \subsection{Maven}
 Maven also uses also xml for the configuration. Opposed to ant, you define how the project has to be build. The building is then
-made by Maven. Maven also resolves dependency. Maven is widely used and therefore has a lot of plugins and additional tools like an eclipse plugin. For our case maven seemed to do the job.
+made by Maven. Maven also resolves dependencies. Maven is widely used and therefore has a lot of plugins and additional tools like an eclipse plugin. For our case maven seemed to do the job.
 
 
 \subsection{Gradle}
-Gradle is the newes member in the build tool family. Gradle is not just a Java build tool so i can also handle other languages. The configuration file is written in groovy. That makes a much nicer looking project definition.
+Gradle is the newest member in the Java build tool family. Gradle is not just a Java build tool so i can also handle other languages. The configuration file is written in groovy. That makes a much nicer looking project definition.
 Gradle also doesn't reinvent the world. It uses the same dependency resolvement as maven. So it can almost do everything that maven can. In addition, it is easy to create custom tasks like in ant.
 
 The downside is, that gradle is still a very young project and has not as much plug-ins or examples as maven. It is however worth keeping in sight.
@@ -592,43 +613,43 @@ maven + repo + scripts + gradle
 
 
 \section{Infrastructure}
-This chapter shal give an overview how the infrastrucure that supports the webapp and the development of it, has to look. 
+This chapter shall give an overview how the infrastructure that supports the web applicatin and the development of it, has to look. 
 All named server are planed to be virtual machines.
 
 \begin{figure}
     \begin{center}
        \includegraphics[width=0.8\textwidth]{./img/InfrastructureLayout.pdf}\\
     \end{center}
-  \caption{Infrastrucutre overview}
+  \caption{Infrastructure overview}
   \label{infrastructureoverview}
 \end{figure} 
 
 It would have four servers. 
 \begin{itemize}
- \item Webapplicatin server
+ \item Web application server
  \item Database server
  \item Calculation server (excel, r)
  \item Repository server
 \end{itemize}
 
 \subsection{Webbapplication server}
-This server is a classic webapplication server that can run war Archives. 
-So it runs an jee enviroment like jBoss or tomcat.
+This server is a classic web application server that can run war Archives. 
+So it runs an Jee environment like jBoss or tomcat.
 The operating system is therefore not so relevant. 
 
-To keep things simpel linux was choosen for the example server.
+To keep things simple linux was choosen for the example server.
 
 \subsubsection{configuration}
 %configs....
 
 
 \subsection{Database server}
-De database server would be used to store the activiti data. The databases supported by activiti are mysql, oracle. Mssql is jet in experimental state.
+De database server would be used to store the activiti data. The databases supported by activiti are mysql \cite{mysql}, oracle \cite{oracledb}. MSsql \cite{mssql} is jet in experimental state.
  
 For the example a linux server with a mysql database was setup.
-To manage the database phpmyadmin is used.
+To manage the database phpmyadmin \cite{phpmyadmin} is used.
 
-Since the database is configured in the webapplication with spring, it is very easy to change the used database.
+Since the database is configured in the web application with spring, it is very easy to change the used database.
 
 
 \subsection{Calculation server}
@@ -687,37 +708,39 @@ For the maven repository nexus from (xxxx) would be a nice chois. It supports al
 
 \bibitem{eclipse} \url{http://www.eclipse.org} %FIXME
 
+\bibitem{rpc} \url{http://en.wikipedia.org/wiki/Remote_Procedure_Call}
+
+\bibitem{uuid} \url{http://en.wikipedia.org/wiki/Universally_unique_identifier}
+
 \bibitem{vaadin} \url{http://www.vaadin.com}
 
-\bibitem{ant} \url{http://www.vaadin.com}
+\bibitem{ant} \url{https://ant.apache.org/}
 
-\bibitem{maven} \url{http://www.vaadin.com}
+\bibitem{maven} \url{https://maven.apache.org/}
 
-\bibitem{gradle} \url{http://www.vaadin.com}
+\bibitem{gradle} \url{http://www.gradle.org/}
 
-\bibitem{spring} \url{} % FIXME
+\bibitem{spring} \url{http://www.springsource.org/}
 
+\bibitem{mysql} \url{https://www.mysql.com/}
 
-\bibitem{activitiDbSupport} \url{}
+\bibitem{phpmyadmin} \url{http://www.phpmyadmin.net/home_page/index.php}
 
-\bibitem{mysql} \url{}
+\bibitem{oracledb} \url{http://www.oracle.com/de/products/database/index.html}
 
-\bibitem{phpmyadmin} \url{}
+\bibitem{mssql} \url{http://www.microsoft.com/sqlserver/en/us/default.aspx}
 
-\bibitem{oracledb} \url{}
+\bibitem{nexus} \url{http://www.sonatype.org/nexus/}
 
-\bibitem{mssql} \url{}
+\bibitem{git} \url{http://git-scm.com/}
 
-\bibitem{nexus} \url{}
+\bibitem{zlib} \url{http://zlib.net/}
 
-\bibitem{git} \url{}
+\bibitem{base64} \url{http://en.wikipedia.org/wiki/Base64}
 
-\bibitem{zlib} \url{}
+\bibitem{xjc} \url{http://docs.oracle.com/javase/6/docs/technotes/tools/share/xjc.html}
 
-\bibitem{base64} \url{}
-
-\bibitem{xjc} \url{}
-
+\bibitem{jaxb} \url{http://www.oracle.com/technetwork/articles/javase/index-140168.html}
 
 \end{thebibliography}
 
