@@ -55,7 +55,7 @@
 	\enlargethispage{3cm}
 	\begin{raggedright}
 	\begin{picture}(0,0)
-		\put(-30,14){\includegraphics[width=7cm]{./img/fhnw-technik-head-eps-converted-to.pdf}}
+		\put(-30,14){\includegraphics[width=7cm]{./img/fhnw-technik-head.pdf}}
 	\end{picture}
 
 	\vspace*{6cm}
@@ -121,11 +121,13 @@ That gives us an extremely heterogeneous landscape.
 
 First we need to look at the current laboratory work flow, with the given programs. Historically, and still so, the lab uses the LIMS to see what samples have do be done and to type the results back. The LIMS is a height level program that was designed to managed samples.
 
-To normalize the data and provide an easy review ability of every step, a report that can be viewed and signed in the SDMS database is created.
+To normalize the data and provide an easy review ability of every step, a report, that can be viewed and signed in the SDMS database, is created.
+The problem with heterogeneous data and raw data reports is currently overcome with the SDMS database. It is possible to print reports into the database and tag them automatically. As a result the reports printed into that database can be parsed and data is so available. This currently is in place and works pretty well.
+
 
 \begin{figure}
     \begin{center}
-%       \includegraphics[width=1\textwidth]{./img/Laboverview.eps}\\
+      \includegraphics[width=1\textwidth]{./img/Laboverview.pdf}\\
     \end{center}
   \caption{The current lab work flow}
   \label{CurrentLabWorkflow}
@@ -182,94 +184,69 @@ The engines are implementations of these business description language. The engi
 \end{itemize}
 
 
-The following chapters present some of these engines that are already available. The list is far from complete.
+The following chapters present some of these engines that are already available. The list is far from complete and in alphabetical order.
 
-\subsection{activVOS}
-Programmer: Active Endpoints, Inc.
+\subsection{activeVOS}
+activeVOS \cite{activevos} is a product from Active Endpoints, Inc. It uses open standards to implement its feature. The supported notations are BPEL and new also BPMN. Everything is implemented in Java and XML. The editor you get looks and feels like an eclipse plugin. The application runs on an JavaEE application server.
 
-Language: java
+The documentations look good. It has videos, tutorials and they also provide training. 
 
-License: proprietary (setzt aber auf offenen standards)
+In addition they have some additional tools to the BPEL engine like reporting.
 
-
-Cost?
-
-Dokumentation: Diverse Videos mit Demos und Tutorials.
-
-Remarks: It's basically an eclipse Plugin. \\
-Has a report designer. \\
-Viele GUI's
-
-
-\subsection{biztalk}
-Hersteller: Microsoft
-
-Sprache: .NET
-
-Lizens: proprietär
-
-
-Preise?
-
-Dokumentation:
-
-Bemerkungen:
-Zusammenspiel mit Sharpoint.
-nur für BPEL
-
-
-
-\subsection{Apache ODE}
-Hersteller: apache fundation
-
-Sprache: java
-
-Lizens: open source (Apache License 2.0 )
-
-Bemerkungen:
-Nur BPEL engine
-
+The cost for the implementations will cost around 50'000 USD \cite{activvosscost}.
 
 
 \subsection{activiti}
-Hersteller:
+activiti \cite{activiti} is an open source BPMN engine. It was forked from the jBPM \cite{jbpm} from JBOSS. It is therefore a very young project that has the goal to build a rock solid BPMN engine. Activiti is really only the engine that provide an Java api. There is also a example web application Activiti Explorer that shows and demonstrate the ability of the activiti engine.
 
-Sprache: java
+Because it is open source it is free of charge. Although the effort to get a working product might be bigger. 
 
-Lizens: opensource (Apache License 2.0 )
+There is also a company Signavio \cite{signavio} behind activiti. Signavio provides consulting and BPMN creation tools.
 
+\subsection{Apache ODE}
+Apache ODE \cite{appacheODE} is an open source BPEL engine. There is also an eclipse plugin, that helps create the BPEL XML definition.
 
-Bemerkungen:
-Nur BPMN engine
-Schlank und aufgeräumt. 
-Relativ neu aber Fork aus jBPM.
 
 
 \subsection{ARIS}
-Hersteller: software AG
+ARIS \cite{aris} is a product form software AG. It is a big enterprise BPM solution that brings many tools like process overviews, dashboards, reports or monitoring. ARIS was developed to work well with SAP. Therefore it is by definition an height level implementation.
 
-Sprache: java
+You buy a solution and the code is not accessible. software AG provides training for employees to configure or work with the product. 
 
-Lizens: proprietär
-
-Preis?
-
-Bemerkungen:
-Unterstützt BPMN und BPEL. (xml nicht sichtbar/exportierbar...)
-Viele GUI's. 
-Monitoring, Reporting werkzeuge dabei.
-Hauptsächlich für SAP entwickelt
-Wird eventuel von <Firma> eingekauft/verwendet.
-Programmierung und Konfiguration muss fast eingekauft werden.
+The cost looks to be quit height and is at least 10 Million USD \cite{ariscost}.
 
 
-\subsection{Signavio}
-Produce: Signavio
 
-More consulting. Uses also activiti as backend.
+\subsection{biztalk}
+Biztalk \cite{biztalk} is the BPEL implementation from Microsoft. It is sold as biztalk server 2010 and is praised as Business Proces Management (BPM) suite. Since it is a Microsoft product it is written and configured in the .NET programming language. Obviously the integration with other Microsoft products like Sharepoint should be good.
+
+The enterprise edition costs around 44'000 USD \cite{biztalkcost}. For testing and development there is a free license.
 
 
 \subsection{Summary of products}
+
+
+\begin{center}
+\begin{tabular}{l | c c c p{3cm}}
+\toprule
+
+Name & Notation & Language & License & Extras \\
+
+\midrule
+
+activiti & BPMN & Java & Apache 2.0 & only API \\
+activVOS & BPMN/BPEL & Java & proprietary &  uses open standars \\
+Apache ODE & BPEL & Java & Apache 2.0 &   \\
+ARIS & BPMN/BPEL & Java & proprietary &  sold as fully feature product \\
+biztalk & BPEL & .NET & proprietary &  share point integration \\
+
+
+\bottomrule
+\end{tabular}
+
+\label{tab:enginecomparison}
+\end{center}
+
 Since either BPMN nor BPEL is in use at the moment the first thing to decide is what specification to use.
 It does not make sense to mix both. 
 
@@ -292,7 +269,7 @@ Because it is open source there are already some example web application that ca
 \subsection{Conclusion}
 The monolithic concept of big systems has proven in the past to be inflexible and heavy on the maintenance. 
 The decision was made to use activiti because of its simplicity and possibility to add other functions (i.e monitoring or reporting) in the future over other programs that also have one functionality.
-Activiti plays also well together with the web framework vaadin.
+Activiti plays also well together with Java based web frameworks like vaadin.
 
 
 \subsection{Compatibility}
@@ -309,7 +286,7 @@ The process takes an annual inventory item review. These items are reference sam
 
 \begin{figure}
     \begin{center}
-%       \includegraphics[width=1\textwidth]{./img/PanExampleBPMN.png}\\
+      \includegraphics[width=1\textwidth]{./img/PanExampleBPMN.png}\\
     \end{center}
   \caption{Example Application work flow}
   \label{panexampleWorkflow}
@@ -318,7 +295,7 @@ The process takes an annual inventory item review. These items are reference sam
 First a list of the reference samples that have to be checked is retrieved from the parent system (i.e LIMS). This is done with a SQL query on the database. 
 The sample number and the location is then stored in a process variable as a data object list.
 
-For each item in the list a sub process is started in parallel (callActiviy). The sub process is a separate bpmn process definition.
+For each item in the list a sub process is started in parallel (callActiviy). The sub process is a separate BPMN process definition.
 The data object which represents a sample, is given to the newly created process.
 
 Now the user can claim the tasks or in this case the samples they wish to check. Then they go to the location and provide the verdict of that sample. If the sample is fine a report is created otherwise a OOS (Out of specification) procedure has to be started first. The OOS process is not part of this demonstration application. It would however be very easy create and to call another sub activity in the future.
@@ -360,7 +337,7 @@ db
 
 
 \section{Webapplication}
-Besides the bpmn engine, the web application is a central cornerstone of this project. After all that is what the user gets to see.
+Besides the BPMN engine, the web application is a central cornerstone of this project. After all that is what the user gets to see.
 The decisions was made to use Vaadin as a web framework. It allows to program the web application completely in java on the server side. So there is
 no need to get in trouble with web technology.
 
@@ -372,7 +349,7 @@ knowledge of the environment it is in. The code can therefore be untouched when 
 
 \subsection{class design}
 The web application is a simple GUI application. There is the main window that holds different widgets in a layout. Each widget shows a certain
-information. For example there is a process viewer that presents the available bpmn processes. 
+information. For example there is a process viewer that presents the available BPMN processes. 
 The following widgets are implemented in the demo web application.
 
 \begin{itemize}
@@ -403,26 +380,27 @@ process logic is being separated from the user interface.
 
 
 
-\subsection{bpmn deployment}
-The demonstration web application deploys the bpmn processes to the activiti engine at start up. In the future and for productive use of activiti the
-bpmn process deployment should be done over a separate applications or as a function inside the web application. 
+\subsection{BPMN deployment}
+The demonstration web application deploys the BPMN processes to the activiti engine at start up. In the future and for productive use of activiti the
+BPMN process deployment should be done over a separate applications or as a function inside the web application. 
 
 
 \subsection{Internationalization}
-
+Internationalization is only needed for the web application. Since the web application is written in basic java, the basic resource pattern can be used. That means each view able string is loaded from a resource file that holds the strings of the given local. 
 
 
 
 \subsection{ldap}
 
 
+
 \section{External application server}
 
-The basic concept is a socket client server architecture. 
+The basic concept is a socket client rpc server architecture. \cite{rpc}
 
 \subsection{server}
 
-The server receives a request to execute a certain excel application. It then executes this application. If multiple request are received the external excel application are run in serial.
+The server receives a request to execute a certain excel application. It then executes this application. If multiple request are received they get stored in an array and then the external excel applications are run in serial.
 
 %TODO class diagram server.
 
@@ -430,8 +408,8 @@ The server receives a request to execute a certain excel application. It then ex
 
 
 \subsection{client}
-
-The client is a process on the bpmn engine server. This process can be called by a parent process (see callActiviy). 
+%FIXME  does not actually work yet.
+The client is a process on the BPMN engine server. This process can be called by a parent process (see callActiviy). 
 The first task is a java service task. It creates a connection to the server and sends the data. 
 It waits until the server sends the processed data back.
 
@@ -448,10 +426,33 @@ data is send again to the server.
   \label{externClientWorkflow}
 \end{figure} 
 
+\subsection{protocol}
+For the communication between both parties a protocol has to be defined. 
+First the client send a request to the server that has an UUID \cite{uuid}, the application to start and the marshalled data object.
+Each information is separated by two ::. The Information then looks like that.
+\begin{verbatim}
+ 
+\end{verbatim}
+
+The server is then responding, that it got the request by sending back the UUID with an !!!!ok.
+\begin{verbatim}
+ 
+\end{verbatim}
+
+When the server has processed the request it sends the new marhsall string back to the client. The UUID is still used as prefix to identify the request.
+\begin{verbatim}
+ 
+\end{verbatim}
+
+The client finally sends the ok to close the connection to the server.
+\begin{verbatim}
+ 
+\end{verbatim}
+
 
 
 \section{Components}
-Components are reusable functions and classes. In java the classes are put together in a jar file. These jar files can be imported in an other project and so be easily used.
+Components are reusable packages of functions and classes. In Java the classes are put together in a jar file. These jar files can be imported in an other project and so be easily used.
 Jar files can be tested separately and be provided in a maven repository.
 
 For this project a few of these components where created. For one they would have at some point been needed anyway and for the other reason to
@@ -478,8 +479,8 @@ Being able to marshall an object into an xml file and sending it over a socket p
 might even be written in an other programming language.
 
 The ability to marshall objects is already implemented in the existing excel framework. So only the matching java code has to be implemented.
-With the existing xsd definition it is possible to automatically create java objects with the xjc \cite{xjc} command line tool.
-These objects can than be used with the jaxb classes to easily navigate through the xml data and creating the java objects.
+With the existing XSD definition it is possible to automatically create java objects with the xjc \cite{xjc} command line tool.
+These objects can than be used with the JAXB \cite{jaxb} classes to easily navigate through the XML data and creating the java objects.
 
 
 %recursion, dict, list, values
@@ -537,11 +538,11 @@ that scripting in xml is not really fun.
 
 \subsection{Maven}
 Maven also uses also xml for the configuration. Opposed to ant, you define how the project has to be build. The building is then
-made by Maven. Maven also resolves dependency. Maven is widely used and therefore has a lot of plugins and additional tools like an eclipse plugin. For our case maven seemed to do the job.
+made by Maven. Maven also resolves dependencies. Maven is widely used and therefore has a lot of plugins and additional tools like an eclipse plugin. For our case maven seemed to do the job.
 
 
 \subsection{Gradle}
-Gradle is the newes member in the build tool family. Gradle is not just a Java build tool so i can also handle other languages. The configuration file is written in groovy. That makes a much nicer looking project definition.
+Gradle is the newest member in the Java build tool family. Gradle is not just a Java build tool so i can also handle other languages. The configuration file is written in groovy. That makes a much nicer looking project definition.
 Gradle also doesn't reinvent the world. It uses the same dependency resolvement as maven. So it can almost do everything that maven can. In addition, it is easy to create custom tasks like in ant.
 
 The downside is, that gradle is still a very young project and has not as much plug-ins or examples as maven. It is however worth keeping in sight.
@@ -563,7 +564,7 @@ that goes on forever.
 The big advantage of unit tests is now, that if a change in the code should brake something, at least one unit test will most likely fail.
 The developer then also know where to look and fix the problem right away.
 
-\subparagraph{Validation Tests}
+\subsection{Validation Tests}
 Once the all functionality is implemented the packages and applications are build and deployed to the validation environment. The validation environment is configured as 
 close as possible the same as the productive environment.
 
@@ -616,43 +617,43 @@ maven + repo + scripts + gradle
 
 
 \section{Infrastructure}
-This chapter shal give an overview how the infrastrucure that supports the webapp and the development of it, has to look. 
+This chapter shall give an overview how the infrastructure that supports the web applicatin and the development of it, has to look. 
 All named server are planed to be virtual machines.
 
 \begin{figure}
     \begin{center}
        \includegraphics[width=0.8\textwidth]{./img/InfrastructureLayout.pdf}\\
     \end{center}
-  \caption{Infrastrucutre overview}
+  \caption{Infrastructure overview}
   \label{infrastructureoverview}
 \end{figure} 
 
 It would have four servers. 
 \begin{itemize}
- \item Webapplicatin server
+ \item Web application server
  \item Database server
  \item Calculation server (excel, r)
  \item Repository server
 \end{itemize}
 
 \subsection{Webbapplication server}
-This server is a classic webapplication server that can run war Archives. 
-So it runs an jee enviroment like jBoss or tomcat.
+This server is a classic web application server that can run war Archives. 
+So it runs an Jee environment like jBoss or tomcat.
 The operating system is therefore not so relevant. 
 
-To keep things simpel linux was choosen for the example server.
+To keep things simple linux was choosen for the example server.
 
 \subsubsection{configuration}
 %configs....
 
 
 \subsection{Database server}
-De database server would be used to store the activiti data. The databases supported by activiti are mysql, oracle. Mssql is jet in experimental state.
+De database server would be used to store the activiti data. The databases supported by activiti are mysql \cite{mysql}, oracle \cite{oracledb}. MSsql \cite{mssql} is jet in experimental state.
  
 For the example a linux server with a mysql database was setup.
-To manage the database phpmyadmin is used.
+To manage the database phpmyadmin \cite{phpmyadmin} is used.
 
-Since the database is configured in the webapplication with spring, it is very easy to change the used database.
+Since the database is configured in the web application with spring, it is very easy to change the used database.
 
 
 \subsection{Calculation server}
@@ -685,45 +686,65 @@ For the maven repository nexus from (xxxx) would be a nice chois. It supports al
 \addcontentsline{toc}{section}{Literaturverzeichnis}
 \begin{thebibliography}{99}
 
-\bibitem{middleware} \url{wiki}
-
-\bibitem{activiti} \url{http://www.activiti.org/}
+\bibitem{middleware} \url{http://en.wikipedia.org/wiki/Middleware}
 
 \bibitem{omg} \url{http://www.omg.org/}
 
+\bibitem{activiti} \url{http://www.activiti.org/}
+
+\bibitem{jbpm} \url{https://www.jboss.org/jbpm/}
+
+\bibitem{activevos} \url{http://www.activevos.com/}
+
+\bibitem{activvosscost} \url{http://www.activevos.com/content/blog/activevos2009butlergrouptechnicalaudit.pdf}
+
+\bibitem{appacheODE} \url{https://ode.apache.org/}
+
+\bibitem{aris} \url{https://www.softwareag.com/ch/products/wm/bpm/default.asp}
+
+\bibitem{ariscost} \url{http://gothamschools.org/2010/09/15/frustrated-with-citys-data-system-teachers-build-their-own/}
+
+\bibitem{biztalk} \url{http://www.microsoft.com/biztalk}
+
+\bibitem{biztalkcost} \url{http://www.microsoft.com/biztalk/en/us/pricing-licensing.aspx}
+
+\bibitem{signavio} \url{http://www.signavio.com/en.html}
+
 \bibitem{eclipse} \url{http://www.eclipse.org} %FIXME
+
+\bibitem{rpc} \url{http://en.wikipedia.org/wiki/Remote_Procedure_Call}
+
+\bibitem{uuid} \url{http://en.wikipedia.org/wiki/Universally_unique_identifier}
 
 \bibitem{vaadin} \url{http://www.vaadin.com}
 
-\bibitem{ant} \url{http://www.vaadin.com}
+\bibitem{ant} \url{https://ant.apache.org/}
 
-\bibitem{maven} \url{http://www.vaadin.com}
+\bibitem{maven} \url{https://maven.apache.org/}
 
-\bibitem{gradle} \url{http://www.vaadin.com}
+\bibitem{gradle} \url{http://www.gradle.org/}
 
-\bibitem{spring} \url{} % FIXME
+\bibitem{spring} \url{http://www.springsource.org/}
 
+\bibitem{mysql} \url{https://www.mysql.com/}
 
-\bibitem{activitiDbSupport} \url{}
+\bibitem{phpmyadmin} \url{http://www.phpmyadmin.net/home_page/index.php}
 
-\bibitem{mysql} \url{}
+\bibitem{oracledb} \url{http://www.oracle.com/de/products/database/index.html}
 
-\bibitem{phpmyadmin} \url{}
+\bibitem{mssql} \url{http://www.microsoft.com/sqlserver/en/us/default.aspx}
 
-\bibitem{oracledb} \url{}
+\bibitem{nexus} \url{http://www.sonatype.org/nexus/}
 
-\bibitem{mssql} \url{}
+\bibitem{git} \url{http://git-scm.com/}
 
-\bibitem{nexus} \url{}
+\bibitem{zlib} \url{http://zlib.net/}
 
-\bibitem{git} \url{}
+\bibitem{base64} \url{http://en.wikipedia.org/wiki/Base64}
 
-\bibitem{zlib} \url{}
+\bibitem{xjc} \url{http://docs.oracle.com/javase/6/docs/technotes/tools/share/xjc.html}
 
-\bibitem{base64} \url{}
-
-\bibitem{xjc} \url{}
-
+\bibitem{jaxb} \url{http://www.oracle.com/technetwork/articles/javase/index-140168.html}
 
 \end{thebibliography}
 
