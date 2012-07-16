@@ -415,9 +415,14 @@ The basic concept is a socket client rpc server architecture. \cite{rpc}
 \subsection{server}
 The server receives a request to execute a certain excel application. It then executes this application. If multiple request are received they get stored in an array and then the external excel applications are run in serial.
 
-%TODO class diagram server.
 
-
+\begin{figure}
+    \begin{center}
+       \includegraphics[width=1\textwidth]{./img/calcServerUML.png}\\
+    \end{center}
+  \caption{UML Class diagram of calculation server}
+  \label{uml_calculationserver}
+\end{figure} 
 
 
 \subsection{client}
@@ -429,15 +434,7 @@ It waits until the server sends the processed data back.
 If there is an error a boundary event is fired and a user or e-mail task is started. When the problem is resolved the 
 data is send again to the server.
 
-%TODO image of client process
 
-\begin{figure}
-    \begin{center}
-%       \includegraphics[width=1\textwidth]{./img/Laboverview.png}\\
-    \end{center}
-  \caption{Work flow of external client call process}
-  \label{externClientWorkflow}
-\end{figure} 
 
 \subsection{protocol}
 For the communication between both parties a protocol has to be defined. 
