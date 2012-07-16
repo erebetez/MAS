@@ -63,7 +63,7 @@
 		MAS-IT\\[1.7ex]
 	}
 	{\Large\bfseries\sf
-		Business frameworks\\[2.2ex]
+		Business frameworks in QC laboratory processes\\[2.2ex]
 	}
 	{\large\bfseries\sf
 		Masterthesis von\\[1.5ex]
@@ -99,31 +99,27 @@ Text
 % --- Einleitung --- %
 \newpage
 \section{Introduction}
-Laboratory processes. What is that all about?
+Laboratory processes. What is that all about? A simplified view looks like the following. A sample of a certain substance comes into the QC lab. What analysis have to be made etc. is given by the labor information and management system (LIMS) \cite{lims}. The LIMS also says when and what sample has to be analysed.
+The lab performs then the analysis. All used solutions, instruments and steps have to be documented. That is traditionally done on paper. 
 
-Usually it goals like this. A physical sample is brought to the quality control (QC) analytic laboratory. The laboratory determines certain physical property's and then tell the customer about it.
+At this point it is important to emphasize that everything that is not documented isn't done from an audit point of view (see GMP \cite{gmp}). Also the standard operating procedure (SOP) has to be followed exactly by the lab technician.
+After the analysis it is mostly the case to have a calculation step where certain parameters are calculated to get the final value. The final value is then transferred back into the LIMS database. These are mainly manual steps. These manual steps can lead to errors and are time consuming.
+Although the operating of balances, creation of solution or other practical tasks cannot be automated, the data flow and the process can.
 
-A simplified view looks like this. A sample of a certain substance comes into the QC lab. What analysis have to be made etc. is given by the Labor information and management system (LIMS). The LIMS also says when and what sample has to be analyzed.
-The lab performs then the analysis. All used solutions, instruments and steps have to be documented. That is traditionally done on paper. At this point it is important to emphasize that everything that is not documented isn't done from an audit point of view. Also the standard operating procedure (SOP) has to be followed exactly.
-After the analysis it is mostly used to have a calculation step where certain parameters are calculated to the final value. The final value is then transferred back to the LIMS. These are mainly manual steps. These manual steps can lead to errors and are time consuming.
-Since the operating of balances, creation of solution or other practical tasks cannot be automated, the data flow and the process can.
+This report aims to look at the layer between LIMS and the instruments and the analysis method. In the past few years there has been a ton of programs that aim to solve that problem. Some try to achieve that with an almighty LIMS. But since most LIMS programs date from the 90's the implementation is not easy and you end up having a not maintainable huge monolithic system. There is also the idea of electronic lab notebooks (ELN) \cite{eln}. These ELN where usually conceived for R\&D laboratory. That means more freedom and less strict processes.
+Then there is the software for the instruments, that can perform more and more tasks. This looks like a good idea, but there are so many instruments, methods and manufactures that there is just no solution that fits it all. Also it is still the case, that one solution of one manufacturer is in no way compatible to the solution of another manufacturer.
 
-This report aims to look at the layer between LIMS and the instruments and the analysis method. In the past few years there has been a ton of programs that aim to solve that problem. Some try to achieve that with an almighty LIMS. But since most LIMS date from the 90's the implementation is not easy and you end up haven a not maintainable monolith. There was also the idea of electronic lab notebooks (ELN) these ELN where usually conceived for R\&D laboratory. That means more freedom and less strict processes.
-Then there is the software for the instruments, that can perform more and more tasks. This looks like a good idea, but there are so many instruments, methods and manufactures that there is just no solution that fits all. Also it is still the case, that one solution of one manufacturer is in no way compatible to the solution of another manufacturer.
-
+This is report therefore explores what existing tool exists in the business IT world and if they could be used to automate a chemical laboratory.
 
 \section{The Laboratory landscape}
-The laboratory knows many different analytic methods. They all have different requirements and provide different forms of results.
-That gives us an extremely heterogeneous landscape. 
-
-
-
+The laboratory knows many different analytic methods. They all have different requirements and provide different forms of results. That gives us an extremely heterogeneous landscape. 
 
 First we need to look at the current laboratory work flow, with the given programs. Historically, and still so, the lab uses the LIMS to see what samples have do be done and to type the results back. The LIMS is a height level program that was designed to managed samples.
 
-To normalize the data and provide an easy review ability of every step, a report, that can be viewed and signed in the SDMS database, is created.
-The problem with heterogeneous data and raw data reports is currently overcome with the SDMS database. It is possible to print reports into the database and tag them automatically. As a result the reports printed into that database can be parsed and data is so available. This currently is in place and works pretty well.
-
+There is also a second program in use. An Scientific data management system SDMS \cite{sdms} database. This stores Raw data from analysis and provides an api to retrieve and query the data.
+To normalize the data and provide an easy review ability of every step, a report, that can be viewed and signed in the SDMS database, is created and printed into the database.
+The problem with heterogeneous data and raw data reports is currently overcome with the SDMS database. It is possible to print reports into the database and tag them automatically. As a result the reports printed into that database can be parsed and the data is then available in an electronic form. This currently is in place and works pretty well.
+It is however mostly implemented in excel \cite{excel} applications.
 
 \begin{figure}
     \begin{center}
@@ -137,12 +133,12 @@ The problem with heterogeneous data and raw data reports is currently overcome w
 % TODO instrument software exkurs. 
 
 
-\section{Concept}
-So the question came up, why not look at something completely different. The lab is not the only business that has processes. There could be other business frameworks that provide the needed functionality. This system should be able to integrate and interface these different islands of programs. It would be like a laboratory middle ware.
+\section{Concept and Target}
+So the question came up, why not look at something completely different. The lab is not the only business that has processes. There could be other business frameworks that provide the needed functionality. This system should be able to integrate and interface these different islands of programs. It would be like a laboratory middle ware \cite{middleware}. 
 
-To make the automation in such a heterogeneous landscape possible a sort of state machine is needed. This state machine knows how process
-look like, which processes are currently run, in which state they are in and which is the next to execute.
-This pattern is basically the same in every business process. One of the therms is SOA (Service Oriented Architecture). The state machine engine would therefore be the heart of the hole automation process.
+
+To make the automation in such a heterogeneous landscape possible a sort of state machine is needed. This state machine knows how process look like, which processes are currently run, in which state they are in and which is the next to execute.
+This pattern is basically the same in every business process. One of the therms is SOA (Service Oriented Architecture) \cite{soa}. The state machine engine would therefore be the heart of the hole automation process.
 
 Since the lab is obviously not the only place in the world that has predefined process a look at generic state machines was imminent.
 To configure these state  machine engines there are already several standards. Two process definition languages are already well established:
@@ -156,33 +152,30 @@ Both are open standards from OMG \cite{omg}.
 
 
 \subsection{Requirements}
-%FIXME translate ....
 Beside the central process engine, there are also other aspects to be considered. One is a web application that should provide forms and an overview
-of the tasks. Thes humand interface should also be available on mobile devices.
-Since the current implementation is based on excel sheets, it of importance that the current applications can be implemented in the new framework.
+of the tasks. These human interfaces should also be available on mobile devices.
+Since the current implementation is based on excel sheets, lots of them, it of importance that the current applications can be implemented and reused in the new framework.
 For instance it should be possible to send data to an excel application and get the results back into the process stream.
 
 
 
-
 \section{BPEL}
-The BPEL (Business Process Execution Language) was an answer to the process problem that came from the it world. It is very technical and the process description is made with ifs and loops that are also known in common programming languages. 
+The BPEL (Business Process Execution Language) \cite{bpel} was an answer to the process problem that came from the IT world. It is very technical and the process description is made with ifs and loops that are also known in common programming languages. The definition is made in a XML file. 
 
 \section{BPMN}
-BPMN (Business Process Model and Notation) has it roots in the business process modulation. It first was only a description language to provide some unified task ore gateway definitions. These are the elements of the common flowcharts.
-With the versin 2 of the BPMN standard these flowcharts can now be interpreted by an engines and be run as a program.
+BPMN (Business Process Model and Notation) \cite{bpmn} has it roots in the business process modulation. It first was only a description language to provide some unified task or gateway definitions. These are the elements of the common flowcharts. 
+With the version 2 of the BPMN standard these flowcharts can now be interpreted by an engines and be run as a program.
+The definition is made in a XML file. 
 
-
-\section{Prozess Engines}
+\section{Process Engines}
 The engines are implementations of these business description language. The engines provide all sort of logic that would be hard to implement every time from scratch.
 \begin{itemize}
   \item What processes are there
-  \item which are in what state
-  \item Processes are recoverable and transaction save. (crash)
+  \item Which are in what state
+  \item Processes are recoverable and transaction save. (i.e in case of crash)
   \item What happens if a new version of the process is deployed.
-  \item Who did what and when.
+  \item Who did what and when. (History and Log service)
 \end{itemize}
-
 
 The following chapters present some of these engines that are already available. The list is far from complete and in alphabetical order.
 
@@ -204,8 +197,8 @@ Because it is open source it is free of charge. Although the effort to get a wor
 There is also a company Signavio \cite{signavio} behind activiti. Signavio provides consulting and BPMN creation tools.
 
 \subsection{Apache ODE}
-Apache ODE \cite{appacheODE} is an open source BPEL engine. There is also an eclipse plugin, that helps create the BPEL XML definition.
-
+Apache ODE \cite{appacheODE} is an open source BPEL engine. ODE provides an Java API to use in a Java program.
+There is also an eclipse plugin, that helps create the BPEL XML definition in a graphical interface.
 
 
 \subsection{ARIS}
@@ -216,7 +209,6 @@ You buy a solution and the code is not accessible. software AG provides training
 The cost looks to be quit height and is at least 10 Million USD \cite{ariscost}.
 
 
-
 \subsection{biztalk}
 Biztalk \cite{biztalk} is the BPEL implementation from Microsoft. It is sold as biztalk server 2010 and is praised as Business Proces Management (BPM) suite. Since it is a Microsoft product it is written and configured in the .NET programming language. Obviously the integration with other Microsoft products like Sharepoint should be good.
 
@@ -224,7 +216,6 @@ The enterprise edition costs around 44'000 USD \cite{biztalkcost}. For testing a
 
 
 \subsection{Summary of products}
-
 
 \begin{center}
 \begin{tabular}{l | c c c p{3cm}}
@@ -248,40 +239,40 @@ biztalk & BPEL & .NET & proprietary &  share point integration \\
 \end{center}
 
 Since either BPMN nor BPEL is in use at the moment the first thing to decide is what specification to use.
-It does not make sense to mix both. 
+It does not make sense to mix both, unless you already have one in use and wish to use the additional features of the other engine. 
 
-BPMN 2.0 seems to be the better choice due to the close process view. BPEL exists longer but seems unnecessary complicated.
+BPMN 2.0 seems to be the better choice due to the close business process view. BPEL exists longer but seems unnecessary complicated.
 Therefore BPMN is the better choice for the lab process definition. 
 
-If we now only look at the BPMN 2.0 engines only ActiVOS, activiti and ARIS remain from the list.
+If we now look at the BPMN 2.0 engines, only ActiVOS, activiti and ARIS remain from the list above.
 
 ActiVOS provides some extra GUI's to give "simpler" access to the configuration. It creates xml and configurations in the background.
-They can fortunately be seen and changed from hand. In the bottom line, it seems nice but does not provide a big advantage. 
+They can fortunately be seen and changed from hand. In the bottom line, it seems nice but does not provide a big advantage. Also most documentations is for the BPEL engine.
 
-ARIS is the big all inclusive package. It is however impossible to work yourselves on the project they sell also the programming and support. Therefore there is no code ore xml visible in the hole package. So for each change the external company has to be contracted.
-They provide also some basic training courses.
+ARIS is the big all inclusive package. It is however impossible to work yourselves on the project because they sell also the programming and support. Therefore there is no code ore xml visible in the hole package. So for each change the external company has to be contracted.
+They provide some basic training courses for configuration.
 
 Activiti has a total other approach. It has no gui what so ever. I provides an open programming interface that provides all functionality 
-of the engine. The xml can be easily edited directly. It is therefore slim and sticks to the one task it tries to solve.
+of the engine. The XML can be easily edited directly. It is therefore slim and sticks to the one task it tries to solve.
 The downside is that there is a steep learning curve since everything has to bee implemented in the code. 
 Because it is open source there are already some example web application that can be used out of the box. 
 
 \subsection{Conclusion}
 The monolithic concept of big systems has proven in the past to be inflexible and heavy on the maintenance. 
-The decision was made to use activiti because of its simplicity and possibility to add other functions (i.e monitoring or reporting) in the future over other programs that also have one functionality.
-Activiti plays also well together with Java based web frameworks like vaadin.
+The decision was made to use activiti because of its simplicity and possibility to add other functions (i.e monitoring or reporting) in the future over other programs that also have just one functionality.
+Activiti plays also well together with Java based web frameworks like vaadin \cite{vaadin}.
 
 
 \subsection{Compatibility}
-Although BPMN is a standard and provides most keywords and rules the implementations still adds own keywords or extra functionality (i.e
-forms). So the BPMN files can't just be copied form one engine to another. If you chose one engine it is kinda final and you will stick to it.
+Although BPMN 2.0 is a standard and provides most keywords and rules the implementations still adds own keywords or extra functionality (i.e forms). So the BPMN files can't just be copied form one engine to another. If you chose one engine it is kinda final and you will have to stick to it.
 
 If an engine change really has to be made it is however simpler to achieve than if you had the complete logic inside the code. If the new engines even
 uses the same programming language, it is very probable, that you can just reuse the business logic classes. 
 
 
-
 \section{Example Application}
+In order to have concrete task to try the business framework on, a example application was designed.
+
 The process takes an annual inventory item review. These items are reference samples of the substance that were sold.
 
 \begin{figure}
@@ -298,17 +289,14 @@ The sample number and the location is then stored in a process variable as a dat
 For each item in the list a sub process is started in parallel (callActiviy). The sub process is a separate BPMN process definition.
 The data object which represents a sample, is given to the newly created process.
 
-Now the user can claim the tasks or in this case the samples they wish to check. Then they go to the location and provide the verdict of that sample. If the sample is fine a report is created otherwise a OOS (Out of specification) procedure has to be started first. The OOS process is not part of this demonstration application. It would however be very easy create and to call another sub activity in the future.
-To print the reports the existing infrastructure is used. The reports are stored in the SDMS and can be signed there..
+Now the user can claim the tasks or in this case the samples they wish to check. Then they go to the location and provide the verdict of that sample and a value. If the sample is fine a report is created otherwise a OOS (Out of specification) procedure has to be started first. The OOS process is not part of this demonstration application. It would however be very easy create and to call another sub activity in the future.
+To print the reports the existing infrastructure is used. The reports are stored in the SDMS and can be signed there.
 Once all samples have been controlled, the parent process goes to the next task.
 
-The laboratory supervisor now gets the task to check the sample list. An overview of the sample list and the verdicts is presented to him.
+The laboratory supervisor now gets the task to check the sample list. An overview of the sample list and the verdicts is presented to him. The entered values also gets calculated together. The calculation step is purely for the sake of demonstrations.
 The list with all samples is then again printed to the SDMS. That concludes the review process.
 
 This process is used to illustrate the further examples and references.
-
-% TODO main process and sub processes
-
 
 % \subsection{Technology and architecture}
 % Since activiti seems a good choice the main language will be Java.
@@ -317,9 +305,28 @@ This process is used to illustrate the further examples and references.
 
 \section{Software Architecture}
 
+
+
+\begin{figure}
+    \begin{center}
+      \includegraphics[width=0.8\textwidth]{./img/ArchitectrueOverview.pdf}\\
+    \end{center}
+  \caption{Overview of the architecture}
+  \label{architectureoverview}
+\end{figure} 
+
+\subsection{Graphical user interface}
+For the graphical user interface (GUI) the web application seems to be a good choise. The web application can be displayed on most devices. With the power of CSS \cite{css} they can even be shown differently on small screens.
+
+To keep things in Java and not being forced to be bothered with the web technology, vaadin \cite{vaadin} is used as a web framework.
+
 webapp
 
+\subsection{process engine}
+
 activti 
+
+
 
 componetns
 
@@ -327,13 +334,11 @@ calc server
 
 db
 
-\begin{figure}
-    \begin{center}
-      \includegraphics[width=0.5\textwidth]{./img/ArchitectrueOverview.pdf}\\
-    \end{center}
-  \caption{Overview of the architecture}
-  \label{architectureoverview}
-\end{figure} 
+methods
+
+spring
+
+
 
 
 \section{Webapplication}
@@ -391,11 +396,10 @@ Internationalization is only needed for the web application. Since the web appli
 
 
 \subsection{ldap}
-
+The user authentication can be done in the BPMN engine.
 
 
 \section{External application server}
-
 The basic concept is a socket client rpc server architecture. \cite{rpc}
 
 \subsection{server}
@@ -573,7 +577,7 @@ the code gets modified in the development environment and redeployed. The tests 
 
 
 \section{Versioning}
-For the versioning of the source code there are several producs available. Just to name a few of them: SVN, mercurial, git.
+For the versioning of the source code there are several products available. Just to name a few of them: SVN, mercurial, git.
 During the development of the example git was used. It is has a decentralised architecture. So every developer has always the full power of git at his disposal. It is also easy to create branches and to create labels for realises.
 
 \begin{figure}
@@ -586,7 +590,7 @@ During the development of the example git was used. It is has a decentralised ar
 
 \subsection{using git}
 In order that every user uses the branches the same way, a few ground rules have to be set.
-Each git repo will have at least three branches. productive, validation, and master.
+Each git repository will have at least three branches. productive, validation, and master.
 
 Master is always the newest development branch. When the new feature is ready the changes are merged into the validation branch where they are tested. This validation branch gets the name of the new version.
 The only thing that has to be changed in the application configuration, is the database configuration in the spring context files.
@@ -611,13 +615,14 @@ This way it is easier to manage branches and versions of each application.
 
 maven + repo + scripts + gradle
 
-\subsection{Maven repository}
 
+\subsection{Maven repository}
+As maven repository the product nexus \cite{nexus} from Sonatype is used. It is written in Java an can be deployed everywhere. I provides a nice web application to manage the repositories. The web application runs on an simple jetty \cite{jetty} application server.
 
 
 
 \section{Infrastructure}
-This chapter shall give an overview how the infrastructure that supports the web applicatin and the development of it, has to look. 
+This chapter shall give an overview how the infrastructure that supports the web application and the development of it, has to look. 
 All named server are planed to be virtual machines.
 
 \begin{figure}
@@ -636,12 +641,12 @@ It would have four servers.
  \item Repository server
 \end{itemize}
 
-\subsection{Webbapplication server}
+\subsection{Webb application server}
 This server is a classic web application server that can run war Archives. 
-So it runs an Jee environment like jBoss or tomcat.
+So it runs an Jee environment like jBoss \cite{jboss} or tomcat \cite{tomcat}.
 The operating system is therefore not so relevant. 
 
-To keep things simple linux was choosen for the example server.
+To keep things simple Linux was chosen for the example server. A Windows server would work just as well.
 
 \subsubsection{configuration}
 %configs....
@@ -650,7 +655,7 @@ To keep things simple linux was choosen for the example server.
 \subsection{Database server}
 De database server would be used to store the activiti data. The databases supported by activiti are mysql \cite{mysql}, oracle \cite{oracledb}. MSsql \cite{mssql} is jet in experimental state.
  
-For the example a linux server with a mysql database was setup.
+For the example a Linux server with a mysql database was setup.
 To manage the database phpmyadmin \cite{phpmyadmin} is used.
 
 Since the database is configured in the web application with spring, it is very easy to change the used database.
@@ -674,7 +679,8 @@ For the maven repository nexus from (xxxx) would be a nice chois. It supports al
 
 
 
-\section{Migration}
+\section{Conclusion}
+
 
 
 
@@ -686,11 +692,30 @@ For the maven repository nexus from (xxxx) would be a nice chois. It supports al
 \addcontentsline{toc}{section}{Literaturverzeichnis}
 \begin{thebibliography}{99}
 
+\bibitem{lims} \url{}
+
+\bibitem{sdms} \url{}
+
+
+\bibitem{gmp} \url{}
+
+\bibitem{eln} \url{}
+
+\bibitem{excel} \url{}
+
+\bibitem{bpel} \url{}
+
+\bibitem{bpmn} \url{}
+
+\bibitem{soa} \url{}
+
 \bibitem{middleware} \url{http://en.wikipedia.org/wiki/Middleware}
 
 \bibitem{omg} \url{http://www.omg.org/}
 
 \bibitem{activiti} \url{http://www.activiti.org/}
+
+\bibitem{css} \url{}
 
 \bibitem{jbpm} \url{https://www.jboss.org/jbpm/}
 
@@ -735,6 +760,12 @@ For the maven repository nexus from (xxxx) would be a nice chois. It supports al
 \bibitem{mssql} \url{http://www.microsoft.com/sqlserver/en/us/default.aspx}
 
 \bibitem{nexus} \url{http://www.sonatype.org/nexus/}
+
+\bibitem{jetty} \url{}
+
+\bibitem{jboss} \url{}
+
+\bibitem{tomcat} \url{}
 
 \bibitem{git} \url{http://git-scm.com/}
 
