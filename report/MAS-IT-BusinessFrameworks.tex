@@ -388,10 +388,8 @@ finished the task viewers are updated to show the remaining tasks.
   \label{webapplicationclassuml}
 \end{figure} 
 
-Since activiti is being configured over spring, the activiti instances can be provided as singletons to each widget that needs them. This way the
+Since activiti is being configured over spring, the activiti instances can be provided as singletons to each widget that needs them. This is done with the Annotation @Autowired \cite{autowire}. This way the
 process logic is being separated from the user interface.
-
-%TODO class image of app%
 
 
 
@@ -439,29 +437,36 @@ data is send again to the server.
   \label{externClientWorkflow}
 \end{figure} 
 
-\subsection{protocol}
+\subsection{Protocol}
 For the communication between both parties a protocol has to be defined. 
 First the client send a request to the server that has an UUID \cite{uuid}, the application to start and the marshalled data object.
-Each information is separated by two ::. The Information then looks like that.
+Each information is separated by two "::". The Information string send to the server then looks like that.
 \begin{verbatim}
- 
+ UUID::MARSHALSTRING::APPID
+ 1647edcf-f8f5-4b04-a01f-f44e3b033b3d::SGFsbG8=::A300.1
 \end{verbatim}
 
-The server is then responding, that it got the request by sending back the UUID with an !!!!ok.
+The client waits for a response. If The server cannot be reached an error is raised. 
+The activiti client task will not finish and still be in the same state as before.
+
+As soon as the server has processed the request, the answer in form of the following string is send back.
+First the UUID is given then the data as marshall string and finally the keyword "FINISHED".
+
 \begin{verbatim}
- 
+ UUID::MARSHALSTRING::FINISHED
+ 1647edcf-f8f5-4b04-a01f-f44e3b033b3d::SGFsbG8gV2VsdA==::FINISHED
 \end{verbatim}
 
-When the server has processed the request it sends the new marhsall string back to the client. The UUID is still used as prefix to identify the request.
-\begin{verbatim}
- 
-\end{verbatim}
+The UUID has to be the same as the one the client send in the first place. If not an error is raised.
 
-The client finally sends the ok to close the connection to the server.
+If everything is fine, the client finally sends the OK to close the connection to the server.
+The finish signal looks like this.
 \begin{verbatim}
- 
+ 1647edcf-f8f5-4b04-a01f-f44e3b033b3d::OK
 \end{verbatim}
+The socket connection is then closed.
 
+\section{Processes / Methods}
 
 
 \section{Components}
@@ -478,22 +483,22 @@ demonstrate the work flow with the build tools and repository.
 \subsection{Data structure}
 At the moment a specified data structure to store all the needed laboratory data already exists. It was implemented in vba and just consists of
 arrays, dictionary's and values. These structures exists in every programming language. Therefore it is easy to port the existing structure for
-example to java. But since Java is object oriented the laboratory objects can be modeled even better than in plain old vba. A sequence object can be
+example to Java. But since Java is object oriented the laboratory objects can be modelled even better than in plain old VBA. A sequence object can be
 created that in turn hold assay objects that also holds result objects. Beside the basic data holding some logic can be implemented or some properties
 can be extended and customized to special objects. A further benefit of having customized data objects (beans), is the fact that vaadin provides
-tables that can be filled whit java beans.
+tables that can be filled whit Java beans.
 
 
 
 
 \subsection{Marshalling}
-One key feature of porting the existing excel framework to activiti and java is the marshalling and unmarshalling of the data objects.
+One key feature of porting the existing excel framework to activiti and Java is the marshalling and unmarshalling of the data objects.
 Being able to marshall an object into an xml file and sending it over a socket provides a powerful function to communicate with other programs that
 might even be written in an other programming language.
 
-The ability to marshall objects is already implemented in the existing excel framework. So only the matching java code has to be implemented.
-With the existing XSD definition it is possible to automatically create java objects with the xjc \cite{xjc} command line tool.
-These objects can than be used with the JAXB \cite{jaxb} classes to easily navigate through the XML data and creating the java objects.
+The ability to marshall objects is already implemented in the existing excel framework. So only the matching Java code has to be implemented.
+With the existing XSD definition it is possible to automatically create Java objects with the xjc \cite{xjc} command line tool.
+These objects can than be used with the JAXB \cite{jaxb} classes to easily navigate through the XML data and creating the Java objects.
 
 
 %recursion, dict, list, values
@@ -513,12 +518,14 @@ the data bytes are encoded into base64 \cite{base64}. That allows a save transmi
 
 
 \subsection{excel adapter}
-In order to use the existing application stack based on excel, it is important to be able to start excel files from java code. 
+In order to use the existing application stack based on excel, it is important to be able to start excel files from Java code. 
 The excel adapter has two parts. One is the java package and the other is a special excel spreadsheet. 
 
-The java package takes some arguments starts the excel spreadsheet and gives a signal as soon as the excel process has finished.
+The Java package takes some arguments starts the excel spreadsheet and gives a signal as soon as the excel process has finished.
 
 The spreadsheet has an on open method, that starts the existing excel applications with the given parameter.
+
+A modification of the current Excel plug-in has to be made.
 
 \begin{figure}
     \begin{center}
@@ -529,10 +536,17 @@ The spreadsheet has an on open method, that starts the existing excel applicatio
 \end{figure} 
 
 \section{Environments}
-develop, validation, prod
+At least three environments have to be defined. Development, validation and production. 
+
+The development environment is where the development is done. Usually the applications are run locally on the developer pc. The spring configurations can be modified at any time to match the need of the developer.
+For unit testing is also done at this stage.
+
+The validation environment should look and behave the same as the production environment. On the validation environment, the final builds are deployed. They then get tested. The formal testing is also done on the validation environment. If an error occurs during tests, a new build is created and deployed on the validation environment.
+
+When everything looks good, a productive build based on the one from the validation environment is created and deployed on the productive environment.
 
 \section{Build tools}
-The question what build tool, if any, came pretty early in the project development. Just starting a Project in Eclipse i the easiest way. 
+The question what build tool, if any, came pretty early in the project development. Just starting a Project in Eclipse is the easiest way. 
 At least as long as the project is not to big, is only one project and doesn't really change over time. That was all not the case. So lets have a look at few of them. 
 
 In the Java World there are the usual suspects:
@@ -543,15 +557,15 @@ In the Java World there are the usual suspects:
 \end{itemize}
 
 \subsection{Ant}
-Ant is the oldest of the three. It allows to define build scripts in xml. 
+Ant is the oldest of the three. It allows to define build scripts in XML. 
 It has no own logic, so all tasks or targets have to be written from scratch.
 That allows a big flexibility, it is however also quit complex. There is also the fact,
-that scripting in xml is not really fun.
+that scripting in XML is not really fun.
 
 
 \subsection{Maven}
-Maven also uses also xml for the configuration. Opposed to ant, you define how the project has to be build. The building is then
-made by Maven. Maven also resolves dependencies. Maven is widely used and therefore has a lot of plugins and additional tools like an eclipse plugin. For our case maven seemed to do the job.
+Maven also uses also XML for the configuration. Opposed to ant, you define how the project has to be build. The building is then
+made by Maven. Maven also resolves dependencies. Maven is widely used and therefore has a lot of plug-ins and additional tools like an eclipse plug-in. For our case Maven seemed to do the job.
 
 
 \subsection{Gradle}
@@ -581,9 +595,11 @@ The developer then also know where to look and fix the problem right away.
 Once the all functionality is implemented the packages and applications are build and deployed to the validation environment. The validation environment is configured as 
 close as possible the same as the productive environment.
 
-Know the testers can execute the written tests plans to check the high level functionality. This is also a formal test to conform to the regulations. If a error occours 
+Know the testers can execute the written tests plans to check the high level functionality. This is also a formal test to conform to the regulations. If a error occurs 
 the code gets modified in the development environment and redeployed. The tests are then repeated where needed.
 
+If for example a component gets updated, the application that uses it has to be rebuild. Because the components can be tested very good with unit tests, the should already work correctly when deployed to the validation environment.
+The new package does then not have to be fully tested.
 
 \section{Versioning}
 For the versioning of the source code there are several products available. Just to name a few of them: SVN, mercurial, git.
@@ -621,8 +637,22 @@ This way it is easier to manage branches and versions of each application.
 
 
 \section{Deployment}
+The deployment should be automated as much as possible to provide a consistent and reproducible build.
+Where possible the build scripts like maven or gradle should be used. 
+In addition to them specific shell scripts can be created.
 
-maven + repo + scripts + gradle
+For the web application the following steps will be required.
+\begin{itemize}
+ \item pack the war archive
+ \item copy war archive to web application server
+ \item update the BPMN process definition
+\end{itemize}
+
+The BPMN process definition a bit trickier. The XML resides in the methods jar archives. So they are in the war package. It is however needed to register them in the BPMN engine. 
+This can be done with an extra program over an administration user interface. After the upload to the BPMN engine database the XML is stored in the database.
+
+Processes started with the old process definition will finish with the definition they where started.
+
 
 
 \subsection{Maven repository}
@@ -676,11 +706,11 @@ This is a rahter exotic configuration. This server should be able to run excel. 
 
 
 \subsection{Repository server}
-This server would not be used in the productiv setting. It is just there to facilitate the developers work.
+This server would not be used in the productive setting. It is just there to facilitate the developers work.
 The server would provide a maven repository and a git repository. 
 
-The operating system would be preferably linux. That is because git is native to linux.
-For the maven repository nexus from (xxxx) would be a nice chois. It supports all neccesery functions and provides a nice web frontend for managing the repositoris.
+The operating system would be preferably Linux. That is because git is native to Linux.
+For the maven repository nexus from Sonatype would be a nice choice. It supports all neccesery functions and provides a nice web front-end for managing the repositories.
 
 % see chapter? configuration....
 
@@ -764,6 +794,8 @@ For the maven repository nexus from (xxxx) would be a nice chois. It supports al
 \bibitem{spring} \url{http://www.springsource.org/}
 
 \bibitem{dependencyInection} \url{http://en.wikipedia.org/wiki/Dependency_injection}
+
+\bibitem{autowire} \url{https://vaadin.com/wiki/-/wiki/Main/Spring+Integration}
 
 \bibitem{mysql} \url{https://www.mysql.com/}
 
