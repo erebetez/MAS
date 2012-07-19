@@ -2,7 +2,7 @@
 
 \usepackage[automark,headsepline]{scrpage2}
 % \usepackage{xunicode,fontspec,xltxtra}
-\usepackage[english,german]{babel}
+\usepackage[english]{babel}
 
 \usepackage[T1]{fontenc}
 \usepackage[utf8x]{inputenc}
@@ -36,7 +36,7 @@
 
 \clearscrheadfoot
 \ihead{\headmark}
-\ohead{Seite\pagemark\ von \pageref{LastPage}}
+\ohead{Page\pagemark\ of \pageref{LastPage}}
 \ifoot{Business frameworks}
 \cfoot{{\includegraphics[width=1.5cm]{./img/CC3.png}}}
 \ofoot{\today}
@@ -347,6 +347,14 @@ This allow to configure external components, the database or process parameters 
 
 This way components can be reused in different applications. It is also easy to configure them in unit tests.
 
+\subsection{dependencies}
+When dependencies are defined during the development they should be handled with the following rules to keep it simple:
+\begin{itemize}
+ \item Components are in the lowest level followed by methods (processes) and then the (web applications.
+ \item Components do not have dependencies of other components or higher applications like the web application. Only third party packages are allowed.
+ \item Methods should only have components and third party packages as dependencies
+ \item The web applications should where possible use the components or methods as dependencies. Third party packages are of course also allowed.
+\end{itemize}
 
 \section{Webapplication}
 Besides the BPMN engine, the web application is a central cornerstone of this project. After all that is what the user gets to see.
@@ -361,7 +369,7 @@ knowledge of the environment it is in. The code can therefore be untouched when 
 
 
 \subsection{class design}
-The web application is a simple GUI application. As a starting point, the example application how to build a vaadin web application on top of activiti, was taken \cite{vaadinactivitwebapp}, \cite{vaadinactivitwebapp2}.
+The web application is a simple GUI application. As a starting point the example application "how to build a vaadin web application on top of activiti" was taken \cite{vaadinactivitwebapp}, \cite{vaadinactivitwebapp2}.
 
 There is the main window that holds different widgets in a layout. Each widget shows a certain
 information. For example there is a process viewer that presents the available BPMN processes. 
@@ -413,32 +421,33 @@ The basic concept is a socket client rpc server architecture. \cite{rpc}
 \subsection{server}
 The server receives a request to execute a certain excel application. It then executes this application. If multiple request are received they get stored in an array and then the external excel applications are run in serial.
 
-%TODO class diagram server.
-
-
+\begin{figure}
+    \begin{center}
+       \includegraphics[width=1\textwidth]{./img/calcServerUML.png}\\
+    \end{center}
+  \caption{UML Class diagram of calculation server}
+  \label{uml_calculationserver}
+\end{figure} 
 
 
 \subsection{client}
-%FIXME  does not actually work yet.
 The client is a BPMN service task for the engine server. This service task can be implemented in any process. 
-The configuration of that task is made in spring. This may the methods or processes can configure their own external applications.
+The configuration of that task is made in spring. This way the methods or processes can configure their own external applications.
 
+In the current implementations of the client service task it is possible to configure in spring the host name the port and the application name that has to be started.
 
+The service task has to be thread save \cite{treadsave}. This is because activiti will call the same instance of the service every time a process needs it. 
 
-The first task is a Java service task. It creates a connection to the server and sends the data. 
-It waits until the server sends the processed data back.
+The client open a connection to the server does the communication with the defined protocol and finally writes the data back into the activiti variable.
 
-If there is an error a boundary event is fired and a user or e-mail task is started. When the problem is resolved the 
-data is send again to the server.
-
-%TODO image of client process
+If an error occurs a BPMN Java exception is raised.
 
 \begin{figure}
     \begin{center}
-%       \includegraphics[width=1\textwidth]{./img/Laboverview.png}\\
+       \includegraphics[width=1\textwidth]{./img/clientServerProtocoll.pdf}\\
     \end{center}
-  \caption{Work flow of external client call process}
-  \label{externClientWorkflow}
+  \caption{Visualisation of client server rpc protocol}
+  \label{protocol}
 \end{figure} 
 
 \subsection{Protocol}
@@ -712,7 +721,7 @@ Since the database is configured in the web application with spring, it is very 
 
 
 \subsection{Calculation server}
-This is a rahter exotic configuration. This server should be able to run excel. Therefore windows is the only option al the operating system. On this server there will also run the calculation server (java) wich listens to the querrys of an activiti task.
+This is a rahter exotic configuration. This server should be able to run excel. Therefore windows is the only option al the operating system. On this server there will also run the calculation server (java) which listens to the query of an activiti task.
 
 
 
@@ -741,7 +750,7 @@ At this point it must been said, that the implementations still requires special
 
 
 
-
+\newpage
 
 \addcontentsline{toc}{section}{Literaturverzeichnis}
 \begin{thebibliography}{99}
@@ -791,6 +800,8 @@ At this point it must been said, that the implementations still requires special
 \bibitem{eclipse} \url{http://www.eclipse.org} %FIXME
 
 \bibitem{rpc} \url{http://en.wikipedia.org/wiki/Remote_Procedure_Call}
+
+\bibitem{treadsave} \url{http://en.wikipedia.org/wiki/Thread_safety}
 
 \bibitem{uuid} \url{http://en.wikipedia.org/wiki/Universally_unique_identifier}
 
