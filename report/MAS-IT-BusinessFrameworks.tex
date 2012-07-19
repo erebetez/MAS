@@ -420,7 +420,11 @@ The server receives a request to execute a certain excel application. It then ex
 
 \subsection{client}
 %FIXME  does not actually work yet.
-The client is a process on the BPMN engine server. This process can be called by a parent process (see callActiviy). 
+The client is a BPMN service task for the engine server. This service task can be implemented in any process. 
+The configuration of that task is made in spring. This may the methods or processes can configure their own external applications.
+
+
+
 The first task is a Java service task. It creates a connection to the server and sends the data. 
 It waits until the server sends the processed data back.
 
@@ -694,7 +698,7 @@ The operating system is therefore not so relevant.
 
 To keep things simple Linux was chosen for the example server. A Windows server would work just as well.
 
-\subsubsection{configuration}
+%\subsubsection{configuration}
 %configs....
 
 
@@ -726,10 +730,14 @@ For the maven repository nexus from Sonatype would be a nice choice. It supports
 
 
 \section{Conclusion}
+First it is relay worth to look around and see what solutions are already available. The BPMN 2.0 standard and the engines that cat run it is a fine 
+idea and very precious for any type of business. It has a big advantage of being able to design the business process and at the same time having an easy way to make it automated in a system.
+At this point it must been said, that the implementations still requires specialised employees that should also be able to read some xml. The BPMN engine should also not being misused for low level tasks. At some point it is smarter to make the easy logic in an service task instead of creating yet another BPMN sup process.
 
 
 
 
+\subsection{Future}
 
 
 
