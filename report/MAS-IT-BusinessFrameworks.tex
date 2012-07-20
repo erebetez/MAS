@@ -129,6 +129,10 @@ It is however mostly implemented in excel \cite{excel} applications.
   \label{CurrentLabWorkflow}
 \end{figure} 
 
+As you can see in figure \ref{CurrentLabWorkflow} there is a high level process. Each step can have manual user steps or can be done automatically with scripts or some sort of application. 
+
+The assays a.k.a samples usually are grouped together in an sequence.
+
 \subsection{Instrument software}
 
 The term instrument software should be clarified at this point. Instrument software is the software that comes with an analytical instrument. This software is needed to interface with the instrument, setting parameters, creating methods, running sequences, interpreting data, crating and printing reports and even some user and group management (Often because of the 21 CFR Part 11 \cite{part11}). Often there are just no other driver that can run the instrument. So you have to use this software. 
@@ -138,7 +142,6 @@ This gives a big number of not standard systems with different logic, frameworks
 
 \section{Concept and Target}
 So the question came up, why not look at something completely different. The lab is not the only business that has processes. There could be other business frameworks that provide the needed functionality. This system should be able to integrate and interface these different islands of programs. It would be like a laboratory middle ware \cite{middleware}. 
-
 
 To make the automation in such a heterogeneous landscape possible a sort of state machine is needed. This state machine knows how process look like, which processes are currently run, in which state they are in and which is the next to execute.
 This pattern is basically the same in every business process. One of the therms is SOA (Service Oriented Architecture) \cite{soa}. The state machine engine would therefore be the heart of the hole automation process.
@@ -154,13 +157,16 @@ To configure these state  machine engines there are already several standards. T
 Both are open standards from OMG \cite{omg}.
 
 
+
 \subsection{Requirements}
 Beside the central process engine, there are also other aspects to be considered. One is a web application that should provide forms and an overview
 of the tasks. These human interfaces should also be available on mobile devices.
 Since the current implementation is based on excel sheets, lots of them, it of importance that the current applications can be implemented and reused in the new framework.
 For instance it should be possible to send data to an excel application and get the results back into the process stream.
 
+These sub tasks can be another sub process BPMN definition or just a program or script that is started via the process engine. If possible the user interaction should be reduced to one graphical user interface. 
 
+The task of a user is usually to fill out a form (if the data isn't available in the system), start processes or claim tasks to do and review raw data and reports.
 
 \section{BPEL}
 The BPEL (Business Process Execution Language) \cite{bpel} was an answer to the process problem that came from the IT world. It is very technical and the process description is made with ifs and loops that are also known in common programming languages. The definition is made in a XML file. 
@@ -327,21 +333,23 @@ For the graphical user interface (GUI) the web application seems to be a good ch
 
 To keep things in Java and not being forced to be bothered with the web technology, vaadin \cite{vaadin} is used as a web framework.
 
-webapp
 
 \subsection{process engine}
+For the process engine activiti is used. Activiti comes with a variety of services that provides the programmer with methods and informations.
 
-activti 
+The following services are available \cite{activitijavadoc}
+\begin{itemize}
+ \item RuntimeService: Service which provides access to Deployments, ProcessDefinitions and ProcessInstances. 
+ \item RepositoryService: Service providing access to the repository of process definitions and deployments. 
+ \item TaskService: Service which provides access to Task and form related operations. 
+ \item ManagementService: Service for admin and maintenance operations on the process engine. 
+ \item IdentityService: Service to manage Users and Groups. 
+ \item HistoryService: Service exposing information about ongoing and past process instances. 
+ \item FormService: Access to form data and rendered forms for starting new process instances and completing tasks
+\end{itemize}
 
+For process related data the runtime service, task service and form service are the mostly used.
 
-
-componetns
-
-calc server
-
-db
-
-methods
 
 \subsection{configuring}
 The Main Application (Web application) is configured using the spring framework \cite{spring}. The Spring framework uses the paradigm of the dependency injection \cite{dependencyInection}.
@@ -350,6 +358,14 @@ This allow to configure external components, the database or process parameters 
 
 This way components can be reused in different applications. It is also easy to configure them in unit tests.
 
+\subsection{dependencies}
+When dependencies are defined during the development they should be handled with the following rules to keep it simple:
+\begin{itemize}
+ \item Components are in the lowest level followed by methods (processes) and then the (web applications.
+ \item Components do not have dependencies of other components or higher applications like the web application. Only third party packages are allowed.
+ \item Methods should only have components and third party packages as dependencies
+ \item The web applications should where possible use the components or methods as dependencies. Third party packages are of course also allowed.
+\end{itemize}
 
 \section{Webapplication}
 Besides the BPMN engine, the web application is a central cornerstone of this project. After all that is what the user gets to see.
@@ -364,7 +380,7 @@ knowledge of the environment it is in. The code can therefore be untouched when 
 
 
 \subsection{class design}
-The web application is a simple GUI application. As a starting point, the example application how to build a vaadin web application on top of activiti, was taken \cite{vaadinactivitwebapp}, \cite{vaadinactivitwebapp2}.
+The web application is a simple GUI application. As a starting point the example application "how to build a vaadin web application on top of activiti" was taken \cite{vaadinactivitwebapp}, \cite{vaadinactivitwebapp2}.
 
 There is the main window that holds different widgets in a layout. Each widget shows a certain
 information. For example there is a process viewer that presents the available BPMN processes. 
@@ -399,7 +415,7 @@ process logic is being separated from the user interface.
 \subsection{BPMN deployment}
 The demonstration web application deploys the BPMN processes to the activiti engine at start up. In the future and for productive use of activiti the
 BPMN process deployment should be done over a separate applications or as a function inside the web application. 
-
+The deployment can also be done over the spring configuration.
 
 \subsection{Internationalization}
 Internationalization is only needed for the web application. Since the web application is written in basic java, the basic resource pattern can be used. That means each view able string is loaded from a resource file that holds the strings of the given local. 
@@ -416,7 +432,6 @@ The basic concept is a socket client rpc server architecture. \cite{rpc}
 \subsection{server}
 The server receives a request to execute a certain excel application. It then executes this application. If multiple request are received they get stored in an array and then the external excel applications are run in serial.
 
-
 \begin{figure}
     \begin{center}
        \includegraphics[width=1\textwidth]{./img/calcServerUML.png}\\
@@ -427,15 +442,24 @@ The server receives a request to execute a certain excel application. It then ex
 
 
 \subsection{client}
-%FIXME  does not actually work yet.
-The client is a process on the BPMN engine server. This process can be called by a parent process (see callActiviy). 
-The first task is a Java service task. It creates a connection to the server and sends the data. 
-It waits until the server sends the processed data back.
+The client is a BPMN service task for the engine server. This service task can be implemented in any process. 
+The configuration of that task is made in spring. This way the methods or processes can configure their own external applications.
 
-If there is an error a boundary event is fired and a user or e-mail task is started. When the problem is resolved the 
-data is send again to the server.
+In the current implementations of the client service task it is possible to configure in spring the host name the port and the application name that has to be started.
 
+The service task has to be thread save \cite{treadsave}. This is because activiti will call the same instance of the service every time a process needs it. 
 
+The client open a connection to the server does the communication with the defined protocol and finally writes the data back into the activiti variable.
+
+If an error occurs a BPMN Java exception is raised.
+
+\begin{figure}
+    \begin{center}
+       \includegraphics[width=1\textwidth]{./img/clientServerProtocoll.pdf}\\
+    \end{center}
+  \caption{Visualisation of client server rpc protocol}
+  \label{protocol}
+\end{figure} 
 
 \subsection{Protocol}
 For the communication between both parties a protocol has to be defined. 
@@ -467,6 +491,13 @@ The finish signal looks like this.
 The socket connection is then closed.
 
 \section{Processes / Methods}
+With methods analytical laboratory processes is meant. Each Method has at leas a BPML xml definition.
+
+In addition they can have custom forms that are implemented in Java. These forms are extended from an abstract from class that knows the activiti services. This way the forms can have the information from current execution variables or historic data from other tasks. For each form a spring bean is created in the method-context.xml file. This way it is then easy to add the form to the web application. The web application has a form container that is also configured with a spring context file.
+
+If the process has other special service tasks the Java code can also be stored in these methods. 
+
+All this method files are bundled in a Java jar archives and versioned separately. Unit tests can also be run over these methods.
 
 
 \section{Components}
@@ -475,8 +506,6 @@ Jar files can be tested separately and be provided in a maven repository.
 
 For this project a few of these components where created. For one they would have at some point been needed anyway and for the other reason to
 demonstrate the work flow with the build tools and repository.
-
-
 
 
 
@@ -504,10 +533,6 @@ These objects can than be used with the JAXB \cite{jaxb} classes to easily navig
 %recursion, dict, list, values
 
 \subsection{Compression}
-Before sending the xml to another socket over the network it is usually good to compress the data.
-In our case the standard inflation and deflation algorithm is used (zlib) \cite{zlib}. After the compression 
-the data bytes are encoded into base64 \cite{base64}. That allows a save transmission over the TCP/IP stack.
-
 \begin{figure}
     \begin{center}
       \includegraphics[width=1\textwidth]{./img/uml_decode_model.png}\\
@@ -516,16 +541,33 @@ the data bytes are encoded into base64 \cite{base64}. That allows a save transmi
   \label{compressionClassUml}
 \end{figure} 
 
+Before sending the xml to another socket over the network it is usually good to compress the data.
+In our case the standard inflation and deflation algorithm is used (zlib) \cite{zlib}. After the compression 
+the data bytes are encoded into base64 \cite{base64}. That allows a save transmission over the TCP/IP stack.
+
+To check that the payload was successfully send over TCP/IP the length of the uncompressed string is prepended in front of the compressed data. This way when uncompressing the string, it can be checked if both have the same length. 
+
+The compression and the decompression classes have each an Java interface and a abstract class. This allows to implement different compression algorithms with the same basic code base. For example beside the zlib deflation zip which is used in the current excel application a gzip compression has also been created on top of the same abstract class.
+
 
 \subsection{excel adapter}
+
+\begin{figure}
+    \begin{center}
+      \includegraphics[width=1\textwidth]{./img/eatstarterOverview.pdf}\\
+    \end{center}
+  \caption{Process overview of the excel starter}
+  \label{eatstarteroverview}
+\end{figure} 
+
 In order to use the existing application stack based on excel, it is important to be able to start excel files from Java code. 
-The excel adapter has two parts. One is the java package and the other is a special excel spreadsheet. 
+The excel adapter has two parts. One is the Java package and the other is a special excel spreadsheet. 
 
 The Java package takes some arguments starts the excel spreadsheet and gives a signal as soon as the excel process has finished.
 
-The spreadsheet has an on open method, that starts the existing excel applications with the given parameter.
+The spreadsheet to start other excel applications has an on open method. In that method the the existing excel applications are started with the given parameter. The trick to start excel applications with parameter is by coping the template to a new location. The file name then represents the parameters which are separated by a separator.
 
-A modification of the current Excel plug-in has to be made.
+A modification of the current Excel plug-in has to be made. Many functions can be removed because most logic is then done in the BPMN engine or in Java service task code.
 
 \begin{figure}
     \begin{center}
@@ -534,6 +576,11 @@ A modification of the current Excel plug-in has to be made.
   \caption{UML class structure of the excel starter}
   \label{eatstarterclassuml}
 \end{figure} 
+
+%TODO excel addin
+
+
+
 
 \section{Environments}
 At least three environments have to be defined. Development, validation and production. 
@@ -544,6 +591,8 @@ For unit testing is also done at this stage.
 The validation environment should look and behave the same as the production environment. On the validation environment, the final builds are deployed. They then get tested. The formal testing is also done on the validation environment. If an error occurs during tests, a new build is created and deployed on the validation environment.
 
 When everything looks good, a productive build based on the one from the validation environment is created and deployed on the productive environment.
+
+Developer should also be able to pull data from the validation or productive server.
 
 \section{Build tools}
 The question what build tool, if any, came pretty early in the project development. Just starting a Project in Eclipse is the easiest way. 
@@ -632,9 +681,6 @@ Multiple git repository will be created. The following projects shall have a own
 This way it is easier to manage branches and versions of each application.
 
 
-%FIXME do some drawings
-
-
 
 \section{Deployment}
 The deployment should be automated as much as possible to provide a consistent and reproducible build.
@@ -658,7 +704,14 @@ Processes started with the old process definition will finish with the definitio
 \subsection{Maven repository}
 As maven repository the product nexus \cite{nexus} from Sonatype is used. It is written in Java an can be deployed everywhere. I provides a nice web application to manage the repositories. The web application runs on an simple jetty \cite{jetty} application server.
 
+Maven distinguishes two versions packages types snapshot and releases.
+During the development the version is suffixed by SNAPSHOT (i.e. 1.3.1-SNAPSHOT).
+This has the effect that, if such a package is put in the dependencies of an project, Maven will get the newest version of this SNAPSHOT. To force the update use -U as a parameter for maven.
+\begin{verbatim}
+ mvn -U clean package
+\end{verbatim}
 
+If the package is finally tested the SNAPSHOT suffix gets removed and the package gets uploaded to the releases repository. In this repository the version can only be uploaded once. The next time a new version number has to be created.
 
 \section{Infrastructure}
 This chapter shall give an overview how the infrastructure that supports the web application and the development of it, has to look. 
@@ -687,7 +740,7 @@ The operating system is therefore not so relevant.
 
 To keep things simple Linux was chosen for the example server. A Windows server would work just as well.
 
-\subsubsection{configuration}
+%\subsubsection{configuration}
 %configs....
 
 
@@ -701,7 +754,7 @@ Since the database is configured in the web application with spring, it is very 
 
 
 \subsection{Calculation server}
-This is a rahter exotic configuration. This server should be able to run excel. Therefore windows is the only option al the operating system. On this server there will also run the calculation server (java) wich listens to the querrys of an activiti task.
+This is a rather exotic configuration. This server should be able to run excel. Therefore windows is the only option al the operating system. On this server there will also run the calculation server (Java) which listens to the query of an activiti task.
 
 
 
@@ -717,18 +770,22 @@ For the maven repository nexus from Sonatype would be a nice choice. It supports
 
 
 
-
 \section{Conclusion}
+First it is relay worth to look around and see what solutions are already available. The BPMN 2.0 standard and the engines that cat run it is a fine 
+idea and very precious for any type of business. It has a big advantage of being able to design the business process and at the same time having an easy way to make it automated in a system.
+At this point it must been said, that the implementations still requires specialised employees that should also be able to read some xml. The BPMN engine should also not being misused for low level tasks. At some point it is smarter to make the easy logic in an service task instead of creating yet another BPMN sup process.
 
 
 
 
+\subsection{Future}
+Once the process engine is in place, the functionality that is currently implemented in excel can be migrated step by step to Java service tasks or script tasks. The goal is that finally only the some calculation have to be made in excel.
 
 
 
+\newpage
 
-
-\addcontentsline{toc}{section}{Literaturverzeichnis}
+\addcontentsline{toc}{section}{Bibliography}
 \begin{thebibliography}{99}
 
 \bibitem{lims} \url{http://en.wikipedia.org/wiki/Laboratory_information_management_system}
@@ -755,6 +812,8 @@ For the maven repository nexus from Sonatype would be a nice choice. It supports
 
 \bibitem{css} \url{http://en.wikipedia.org/wiki/Cascading_Style_Sheets}
 
+\bibitem{activitijavadoc} \url{http://activiti.org/javadocs/index.html}
+
 \bibitem{jbpm} \url{https://www.jboss.org/jbpm/}
 
 \bibitem{activevos} \url{http://www.activevos.com/}
@@ -776,6 +835,8 @@ For the maven repository nexus from Sonatype would be a nice choice. It supports
 \bibitem{eclipse} \url{http://www.eclipse.org} %FIXME
 
 \bibitem{rpc} \url{http://en.wikipedia.org/wiki/Remote_Procedure_Call}
+
+\bibitem{treadsave} \url{http://en.wikipedia.org/wiki/Thread_safety}
 
 \bibitem{uuid} \url{http://en.wikipedia.org/wiki/Universally_unique_identifier}
 
