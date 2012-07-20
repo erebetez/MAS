@@ -129,13 +129,16 @@ It is however mostly implemented in excel \cite{excel} applications.
   \label{CurrentLabWorkflow}
 \end{figure} 
 
+As you can see in figure \ref{CurrentLabWorkflow} there is a high level process. Each step can have manual user steps or can be done automatically with scripts or some sort of application. 
+
+The assays a.k.a samples usually are grouped together in an sequence.
+
 \subsection{Instrument software}
 % TODO instrument software exkurs. 
 
 
 \section{Concept and Target}
 So the question came up, why not look at something completely different. The lab is not the only business that has processes. There could be other business frameworks that provide the needed functionality. This system should be able to integrate and interface these different islands of programs. It would be like a laboratory middle ware \cite{middleware}. 
-
 
 To make the automation in such a heterogeneous landscape possible a sort of state machine is needed. This state machine knows how process look like, which processes are currently run, in which state they are in and which is the next to execute.
 This pattern is basically the same in every business process. One of the therms is SOA (Service Oriented Architecture) \cite{soa}. The state machine engine would therefore be the heart of the hole automation process.
@@ -151,13 +154,16 @@ To configure these state  machine engines there are already several standards. T
 Both are open standards from OMG \cite{omg}.
 
 
+
 \subsection{Requirements}
 Beside the central process engine, there are also other aspects to be considered. One is a web application that should provide forms and an overview
 of the tasks. These human interfaces should also be available on mobile devices.
 Since the current implementation is based on excel sheets, lots of them, it of importance that the current applications can be implemented and reused in the new framework.
 For instance it should be possible to send data to an excel application and get the results back into the process stream.
 
+These sub tasks can be another sub process BPMN definition or just a program or script that is started via the process engine. If possible the user interaction should be reduced to one graphical user interface. 
 
+The task of a user is usually to fill out a form (if the data isn't available in the system), start processes or claim tasks to do and review raw data and reports.
 
 \section{BPEL}
 The BPEL (Business Process Execution Language) \cite{bpel} was an answer to the process problem that came from the IT world. It is very technical and the process description is made with ifs and loops that are also known in common programming languages. The definition is made in a XML file. 
@@ -324,21 +330,23 @@ For the graphical user interface (GUI) the web application seems to be a good ch
 
 To keep things in Java and not being forced to be bothered with the web technology, vaadin \cite{vaadin} is used as a web framework.
 
-webapp
 
 \subsection{process engine}
+For the process engine activiti is used. Activiti comes with a variety of services that provides the programmer with methods and informations.
 
-activti 
+The following services are available \cite{activitijavadoc}
+\begin{itemize}
+ \item RuntimeService: Service which provides access to Deployments, ProcessDefinitions and ProcessInstances. 
+ \item RepositoryService: Service providing access to the repository of process definitions and deployments. 
+ \item TaskService: Service which provides access to Task and form related operations. 
+ \item ManagementService: Service for admin and maintenance operations on the process engine. 
+ \item IdentityService: Service to manage Users and Groups. 
+ \item HistoryService: Service exposing information about ongoing and past process instances. 
+ \item FormService: Access to form data and rendered forms for starting new process instances and completing tasks
+\end{itemize}
 
+For process related data the runtime service, task service and form service are the mostly used.
 
-
-componetns
-
-calc server
-
-db
-
-methods
 
 \subsection{configuring}
 The Main Application (Web application) is configured using the spring framework \cite{spring}. The Spring framework uses the paradigm of the dependency injection \cite{dependencyInection}.
@@ -404,7 +412,7 @@ process logic is being separated from the user interface.
 \subsection{BPMN deployment}
 The demonstration web application deploys the BPMN processes to the activiti engine at start up. In the future and for productive use of activiti the
 BPMN process deployment should be done over a separate applications or as a function inside the web application. 
-
+The deployment can also be done over the spring configuration.
 
 \subsection{Internationalization}
 Internationalization is only needed for the web application. Since the web application is written in basic java, the basic resource pattern can be used. That means each view able string is loaded from a resource file that holds the strings of the given local. 
@@ -480,6 +488,13 @@ The finish signal looks like this.
 The socket connection is then closed.
 
 \section{Processes / Methods}
+With methods analytical laboratory processes is meant. Each Method has at leas a BPML xml definition.
+
+In addition they can have custom forms that are implemented in Java. These forms are extended from an abstract from class that knows the activiti services. This way the forms can have the information from current execution variables or historic data from other tasks. For each form a spring bean is created in the method-context.xml file. This way it is then easy to add the form to the web application. The web application has a form container that is also configured with a spring context file.
+
+If the process has other special service tasks the Java code can also be stored in these methods. 
+
+All this method files are bundled in a Java jar archives and versioned separately. Unit tests can also be run over these methods.
 
 
 \section{Components}
@@ -488,8 +503,6 @@ Jar files can be tested separately and be provided in a maven repository.
 
 For this project a few of these components where created. For one they would have at some point been needed anyway and for the other reason to
 demonstrate the work flow with the build tools and repository.
-
-
 
 
 
@@ -517,10 +530,6 @@ These objects can than be used with the JAXB \cite{jaxb} classes to easily navig
 %recursion, dict, list, values
 
 \subsection{Compression}
-Before sending the xml to another socket over the network it is usually good to compress the data.
-In our case the standard inflation and deflation algorithm is used (zlib) \cite{zlib}. After the compression 
-the data bytes are encoded into base64 \cite{base64}. That allows a save transmission over the TCP/IP stack.
-
 \begin{figure}
     \begin{center}
       \includegraphics[width=1\textwidth]{./img/uml_decode_model.png}\\
@@ -529,16 +538,33 @@ the data bytes are encoded into base64 \cite{base64}. That allows a save transmi
   \label{compressionClassUml}
 \end{figure} 
 
+Before sending the xml to another socket over the network it is usually good to compress the data.
+In our case the standard inflation and deflation algorithm is used (zlib) \cite{zlib}. After the compression 
+the data bytes are encoded into base64 \cite{base64}. That allows a save transmission over the TCP/IP stack.
+
+To check that the payload was successfully send over TCP/IP the length of the uncompressed string is prepended in front of the compressed data. This way when uncompressing the string, it can be checked if both have the same length. 
+
+The compression and the decompression classes have each an Java interface and a abstract class. This allows to implement different compression algorithms with the same basic code base. For example beside the zlib deflation zip which is used in the current excel application a gzip compression has also been created on top of the same abstract class.
+
 
 \subsection{excel adapter}
+
+\begin{figure}
+    \begin{center}
+      \includegraphics[width=1\textwidth]{./img/eatstarterOverview.pdf}\\
+    \end{center}
+  \caption{Process overview of the excel starter}
+  \label{eatstarteroverview}
+\end{figure} 
+
 In order to use the existing application stack based on excel, it is important to be able to start excel files from Java code. 
-The excel adapter has two parts. One is the java package and the other is a special excel spreadsheet. 
+The excel adapter has two parts. One is the Java package and the other is a special excel spreadsheet. 
 
 The Java package takes some arguments starts the excel spreadsheet and gives a signal as soon as the excel process has finished.
 
-The spreadsheet has an on open method, that starts the existing excel applications with the given parameter.
+The spreadsheet to start other excel applications has an on open method. In that method the the existing excel applications are started with the given parameter. The trick to start excel applications with parameter is by coping the template to a new location. The file name then represents the parameters which are separated by a separator.
 
-A modification of the current Excel plug-in has to be made.
+A modification of the current Excel plug-in has to be made. Many functions can be removed because most logic is then done in the BPMN engine or in Java service task code.
 
 \begin{figure}
     \begin{center}
@@ -547,6 +573,11 @@ A modification of the current Excel plug-in has to be made.
   \caption{UML class structure of the excel starter}
   \label{eatstarterclassuml}
 \end{figure} 
+
+%TODO excel addin
+
+
+
 
 \section{Environments}
 At least three environments have to be defined. Development, validation and production. 
@@ -557,6 +588,8 @@ For unit testing is also done at this stage.
 The validation environment should look and behave the same as the production environment. On the validation environment, the final builds are deployed. They then get tested. The formal testing is also done on the validation environment. If an error occurs during tests, a new build is created and deployed on the validation environment.
 
 When everything looks good, a productive build based on the one from the validation environment is created and deployed on the productive environment.
+
+Developer should also be able to pull data from the validation or productive server.
 
 \section{Build tools}
 The question what build tool, if any, came pretty early in the project development. Just starting a Project in Eclipse is the easiest way. 
@@ -645,9 +678,6 @@ Multiple git repository will be created. The following projects shall have a own
 This way it is easier to manage branches and versions of each application.
 
 
-%FIXME do some drawings
-
-
 
 \section{Deployment}
 The deployment should be automated as much as possible to provide a consistent and reproducible build.
@@ -721,7 +751,7 @@ Since the database is configured in the web application with spring, it is very 
 
 
 \subsection{Calculation server}
-This is a rahter exotic configuration. This server should be able to run excel. Therefore windows is the only option al the operating system. On this server there will also run the calculation server (java) which listens to the query of an activiti task.
+This is a rather exotic configuration. This server should be able to run excel. Therefore windows is the only option al the operating system. On this server there will also run the calculation server (Java) which listens to the query of an activiti task.
 
 
 
@@ -747,6 +777,7 @@ At this point it must been said, that the implementations still requires special
 
 
 \subsection{Future}
+Once the process engine is in place, the functionality that is currently implemented in excel can be migrated step by step to Java service tasks or script tasks. The goal is that finally only the some calculation have to be made in excel.
 
 
 
@@ -778,6 +809,8 @@ At this point it must been said, that the implementations still requires special
 \bibitem{activiti} \url{http://www.activiti.org/}
 
 \bibitem{css} \url{http://en.wikipedia.org/wiki/Cascading_Style_Sheets}
+
+\bibitem{activitijavadoc} \url{http://activiti.org/javadocs/index.html}
 
 \bibitem{jbpm} \url{https://www.jboss.org/jbpm/}
 
