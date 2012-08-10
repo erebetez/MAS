@@ -136,7 +136,9 @@ As you can see in figure \ref{CurrentLabWorkflow} there is a high level process.
 The assays usually are grouped together in an sequence.
 
 \subsection{Instrument software}
-% TODO instrument software exkurs. 
+The term instrument software should be clarified at this point. Instrument software is the software that comes with an analytical instrument. This software is needed to interface with the instrument, setting parameters, creating methods, running sequences, interpreting data, crating and printing reports and even some user and group management (Often because of the 21 CFR Part 11 \cite{part11}). Often there are just no other driver that can run the instrument. So you have to use this software. 
+
+This gives a big number of not standard systems with different logic, frameworks and even operating systems. Additionally the expiriance shows that instrument software is poorly written and bugy. This can lead for example to a not working system after an operating system upgrade.
 
 
 \subsection{Raw data}
@@ -811,7 +813,8 @@ This server would not be used in the productive setting. It is just there to fac
 The server would provide a Maven repository and a git repository. 
 
 The operating system would be preferably Linux. That is because git is native to Linux.
-For the Maven repository nexus from Sonatype would be a nice choice. It supports all neccesery functions and provides a nice web front-end for managing the repositories.
+
+For the Maven repository nexus from Sonatype would be a nice choice. It supports all necessary functions and provides a nice web front-end for managing the repositories.
 
 % see chapter? configuration....
 
@@ -831,6 +834,11 @@ Once the process engine is in place, the functionality that is currently impleme
 
 To handle the processes packages and the releases of the different software some additional administration tools have to be created. This can be an web application or just a shell script.
 
+The Activiti engine and the web application should be moved into separate programs. This will make the use of other front ends easier. To use the Activiti functionality the REST API could be used.
+
+The possibility of OSGI and Activiti \cite{osgiactivit} looks interesting and should be investigated in the future.
+
+
 
 \newpage
 
@@ -847,6 +855,8 @@ To handle the processes packages and the releases of the different software some
 
 \bibitem{excel} \url{http://office.microsoft.com/en-us/excel}
 
+\bibitem{part11} \url{http://en.wikipedia.org/wiki/Title_21_CFR_Part_11}
+
 \bibitem{bpel} \url{http://en.wikipedia.org/wiki/Business_Process_Execution_Language}
 
 \bibitem{bpmn} \url{http://www.bpmn.org/}
@@ -857,11 +867,11 @@ To handle the processes packages and the releases of the different software some
 
 \bibitem{omg} \url{http://www.omg.org/}
 
-\bibitem{activiti} \url{http://www.activiti.org/}
+\bibitem{Activiti} \url{http://www.Activiti.org/}
 
 \bibitem{css} \url{http://en.wikipedia.org/wiki/Cascading_Style_Sheets}
 
-\bibitem{activitijavadoc} \url{http://activiti.org/javadocs/index.html}
+\bibitem{Activitijavadoc} \url{http://Activiti.org/javadocs/index.html}
 
 \bibitem{jbpm} \url{https://www.jboss.org/jbpm/}
 
@@ -934,6 +944,8 @@ To handle the processes packages and the releases of the different software some
 \bibitem{xjc} \url{http://docs.oracle.com/javase/6/docs/technotes/tools/share/xjc.html}
 
 \bibitem{jaxb} \url{http://www.oracle.com/technetwork/articles/javase/index-140168.html}
+
+\bibitem{osgiactivit} \url{https://code.google.com/p/activiti-karaf/}
 
 \end{thebibliography}
 
