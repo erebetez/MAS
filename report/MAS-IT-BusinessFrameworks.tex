@@ -422,6 +422,8 @@ Internationalization is only needed for the web application. Since the web appli
 \subsection{ldap}
 The user authentication can be done in the BPMN engine. The engine has to know anyway what user is currently logged in. Activiti can therefore be connected to a ldap server to retrieve the needed user login information.
 
+\subsection{Activiti implementation}
+
 
 \section{External application server}
 The basic concept is a socket client rpc server architecture. \cite{rpc}
@@ -470,7 +472,12 @@ Each information is separated by two "::". The Information string send to the se
 The client waits for a response. If The server cannot be reached an error is raised. 
 The activiti client task will not finish and still be in the same state as before.
 
+The server saves the base64 coded marshall string in a file named as the UUID in a local folder.
+This way the data can be used by the program the server starts (i.e here A300). 
+The application safes the modified base64 marshall string back into that file as soon as the job is done.
+
 As soon as the server has processed the request, the answer in form of the following string is send back.
+The data is read from the file written by the started application.
 First the UUID is given then the data as marshall string and finally the keyword "FINISHED".
 
 \begin{verbatim}
@@ -776,8 +783,9 @@ At this point it must been said, that the implementations still requires special
 
 
 \subsection{Future}
-Once the process engine is in place, the functionality that is currently implemented in excel can be migrated step by step to Java service tasks or script tasks. The goal is that finally only the some calculation have to be made in excel.
+Once the process engine is in place, the functionality that is currently implemented in excel can be migrated step by step to Java service tasks or script tasks. The goal is that finally only some calculation have to be made in excel.
 
+To handle the processes packages and the releases of the different software some additional administration tools have to be created. This can be an web application or just a shell script.
 
 
 \newpage
