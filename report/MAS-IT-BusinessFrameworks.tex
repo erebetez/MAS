@@ -133,20 +133,34 @@ It is however mostly implemented in Excel \cite{excel} applications.
 
 As you can see in figure \ref{CurrentLabWorkflow} there is a high level process. Each step can have manual user steps or can be done automatically with scripts or some sort of application. 
 
-The assays a.k.a samples usually are grouped together in an sequence.
+The assays usually are grouped together in an sequence.
 
 \subsection{Instrument software}
 % TODO instrument software exkurs. 
 
 
-\section{Concept and Target}
+\subsection{Raw data}
+The definition of raw data is all the data that a instrument generates. That means the actual measured values. 
+This raw data usually needs to be integrated or calculated in some way or another. To be able to check the calculation or just to rerun them the data needs all to be stored in a database. It is also still customary to just store the paper copy.
+
+\section{Concept and Goals}
 So the question came up, why not look at something completely different. The lab is not the only business that has processes. There could be other business frameworks that provide the needed functionality. This system should be able to integrate and interface these different islands of programs. It would be like a laboratory middle ware \cite{middleware}. 
 
 To make the automation in such a heterogeneous landscape possible a sort of state machine is needed. This state machine knows how process look like, which processes are currently run, in which state they are in and which is the next to execute.
 This pattern is basically the same in every business process. One of the therms is SOA (Service Oriented Architecture) \cite{soa}. The state machine engine would therefore be the heart of the hole automation process.
 
 Since the lab is obviously not the only place in the world that has predefined process a look at generic state machines was imminent.
-To configure these state  machine engines there are already several standards. Two process definition languages are already well established:
+
+
+\subsection{Requirements}
+Beside the central process engine, there are also other aspects to be considered. One is a web application that should provide forms and an overview
+of the tasks. These human interfaces should also be available on mobile devices.
+Since the current implementation is based on Excel sheets, lots of them, it is of importance that the current applications can be implemented and reused in the new framework.
+For instance it should be possible to send data to an Excel application and get the results back into the process stream.
+
+\section{Process description languages}
+It was decided to use some sort of state machine. To configure these state machine engines there are already several standards. 
+Two process definition languages are already well established:
 
 \begin{itemize}
  \item BPEL
@@ -155,27 +169,19 @@ To configure these state  machine engines there are already several standards. T
 
 Both are open standards from OMG \cite{omg}.
 
-
-
-\subsection{Requirements}
-Beside the central process engine, there are also other aspects to be considered. One is a web application that should provide forms and an overview
-of the tasks. These human interfaces should also be available on mobile devices.
-Since the current implementation is based on Excel sheets, lots of them, it of importance that the current applications can be implemented and reused in the new framework.
-For instance it should be possible to send data to an Excel application and get the results back into the process stream.
-
-These sub tasks can be another sub process BPMN definition or just a program or script that is started via the process engine. If possible the user interaction should be reduced to one graphical user interface. 
-
-The task of a user is usually to fill out a form (if the data isn't available in the system), start processes or claim tasks to do and review raw data and reports.
-
-\section{BPEL}
+\subsection{BPEL}
 The BPEL (Business Process Execution Language) \cite{bpel} was an answer to the process problem that came from the IT world. It is very technical and the process description is made with ifs and loops that are also known in common programming languages. The definition is made in a XML file. 
 
-\section{BPMN}
-BPMN (Business Process Model and Notation) \cite{bpmn} has it roots in the business process modulation. It first was only a description language to provide some unified task or gateway definitions. These are the elements of the common flowcharts. 
+\subsection{BPMN}
+BPMN (Business Process Model and Notation) \cite{bpmn} has it roots in the business process modelling. It first was only a description language to provide some unified task or gateway definitions. These are the elements of the common flowcharts. 
 With the version 2 of the BPMN standard these flowcharts can now be interpreted by an engines and be run as a program.
 The definition is made in a XML file. 
 
-\section{Process Engines}
+The XML configuration describes a process. The process has multiple tasks. These tasks can be another sub process BPMN definition, a program or script that is started via the process engine or a user task that needs an interaction with a human. 
+
+The task of a user is usually to fill out a form (if the data isn't available in the system), start processes or claim tasks to do and review raw data and reports.
+
+\subsection{Process engines}
 The engines are implementations of these business description language. The engines provide all sort of logic that would be hard to implement every time from scratch.
 \begin{itemize}
   \item What processes are there
@@ -185,9 +191,14 @@ The engines are implementations of these business description language. The engi
   \item Who did what and when. (History and Log service)
 \end{itemize}
 
+The last point is important to emphasize. This is a big added value to the existing situation regarding the audit compliance.
+
+\subsection{Engine evaluation}
+The business process engine forms the core of the infrastructure. Thus I invested a great amount of time to have a look at different solutions available.
+
 The following chapters present some of these engines that are already available. The list is far from complete and in alphabetical order.
 
-\subsection{activeVOS}
+\subsubsection{activeVOS}
 activeVOS \cite{activevos} is a product from Active Endpoints, Inc. It uses open standards to implement its feature. The supported notations are BPEL and new also BPMN. Everything is implemented in Java and XML. The editor you get looks and feels like an eclipse plugin. The application runs on an JavaEE application server.
 
 The documentations look good. It has videos, tutorials and they also provide training. 
@@ -197,19 +208,19 @@ In addition they have some additional tools to the BPEL engine like reporting.
 The cost for the implementations will cost around 50'000 USD \cite{activvosscost}.
 
 
-\subsection{Activiti}
+\subsubsection{Activiti}
 Activiti \cite{activiti} is an open source BPMN engine. It was forked from the jBPM \cite{jbpm} from JBOSS. It is therefore a very young project that has the goal to build a rock solid BPMN engine. Activiti is really only the engine that provide an Java API. There is also a example web application Activiti Explorer that shows and demonstrate the ability of the Activiti engine.
 
 Because it is open source it is free of charge. Although the effort to get a working product might be bigger. 
 
 There is also a company Signavio \cite{signavio} behind Activiti. Signavio provides consulting and BPMN creation tools.
 
-\subsection{Apache ODE}
+\subsubsection{Apache ODE}
 Apache ODE \cite{appacheODE} is an open source BPEL engine. ODE provides an Java API to use in a Java program.
 There is also an eclipse plugin, that helps create the BPEL XML definition in a graphical interface.
 
 
-\subsection{ARIS}
+\subsubsection{ARIS}
 ARIS \cite{aris} is a product form software AG. It is a big enterprise BPM solution that brings many tools like process overviews, dashboards, reports or monitoring. ARIS was developed to work well with SAP. Therefore it is by definition an height level implementation.
 
 You buy a solution and the code is not accessible. software AG provides training for employees to configure or work with the product. 
@@ -217,8 +228,8 @@ You buy a solution and the code is not accessible. software AG provides training
 The cost looks to be quit height and is at least 10 Million USD \cite{ariscost}.
 
 
-\subsection{Biztalk}
-Biztalk \cite{biztalk} is the BPEL implementation from Microsoft. It is sold as Biztalk server 2010 and is praised as Business Proces Management (BPM) suite. Since it is a Microsoft product it is written and configured in the .NET programming language. Obviously the integration with other Microsoft products like Sharepoint should be good.
+\subsubsection{Biztalk}
+Biztalk \cite{biztalk} is the BPEL implementation from Microsoft. It is sold as Biztalk server 2010 and is advertised as Business Proces Management (BPM) suite. Since it is a Microsoft product it is written and configured in the .NET programming language. The integration with other Microsoft products like Sharepoint should therefore be good.
 
 The enterprise edition costs around 44'000 USD \cite{biztalkcost}. For testing and development there is a free license.
 
@@ -246,6 +257,7 @@ Biztalk & BPEL & .NET & proprietary &  share point integration \\
 \label{tab:enginecomparison}
 \end{center}
 
+\subsection{Selection}
 Since either BPMN nor BPEL is in use at the moment the first thing to decide is what specification to use.
 It does not make sense to mix both, unless you already have one in use and wish to use the additional features of the other engine. 
 
@@ -254,10 +266,10 @@ Therefore BPMN is the better choice for the lab process definition.
 
 If we now look at the BPMN 2.0 engines, only ActiVOS, Activiti and ARIS remain from the list above.
 
-ActiVOS provides some extra GUI's to give "simpler" access to the configuration. It creates xml and configurations in the background.
+ActiVOS provides some extra GUI's to give "simpler" access to the configuration. It creates XML and configurations in the background.
 They can fortunately be seen and changed from hand. In the bottom line, it seems nice but does not provide a big advantage. Also most documentations is for the BPEL engine.
 
-ARIS is the big all inclusive package. It is however impossible to work yourselves on the project because they sell also the programming and support. Therefore there is no code ore xml visible in the hole package. So for each change the external company has to be contracted.
+ARIS is the big all inclusive package. It is however impossible to work yourselves on the project because they sell also the programming and support. Therefore there is no code ore XML visible in the hole package. So for each change the external company has to be contracted.
 They provide some basic training courses for configuration.
 
 Activiti has a total other approach. It has no gui what so ever. I provides an open programming interface that provides all functionality 
@@ -267,19 +279,79 @@ Because it is open source there are already some example web application that ca
 
 \subsection{Conclusion}
 The monolithic concept of big systems has proven in the past to be inflexible and heavy on the maintenance. 
-The decision was made to use Activiti because of its simplicity and possibility to add other functions (i.e monitoring or reporting) in the future over other programs that also have just one functionality.
-Activiti plays also well together with Java based web frameworks like vaadin \cite{vaadin}.
 
+The decision was made to use Activiti because of its simplicity and possibility to add other functions (i.e monitoring or reporting) in the future over other programs that also have just one functionality.
+Activiti plays also well together with Java based web frameworks like Vaadin \cite{Vaadin}.
+
+% TODO add some Requirement <-> Is comparaison
 
 \subsection{Compatibility}
-Although BPMN 2.0 is a standard and provides most keywords and rules the implementations still adds own keywords or extra functionality (i.e forms). So the BPMN files can't just be copied form one engine to another. If you chose one engine it is kinda final and you will have to stick to it.
+Although BPMN 2.0 is a standard and provides most keywords and rules the implementations still adds own keywords or extra functionality (i.e forms). So the BPMN files can't just be copied form one engine to another. If you chose one engine it is kind of final and you will have to stick to it.
 
 If an engine change really has to be made it is however simpler to achieve than if you had the complete logic inside the code. If the new engines even
 uses the same programming language, it is very probable, that you can just reuse the business logic classes. 
 
 
+\section{Software Architecture}
+The environment consists of an user interface, the BPMN engine, the processes (laboratory methods) and universal usable components (jar archives). Most of the code is written in Java. 
+
+To use the existing Excel applications, a so called calculation server was written. This is a stand alone application and communicates over sockets with the client.
+
+The BPMN process and forms are put together into an own jar archive. These process definitions can be add as dependency to the main application with the BPMN engine.
+
+
+\begin{figure}
+    \begin{center}
+      \includegraphics[width=0.8\textwidth]{./img/ArchitectrueOverview.pdf}\\
+    \end{center}
+  \caption{Overview of the architecture}
+  \label{architectureoverview}
+\end{figure} 
+
+\subsection{Graphical user interface}
+For the graphical user interface (GUI) the web application seems to be a good choice. The web application can be displayed on most devices. With the power of CSS \cite{css} they can even be shown differently on small screens.
+
+To keep things in Java and not being forced to be bothered with the web technology, Vaadin \cite{Vaadin} is used as a web framework.
+
+
+\subsection{Process engine}
+For the process engine Activiti is used. Activiti comes with a variety of services that provides the programmer with methods and informations.
+
+The following services are available \cite{activitijavadoc}:
+\begin{itemize}
+ \item RuntimeService: Service which provides access to Deployments, ProcessDefinitions and ProcessInstances. 
+ \item RepositoryService: Service providing access to the repository of process definitions and deployments. 
+ \item TaskService: Service which provides access to Task and form related operations. 
+ \item ManagementService: Service for admin and maintenance operations on the process engine. 
+ \item IdentityService: Service to manage Users and Groups. 
+ \item HistoryService: Service exposing information about ongoing and past process instances. 
+ \item FormService: Access to form data and rendered forms for starting new process instances and completing tasks
+\end{itemize}
+
+For process related data the runtime service, task service and form service are the mostly used.
+
+
+\subsection{Configuring}
+The Main Application (Web application) is configured using the spring framework \cite{spring}. The Spring framework uses the paradigm of the dependency injection \cite{dependencyInection}.
+
+This allow to configure external components, the database or process parameters in a XML configuration file. The Java code does not have to be modified. 
+
+This way components can be reused in different applications. It is also easy to configure them in unit tests.
+
+\subsection{Dependencies}
+Dependencies are provided as own or third party Jar archives that can be added to a JAVA project.
+Dependencies can be handled by hand. This is strongly discouraged. In the long run it is way simpler to use build tools that do the dependencies resolvability for you.
+
+When dependencies are defined during the development they should be handled with the following rules to keep it simple:
+\begin{itemize}
+ \item Components are in the lowest level followed by methods (processes) and then the web applications.
+ \item Components do not have dependencies of other components or higher applications like the web application. Only third party packages are allowed.
+ \item Methods should only have components and third party packages as dependencies
+ \item The web applications should where possible use the components or methods as dependencies. Third party packages are of course also allowed.
+\end{itemize}
+
 \section{Example Application}
-In order to have concrete task to try the business framework on, a example application was designed.
+Now that we have chosen a BPMN process engine and the other required frameworks we need to have a concrete task to try the business framework on. That is why an example application was designed.
 
 The process takes an annual inventory item review. These items are reference samples of the substance that were sold.
 
@@ -306,83 +378,45 @@ The list with all samples is then again printed to the SDMS. That concludes the 
 
 This process is used to illustrate the further examples and references.
 
-% \subsection{Technology and architecture}
-% Since Activiti seems a good choice the main language will be Java.
-% Java also brings a lot of classes and tools to process xml and other data.
 
 
-\section{Software Architecture}
-The environment consists of an user interface, the BPMN engine, the processes (laboratory methods) and universal usable components (jar archives). Most of the code is written in Java. 
-
-To use the existing Excel applications a so called calculation server was written. This is a stand alone application and communicates over sockets with the client.
-
-The BPMN process and forms are put together in an own jar archive. These process definitions can be add as dependency to the main application with the BPMN engine.
-
+\section{Web application}
 
 \begin{figure}
     \begin{center}
-      \includegraphics[width=0.8\textwidth]{./img/ArchitectrueOverview.pdf}\\
+      \includegraphics[width=1\textwidth]{./img/LaraWebApplicationScreenshot.png}\\
     \end{center}
-  \caption{Overview of the architecture}
-  \label{architectureoverview}
+  \caption{LaraWebApplication screenshot}
+  \label{webapplicationscreenshot}
 \end{figure} 
 
-\subsection{Graphical user interface}
-For the graphical user interface (GUI) the web application seems to be a good choice. The web application can be displayed on most devices. With the power of CSS \cite{css} they can even be shown differently on small screens.
+The web application was named LaraWebApplication.
 
-To keep things in Java and not being forced to be bothered with the web technology, vaadin \cite{vaadin} is used as a web framework.
-
-
-\subsection{process engine}
-For the process engine Activiti is used. Activiti comes with a variety of services that provides the programmer with methods and informations.
-
-The following services are available \cite{activitijavadoc}
-\begin{itemize}
- \item RuntimeService: Service which provides access to Deployments, ProcessDefinitions and ProcessInstances. 
- \item RepositoryService: Service providing access to the repository of process definitions and deployments. 
- \item TaskService: Service which provides access to Task and form related operations. 
- \item ManagementService: Service for admin and maintenance operations on the process engine. 
- \item IdentityService: Service to manage Users and Groups. 
- \item HistoryService: Service exposing information about ongoing and past process instances. 
- \item FormService: Access to form data and rendered forms for starting new process instances and completing tasks
-\end{itemize}
-
-For process related data the runtime service, task service and form service are the mostly used.
-
-
-\subsection{configuring}
-The Main Application (Web application) is configured using the spring framework \cite{spring}. The Spring framework uses the paradigm of the dependency injection \cite{dependencyInection}.
-
-This allow to configure external components, the database or process parameters in a XML configuration file. The Java code does not have to be modified. 
-
-This way components can be reused in different applications. It is also easy to configure them in unit tests.
-
-\subsection{dependencies}
-When dependencies are defined during the development they should be handled with the following rules to keep it simple:
-\begin{itemize}
- \item Components are in the lowest level followed by methods (processes) and then the (web applications.
- \item Components do not have dependencies of other components or higher applications like the web application. Only third party packages are allowed.
- \item Methods should only have components and third party packages as dependencies
- \item The web applications should where possible use the components or methods as dependencies. Third party packages are of course also allowed.
-\end{itemize}
-
-\section{Webapplication}
-Besides the BPMN engine, the web application is a central cornerstone of this project. After all that is what the user gets to see.
-The decisions was made to use Vaadin \cite{vaadin} as a web framework. It allows to program the web application completely in Java on the server side. So there is
-no need to get in trouble with web technology.
+Besides the BPMN engine, the web application is a central cornerstone of this project. After all, that is what the user gets to see.
+The decisions was made to use Vaadin \cite{Vaadin} as a web framework. It allows to program the web application completely in Java on the server side. The Java code then gets compiled into (Google web toolkit) GWT \cite{gwt} code. GWT in turn uses HTML5 and Javascipt. So there is
+no need to get in trouble with web technology. The HTML is generated for you.
 
 As the back end Activiti is used. So the user management, transaction safety and business logic is taken care of.
 
-To glue all the frameworks together, spring is used. In spring the configuration is made in a xml file. As a result the code doesn't has to have any 
+To glue all the frameworks together, spring is used. In spring the configuration is made in a XML file. As a result the code doesn't has to have any 
 knowledge of the environment it is in. The code can therefore be untouched when deployed to a productive system.
 
 
 
 \subsection{class design}
-The web application is a simple GUI application. As a starting point the example application "how to build a vaadin web application on top of Activiti" was taken \cite{vaadinactivitwebapp}, \cite{vaadinactivitwebapp2}.
+\begin{figure}
+    \begin{center}
+      \includegraphics[width=1\textwidth]{./img/uml_webapp_model.png}\\
+    \end{center}
+  \caption{UML diagramm of main web application classes}
+  \label{webapplicationclassuml}
+\end{figure} 
 
-There is the main window that holds different widgets in a layout. Each widget shows a certain
+The web application is a simple GUI application. As a starting point the example application "how to build a Vaadin web application on top of Activiti" was taken \cite{Vaadinactivitwebapp}, \cite{Vaadinactivitwebapp2}.
+
+There is the main window that holds different widgets that extends from the Vaadin CustomComponent class in a layout. Each widget shows a certain
 information. For example there is a process viewer that presents the available BPMN processes. 
+
 The following widgets are implemented in the demo web application.
 
 \begin{itemize}
@@ -400,10 +434,19 @@ finished the task viewers are updated to show the remaining tasks.
 
 \begin{figure}
     \begin{center}
-      \includegraphics[width=1\textwidth]{./img/uml_webapp_model.png}\\
-    \end{center}
-  \caption{UML diagramm of main web application classes}
-  \label{webapplicationclassuml}
+\begin{verbatim}
+@Configurable(preConstruction = true)
+public class TaskViewer extends CustomComponent implements RefreshListener {
+
+    @Autowired
+    private TaskService taskService;
+
+    ....
+}
+\end{verbatim}
+  \caption{Example skeleton of an Vaadin CustomComponent with Activiti service}
+   \end{center}
+  \label{examplecodecomponent}
 \end{figure} 
 
 Since Activiti is being configured over spring, the Activiti instances can be provided as singletons to each widget that needs them. This is done with the Annotation @Autowired \cite{autowire}. This way the
@@ -421,17 +464,16 @@ Internationalization is only needed for the web application. Since the web appli
 
 
 
-\subsection{ldap}
+\subsection{Authentication}
 The user authentication can be done in the BPMN engine. The engine has to know anyway what user is currently logged in. Activiti can therefore be connected to a ldap server to retrieve the needed user login information.
 
-\subsection{Activiti implementation}
 
 
 \section{External application server}
-The basic concept is a socket client rpc server architecture. \cite{rpc}
+The basic concept is a rpc socket client/server architecture. \cite{rpc}
 
-\subsection{server}
-The server receives a request to execute a certain Excel application. It then executes this application. If multiple request are received they get stored in an array and then the external Excel applications are run in serial.
+\subsection{Server}
+The server receives a request to execute a certain Excel application. It then executes this application. If multiple request are received they get stored in an array (queue) and then the external Excel applications are run in serial. 
 
 \begin{figure}
     \begin{center}
@@ -442,7 +484,7 @@ The server receives a request to execute a certain Excel application. It then ex
 \end{figure} 
 
 
-\subsection{client}
+\subsection{Client}
 The client is a BPMN service task for the engine server. This service task can be implemented in any process. 
 The configuration of that task is made in spring. This way the methods or processes can configure their own external applications.
 
@@ -464,7 +506,7 @@ If an error occurs a BPMN Java exception is raised.
 
 \subsection{Protocol}
 For the communication between both parties a protocol has to be defined. 
-First the client send a request to the server that has an UUID \cite{uuid}, the application to start and the marshalled data object.
+First the client send a request to the server that has an UUID \cite{uuid}, the application to start and the marshalled data string. The marshalled data is an Java object (Nested Maps and Lists) that is converted (marshalled) in an XML string. The XML is then base64 \cite{base64} coded.
 Each information is separated by two "::". The Information string send to the server then looks like that.
 \begin{verbatim}
  UUID::MARSHALSTRING::APPID
@@ -497,17 +539,17 @@ The finish signal looks like this.
 The socket connection is then closed.
 
 \section{Processes / Methods}
-With methods analytical laboratory processes is meant. Each Method has at leas a BPML xml definition.
+With methods analytical laboratory processes is meant. Each Method has at leas a BPML XML definition.
 
-In addition they can have custom forms that are implemented in Java. These forms are extended from an abstract from class that knows the Activiti services. This way the forms can have the information from current execution variables or historic data from other tasks. For each form a spring bean is created in the method-context.xml file. This way it is then easy to add the form to the web application. The web application has a form container that is also configured with a spring context file.
+In addition they can have custom forms that are implemented in Java. These forms are extended from an abstract from class that knows the Activiti services. This way the forms can have the information from current execution variables or historic data from other tasks. For each form a spring bean is created in the method-context.XML file. This way it is then easy to add the form to the web application. The web application has a form container that is also configured with a spring context file.
 
 If the process has other special service tasks the Java code can also be stored in these methods. 
 
 All this method files are bundled in a Java jar archives and versioned separately. Unit tests can also be run over these methods.
 
 
-\section{Components}
-Components are reusable packages of functions and classes. In Java the classes are put together in a jar file. These jar files can be imported in an other project and so be easily used.
+\section{Custom Jar library's}
+Jar library's are reusable packages of functions and classes. In Java the classes are put together in a jar file. These jar files can be imported in an other project and so be easily used.
 Jar files can be tested separately and be provided in a maven repository.
 
 For this project a few of these components where created. For one they would have at some point been needed anyway and for the other reason to
@@ -520,7 +562,7 @@ At the moment a specified data structure to store all the needed laboratory data
 arrays, dictionary's and values. These structures exists in every programming language. Therefore it is easy to port the existing structure for
 example to Java. But since Java is object oriented the laboratory objects can be modelled even better than in plain old VBA. A sequence object can be
 created that in turn hold assay objects that also holds result objects. Beside the basic data holding some logic can be implemented or some properties
-can be extended and customized to special objects. A further benefit of having customized data objects (beans), is the fact that vaadin provides
+can be extended and customized to special objects. A further benefit of having customized data objects (beans), is the fact that Vaadin provides
 tables that can be filled whit Java beans.
 
 
@@ -528,7 +570,7 @@ tables that can be filled whit Java beans.
 
 \subsection{Marshalling}
 One key feature of porting the existing Excel framework to Activiti and Java is the marshalling and unmarshalling of the data objects.
-Being able to marshall an object into an xml file and sending it over a socket provides a powerful function to communicate with other programs that
+Being able to marshall an object into an XML file and sending it over a socket provides a powerful function to communicate with other programs that
 might even be written in an other programming language.
 
 The ability to marshall objects is already implemented in the existing Excel framework. So only the matching Java code has to be implemented.
@@ -547,7 +589,7 @@ These objects can than be used with the JAXB \cite{jaxb} classes to easily navig
   \label{compressionClassUml}
 \end{figure} 
 
-Before sending the xml to another socket over the network it is usually good to compress the data.
+Before sending the XML to another socket over the network it is usually good to compress the data.
 In our case the standard inflation and deflation algorithm is used (zlib) \cite{zlib}. After the compression 
 the data bytes are encoded into base64 \cite{base64}. That allows a save transmission over the TCP/IP stack.
 
@@ -625,12 +667,12 @@ made by Maven. Maven also resolves dependencies. Maven is widely used and theref
 
 \subsection{Gradle}
 Gradle is the newest member in the Java build tool family. Gradle is not just a Java build tool so i can also handle other languages. The configuration file is written in groovy. That makes a much nicer looking project definition.
-Gradle also doesn't reinvent the world. It uses the same dependency resolvement as maven. So it can almost do everything that maven can. In addition, it is easy to create custom tasks like in ant.
+Gradle also doesn't reinvent the world. It uses the same dependency resolvement as Maven. So it can almost do everything that Maven can. In addition, it is easy to create custom tasks like in ant.
 
-The downside is, that gradle is still a very young project and has not as much plug-ins or examples as maven. It is however worth keeping in sight.
+The downside is, that Gradle is still a very young project and has not as much plug-ins or examples as Maven. It is however worth keeping in sight.
 
 \subsection{Usage}
-For the main web application it is the simplest way to use maven as the build tool. Since gradle seems very promising, the plan is to use it in the
+For the main web application it is the simplest way to use Maven as the build tool. Since Gradle seems very promising, the plan is to use it in the
 smaller sub projects. That way it can be easily evaluated and maybe used as the main build tool in the future.
 
 
@@ -675,7 +717,7 @@ Each git repository will have at least three branches. productive, validation, a
 Master is always the newest development branch. When the new feature is ready the changes are merged into the validation branch where they are tested. This validation branch gets the name of the new version.
 The only thing that has to be changed in the application configuration, is the database configuration in the spring context files.
 The same has to be done when the productive package is about to be build. Since the configuration for the validation and productive 
-environment can be in a separate file, the change is minimal. Only some imports in the spring context xml have to be changed.
+environment can be in a separate file, the change is minimal. Only some imports in the spring context XML have to be changed.
 
 Multiple git repository will be created. The following projects shall have a own repository.
 \begin{itemize}
@@ -690,7 +732,7 @@ This way it is easier to manage branches and versions of each application.
 
 \section{Deployment}
 The deployment should be automated as much as possible to provide a consistent and reproducible build.
-Where possible the build scripts like maven or gradle should be used. 
+Where possible the build scripts like Maven or Gradle should be used. 
 In addition to them specific shell scripts can be created.
 
 For the web application the following steps will be required.
@@ -708,11 +750,11 @@ Processes started with the old process definition will finish with the definitio
 
 
 \subsection{Maven repository}
-As maven repository the product nexus \cite{nexus} from Sonatype is used. It is written in Java an can be deployed everywhere. I provides a nice web application to manage the repositories. The web application runs on an simple jetty \cite{jetty} application server.
+As Maven repository the product nexus \cite{nexus} from Sonatype is used. It is written in Java an can be deployed everywhere. I provides a nice web application to manage the repositories. The web application runs on an simple jetty \cite{jetty} application server.
 
 Maven distinguishes two versions packages types snapshot and releases.
 During the development the version is suffixed by SNAPSHOT (i.e. 1.3.1-SNAPSHOT).
-This has the effect that, if such a package is put in the dependencies of an project, Maven will get the newest version of this SNAPSHOT. To force the update use -U as a parameter for maven.
+This has the effect that, if such a package is put in the dependencies of an project, Maven will get the newest version of this SNAPSHOT. To force the update use -U as a parameter for Maven.
 \begin{verbatim}
  mvn -U clean package
 \end{verbatim}
@@ -739,7 +781,7 @@ It would have four servers.
  \item Repository server
 \end{itemize}
 
-\subsection{Webb application server}
+\subsection{Web application server}
 This server is a classic web application server that can run war Archives. 
 So it runs an Jee environment like jBoss \cite{jboss} or tomcat \cite{tomcat}.
 The operating system is therefore not so relevant. 
@@ -766,10 +808,10 @@ This is a rather exotic configuration. This server should be able to run Excel. 
 
 \subsection{Repository server}
 This server would not be used in the productive setting. It is just there to facilitate the developers work.
-The server would provide a maven repository and a git repository. 
+The server would provide a Maven repository and a git repository. 
 
 The operating system would be preferably Linux. That is because git is native to Linux.
-For the maven repository nexus from Sonatype would be a nice choice. It supports all neccesery functions and provides a nice web front-end for managing the repositories.
+For the Maven repository nexus from Sonatype would be a nice choice. It supports all neccesery functions and provides a nice web front-end for managing the repositories.
 
 % see chapter? configuration....
 
@@ -779,7 +821,7 @@ For the maven repository nexus from Sonatype would be a nice choice. It supports
 \section{Conclusion}
 First it is relay worth to look around and see what solutions are already available. The BPMN 2.0 standard and the engines that cat run it is a fine 
 idea and very precious for any type of business. It has a big advantage of being able to design the business process and at the same time having an easy way to make it automated in a system.
-At this point it must been said, that the implementations still requires specialised employees that should also be able to read some xml. The BPMN engine should also not being misused for low level tasks. At some point it is smarter to make the easy logic in an service task instead of creating yet another BPMN sup process.
+At this point it must been said, that the implementations still requires specialised employees that should also be able to read some XML. The BPMN engine should also not being misused for low level tasks. At some point it is smarter to make the easy logic in an service task instead of creating yet another BPMN sup process.
 
 
 
@@ -847,11 +889,13 @@ To handle the processes packages and the releases of the different software some
 
 \bibitem{uuid} \url{http://en.wikipedia.org/wiki/Universally_unique_identifier}
 
-\bibitem{vaadin} \url{http://www.vaadin.com}
+\bibitem{Vaadin} \url{http://www.Vaadin.com}
 
-\bibitem{vaadinactivitwebapp} \url{https://vaadin.com/wiki/-/wiki/Main/Building Vaadin Applications on top of Activiti}
+\bibitem{gwt} \url{https://developers.google.com/web-toolkit/}
 
-\bibitem{vaadinactivitwebapp2} \url{https://github.com/peholmst/ActivitiVaadinDevoxx11}
+\bibitem{Vaadinactivitwebapp} \url{https://Vaadin.com/wiki/-/wiki/Main/Building Vaadin Applications on top of Activiti}
+
+\bibitem{Vaadinactivitwebapp2} \url{https://github.com/peholmst/ActivitiVaadinDevoxx11}
 
 \bibitem{ant} \url{https://ant.apache.org/}
 
@@ -863,7 +907,7 @@ To handle the processes packages and the releases of the different software some
 
 \bibitem{dependencyInection} \url{http://en.wikipedia.org/wiki/Dependency_injection}
 
-\bibitem{autowire} \url{https://vaadin.com/wiki/-/wiki/Main/Spring+Integration}
+\bibitem{autowire} \url{https://Vaadin.com/wiki/-/wiki/Main/Spring+Integration}
 
 \bibitem{mysql} \url{https://www.mysql.com/}
 
