@@ -113,7 +113,18 @@ Then there is the software for the instruments, that can perform more and more t
 
 This is report therefore explores what existing tool exists in the business IT world and if they could be used to automate a chemical laboratory.
 
+
 \section{The laboratory landscape}
+
+\begin{figure}
+    \begin{center}
+      \includegraphics[width=0.9\textwidth]{./img/Laboverview.pdf}\\
+    \end{center}
+  \caption{The current lab work flow}
+  \label{CurrentLabWorkflow}
+\end{figure} 
+
+
 The laboratory knows many different analytic methods. They all have different requirements and provide different forms of results. That gives us an extremely heterogeneous landscape. 
 
 First we need to look at the current laboratory work flow, with the given programs. Historically, and still so, the lab uses the LIMS to see what samples have do be done and to type the results back. The LIMS is a height level program that was designed to managed samples.
@@ -123,13 +134,6 @@ To normalize the data and provide an easy review ability of every step, a report
 The problem with heterogeneous data and raw data reports is currently overcome with the SDMS database. It is possible to print reports into the database and tag them automatically. As a result the reports printed into that database can be parsed and the data is then available in an electronic form. This currently is in place and works pretty well.
 It is however mostly implemented in Excel \cite{excel} applications.
 
-\begin{figure}
-    \begin{center}
-      \includegraphics[width=1\textwidth]{./img/Laboverview.pdf}\\
-    \end{center}
-  \caption{The current lab work flow}
-  \label{CurrentLabWorkflow}
-\end{figure} 
 
 As you can see in figure \ref{CurrentLabWorkflow} there is a high level process. Each step can have manual user steps or can be done automatically with scripts or some sort of application. 
 
@@ -352,6 +356,41 @@ When dependencies are defined during the development they should be handled with
  \item The web applications should where possible use the components or methods as dependencies. Third party packages are of course also allowed.
 \end{itemize}
 
+
+\section{Build tools}
+The question what build tool, if any, came pretty early in the project development. Just starting a Project in Eclipse is the easiest way. 
+At least as long as the project is not too big, is only one project and doesn't really change over time. That was all not the case. So lets have a look at few of them. 
+
+In the Java World there are the usual suspects:
+\begin{itemize}
+ \item Ant
+ \item Maven
+ \item Gradle
+\end{itemize}
+
+\subsection{Ant}
+Ant is the oldest of the three. It allows to define build scripts in XML. 
+It has no own logic, so all tasks or targets have to be written from scratch.
+That allows a big flexibility, it is however also quit complex. There is also the fact,
+that scripting in XML is not really fun.
+
+
+\subsection{Maven}
+Maven also uses also XML for the configuration. Opposed to ant, you define how the project has to be build. The building is then
+made by Maven. Maven also resolves dependencies. Maven is widely used and therefore has a lot of plug-ins and additional tools like an eclipse plug-in. For our case Maven seemed to do the job.
+
+
+\subsection{Gradle}
+Gradle is the newest member in the Java build tool family. Gradle is not just a Java build tool so i can also handle other languages. The configuration file is written in groovy. That makes a much nicer looking project definition.
+Gradle also doesn't reinvent the world. It uses the same dependency resolvement as Maven. So it can almost do everything that Maven can. In addition, it is easy to create custom tasks like in ant.
+
+The downside is, that Gradle is still a very young project and has not as much plug-ins or examples as Maven. It is however worth keeping in sight.
+
+\subsection{Usage}
+For the main web application it is the simplest way to use Maven as the build tool. Since Gradle seems very promising, the plan is to use it in the
+smaller sub projects. That way it can be easily evaluated and maybe used as the main build tool in the future.
+
+
 \section{Example Application}
 Now that we have chosen a BPMN process engine and the other required frameworks we need to have a concrete task to try the business framework on. That is why an example application was designed.
 
@@ -405,7 +444,7 @@ knowledge of the environment it is in. The code can therefore be untouched when 
 
 
 
-\subsection{class design}
+\subsection{Class design}
 \begin{figure}
     \begin{center}
       \includegraphics[width=1\textwidth]{./img/uml_webapp_model.png}\\
@@ -467,7 +506,7 @@ Internationalization is only needed for the web application. Since the web appli
 
 
 \subsection{Authentication}
-The user authentication can be done in the BPMN engine. The engine has to know anyway what user is currently logged in. Activiti can therefore be connected to a ldap server to retrieve the needed user login information.
+The user authentication can be done in the BPMN engine. The engine has to know anyway what user is currently logged in. Activiti can therefore be connected to a LDAP server to retrieve the needed user login information.
 
 
 
@@ -476,6 +515,7 @@ The basic concept is a rpc socket client/server architecture. \cite{rpc}
 
 \subsection{Server}
 The server receives a request to execute a certain Excel application. It then executes this application. If multiple request are received they get stored in an array (queue) and then the external Excel applications are run in serial. 
+The requests are processed in there own threads. This way the serve is asynchronous.
 
 \begin{figure}
     \begin{center}
@@ -488,9 +528,15 @@ The server receives a request to execute a certain Excel application. It then ex
 
 \subsection{Client}
 The client is a BPMN service task for the engine server. This service task can be implemented in any process. 
-The configuration of that task is made in spring. This way the methods or processes can configure their own external applications.
+The configuration of that task is made in spring. This way the methods or processes can configure their own external applications. The following code shows the service tasks of the client that is being executed by the BPMN engine.
+\begin{verbatim}
+ <serviceTask id="servicetask_externappadapter" 
+    name="Send Data to extern programm"
+    activiti:delegateExpression="${externprintadapter}">
+ </serviceTask>
+\end{verbatim}
 
-In the current implementations of the client service task it is possible to configure in spring the host name the port and the application name that has to be started.
+In the current implementations of the client service task it is possible to configure in spring the host name, the port, the application name that has to be started and the environment in which the external application hast to be run. The bean in the above service task is named "externprintadapter".
 
 The service task has to be thread save \cite{treadsave}. This is because Activiti will call the same instance of the service every time a process needs it. 
 
@@ -541,20 +587,62 @@ The finish signal looks like this.
 The socket connection is then closed.
 
 \section{Processes / Methods}
-With methods analytical laboratory processes is meant. Each Method has at leas a BPML XML definition.
+With methods the analytical laboratory processes is meant. Each Method has at least one BPML XML definition.
 
-In addition they can have custom forms that are implemented in Java. These forms are extended from an abstract from class that knows the Activiti services. This way the forms can have the information from current execution variables or historic data from other tasks. For each form a spring bean is created in the method-context.XML file. This way it is then easy to add the form to the web application. The web application has a form container that is also configured with a spring context file.
+In addition they can have custom forms that are implemented in Java. These forms are extended from an abstract from class that knows the Activiti services. This way the forms can have the information from current execution variables or historic data from other tasks. For each form a spring bean is created in the method-context.xml file. This way it is then easy to add the form to the web application. The web application has a form container that is also configured with a spring context file.
 
 If the process has other special service tasks the Java code can also be stored in these methods. 
 
-All this method files are bundled in a Java jar archives and versioned separately. Unit tests can also be run over these methods.
+All these method files are bundled in a Java jar archives and versioned separately. Unit tests can also be run over these methods.
 
+\subsection{The example method}
+Lets have a look at our example method defined at the start (See figure \ref{panexampleWorkflow}). The heart of the method is of course the two BPMN XML definitions. 
+
+The Process is always started with the main process XML (Defined in targetNamespace property in the definitions element).
+
+The main process calls then all sub processes in the call activity element.
+\begin{verbatim}
+ <callActivity id="callInventoryItem" calledElement="doInventoryItem" >
+   <extensionElements>
+      <activiti:in source="sessionVariable" target="sessionVariable" />
+   </extensionElements> 
+   <multiInstanceLoopCharacteristics isSequential="false" >
+      <loopDataInputRef>sessionVariable</loopDataInputRef>
+      <inputDataItem name="sessionVariable" />
+   </multiInstanceLoopCharacteristics> 
+ </callActivity>
+\end{verbatim}
+The information can be passed from the main process to the sub process over the extension element activiti:in. In this case the variable is called "sessionVariable". 
+
+All the sup process are run in parallel. This is defined in the "multiInstanceLoopCharacteristics" element.
+
+The sub process has an inclusive gateway. If a sample is not OK, an additional task has to be done.
+The decision is evaluated it the sequence flow element.
+\begin{verbatim}
+ <inclusiveGateway id="checkOosFork" />
+        
+ <sequenceFlow sourceRef="checkOosFork" targetRef="checkOosJoin" >
+  <conditionExpression xsi:type="tFormalExpression">
+     ${isItemOk == true}
+  </conditionExpression>
+ </sequenceFlow>
+	    
+ <sequenceFlow sourceRef="checkOosFork" targetRef="usertask_startOOS" >
+  <conditionExpression xsi:type="tFormalExpression">
+     ${isItemOk == false}
+  </conditionExpression>
+ </sequenceFlow>
+ 
+ <inclusiveGateway id="checkOosJoin" />
+\end{verbatim}
+
+The inclusive gateway has a fork and a join element. If the item is OK the checkOosJoin is directly the next element. If the item is not OK a the additional user task start OOS is called. OOS stands for out of specification.
 
 \section{Custom Jar library's}
 Jar library's are reusable packages of functions and classes. In Java the classes are put together in a jar file. These jar files can be imported in an other project and so be easily used.
 Jar files can be tested separately and be provided in a maven repository.
 
-For this project a few of these components where created. For one they would have at some point been needed anyway and for the other reason to
+For this project a few of these components where created. For one, they would have at some point been needed anyway and for the other reason to
 demonstrate the work flow with the build tools and repository.
 
 
@@ -633,6 +721,7 @@ A modification of the current Excel plug-in has to be made. Many functions can b
 
 
 \section{Environments}
+Environments are settings and boundary's in which a program is run. This can be differently set up server, database or other configuration files.
 At least three environments have to be defined. Development, validation and production. 
 
 The development environment is where the development is done. Usually the applications are run locally on the developer pc. The spring configurations can be modified at any time to match the need of the developer.
@@ -644,43 +733,12 @@ When everything looks good, a productive build based on the one from the validat
 
 Developer should also be able to pull data from the validation or productive server.
 
-\section{Build tools}
-The question what build tool, if any, came pretty early in the project development. Just starting a Project in Eclipse is the easiest way. 
-At least as long as the project is not to big, is only one project and doesn't really change over time. That was all not the case. So lets have a look at few of them. 
-
-In the Java World there are the usual suspects:
-\begin{itemize}
- \item Ant
- \item Maven
- \item Gradle
-\end{itemize}
-
-\subsection{Ant}
-Ant is the oldest of the three. It allows to define build scripts in XML. 
-It has no own logic, so all tasks or targets have to be written from scratch.
-That allows a big flexibility, it is however also quit complex. There is also the fact,
-that scripting in XML is not really fun.
-
-
-\subsection{Maven}
-Maven also uses also XML for the configuration. Opposed to ant, you define how the project has to be build. The building is then
-made by Maven. Maven also resolves dependencies. Maven is widely used and therefore has a lot of plug-ins and additional tools like an eclipse plug-in. For our case Maven seemed to do the job.
-
-
-\subsection{Gradle}
-Gradle is the newest member in the Java build tool family. Gradle is not just a Java build tool so i can also handle other languages. The configuration file is written in groovy. That makes a much nicer looking project definition.
-Gradle also doesn't reinvent the world. It uses the same dependency resolvement as Maven. So it can almost do everything that Maven can. In addition, it is easy to create custom tasks like in ant.
-
-The downside is, that Gradle is still a very young project and has not as much plug-ins or examples as Maven. It is however worth keeping in sight.
-
-\subsection{Usage}
-For the main web application it is the simplest way to use Maven as the build tool. Since Gradle seems very promising, the plan is to use it in the
-smaller sub projects. That way it can be easily evaluated and maybe used as the main build tool in the future.
-
 
 \section{Testing and Validation}
-Testing and Validation is an very important subject. It begins already with the developer and goes all the way to the qc personnel.
+Testing and Validation is an very important subject. It begins already with the developer and goes all the way to the QC personnel.
 There are several strategies to be followed.
+
+At the moment unit testing is almost non existent in the current framework. Using business tools where for example JUnit \cite{junit} can be used would be a big added value.
 
 \subsection{Unit Tests}
 Unit tests are an important tool during and after the development of the code. If possible each function and each class should also have his unit test. 
@@ -694,7 +752,7 @@ The developer then also know where to look and fix the problem right away.
 Once the all functionality is implemented the packages and applications are build and deployed to the validation environment. The validation environment is configured as 
 close as possible the same as the productive environment.
 
-Know the testers can execute the written tests plans to check the high level functionality. This is also a formal test to conform to the regulations. If a error occurs 
+Now the testers can execute the written tests plans to check the high level functionality. This is also a formal test to conform to the regulations. If a error occurs 
 the code gets modified in the development environment and redeployed. The tests are then repeated where needed.
 
 If for example a component gets updated, the application that uses it has to be rebuild. Because the components can be tested very good with unit tests, the should already work correctly when deployed to the validation environment.
@@ -739,7 +797,7 @@ In addition to them specific shell scripts can be created.
 
 For the web application the following steps will be required.
 \begin{itemize}
- \item pack the war archive
+ \item pack the WAR archive
  \item copy war archive to web application server
  \item update the BPMN process definition
 \end{itemize}
@@ -764,7 +822,7 @@ This has the effect that, if such a package is put in the dependencies of an pro
 If the package is finally tested the SNAPSHOT suffix gets removed and the package gets uploaded to the releases repository. In this repository the version can only be uploaded once. The next time a new version number has to be created.
 
 \section{Infrastructure}
-This chapter shall give an overview how the infrastructure that supports the web application and the development of it, has to look. 
+This chapter shall give an overview how the infrastructure has to be, that supports the web application and the development. 
 All named server are planed to be virtual machines.
 
 \begin{figure}
@@ -918,6 +976,8 @@ The possibility of OSGI and Activiti \cite{osgiactivit} looks interesting and sh
 \bibitem{dependencyInection} \url{http://en.wikipedia.org/wiki/Dependency_injection}
 
 \bibitem{autowire} \url{https://Vaadin.com/wiki/-/wiki/Main/Spring+Integration}
+
+\bibitem{junit} \url{http://www.junit.org/}
 
 \bibitem{mysql} \url{https://www.mysql.com/}
 
