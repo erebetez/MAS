@@ -85,15 +85,20 @@
 \end{titlepage}
 
 \newpage
+
+
 % --- Zusammenfassung --- %
 \section*{Summary}
-Text
+This report looks at business frameworks to support laboratory automation. The new BPMN 2.0 specification is the main subject that was investigated. Based on Activiti (BPMN engine), Spring (configuration) and Vaadin (web framework), a web application was created to demonstrate the 
+usefulness of a BPMN engines. It was also looked at build tools and possible server configurations. BPMN 2.0 was found to be a good help when it comes to solve process related problems.
 
 % --- Vorwort --- %
 \section*{Vorwort}
-Text
+In diesem Report wurden Business Framewoks um eine mögliche Laborautomatisation zu erleichtern betrachtet. Ein spezielles Augenmerk wurde dabei auf die neue BPMN 2.0 Spezifikation gelegt. Auf basis von Activiti (BPMN engine), Spring (konfiguration) und Vaadin (web framework) wurde eine Webapplikation erstellt um die Nützlichkeit von BPMN zu demonstrieren. Ausserdem wurden Buildtools und mögliche Server Konfigurationen analysiert. BPMN 2.0 ist ein vielversprechender Kandidat wenn es dabei geht prozessbezogene Probleme lösen zu wollen.
+
 % --- Inhaltsverzeichnis --- %
 \newpage
+    \setcounter{tocdepth}{2}
 	\tableofcontents
 
 % --- Einleitung --- %
@@ -108,7 +113,7 @@ At this point it is important to emphasize that everything that is not documente
 After the analysis it is mostly the case to have a calculation step where certain parameters are calculated to get the final value. The final value is then transferred back into the LIMS database. These are mainly manual steps. These manual steps can lead to errors and are time consuming.
 Although the operating of balances, creation of solution or other manual tasks cannot be automated, the data flow and the process can.
 
-This report aims to look at the layer between LIMS and the instruments and the analysis method. In the past few years there has been a ton of programs that aim to solve that problem \cite{}.  Some try to achieve that with an almighty LIMS. But since most LIMS programs date from the 90's the implementation is not easy and you end up having a not maintainable huge monolithic system. There is also the idea of electronic lab notebooks (ELN) \cite{eln}. These ELN where usually conceived for R\&D laboratory. That means more freedom and less strict processes.
+This report aims to look at the layer between LIMS and the instruments and the analysis method. In the past few years there has been a ton of programs that aim to solve that problem. Some try to achieve that with an almighty LIMS. But since most LIMS programs date from the 90's the implementation is not easy and you end up having a not maintainable huge monolithic system. There is also the idea of electronic lab notebooks (ELN) \cite{eln}. These ELN where usually conceived for R\&D laboratory. That means more freedom and less strict processes.
 Then there is the software for the instruments, that can perform more and more tasks. This looks like a good idea, but there are so many instruments, methods and manufactures that there is just no solution that fits it all. Also it is still the case, that one solution of one manufacturer is in no way compatible to the solution of another manufacturer.
 
 This is report therefore explores what existing tool exists in the business IT world and if they could be used to automate a chemical laboratory.
@@ -129,7 +134,7 @@ The laboratory knows many different analytic methods. They all have different re
 
 First we need to look at the current laboratory work flow, with the given programs. Historically, and still so, the lab uses the LIMS to see what samples have do be done and to type the results back. The LIMS is a height level program that was designed to managed samples.
 
-There is also a second program in use. An Scientific data management system SDMS \cite{sdms} database. This stores Raw data from analysis and provides an API to retrieve and query the data.
+There is also a second program in use. An Scientific data management system (SDMS) database. This stores Raw data from analysis and provides an API to retrieve and query the data.
 To normalize the data and provide an easy review ability of every step, a report, that can be viewed and signed in the SDMS database, is created and printed into the database.
 The problem with heterogeneous data and raw data reports is currently overcome with the SDMS database. It is possible to print reports into the database and tag them automatically. As a result the reports printed into that database can be parsed and the data is then available in an electronic form. This currently is in place and works pretty well.
 It is however mostly implemented in Excel \cite{excel} applications.
@@ -897,15 +902,21 @@ The Activiti engine and the web application should be moved into separate progra
 The possibility of OSGI and Activiti \cite{osgiactivit} looks interesting and should be investigated in the future.
 
 
-
 \newpage
+
+
+\section{Appendix}
+
+\appendix
+\section{Manual / Specification}
+
+\section{Journal}
+
 
 \addcontentsline{toc}{section}{Bibliography}
 \begin{thebibliography}{99}
 
 \bibitem{lims} \url{http://en.wikipedia.org/wiki/Laboratory_information_management_system}
-
-\bibitem{sdms} \url{}
 
 \bibitem{gmp} \url{http://en.wikipedia.org/wiki/Good_manufacturing_practice}
 
@@ -925,11 +936,11 @@ The possibility of OSGI and Activiti \cite{osgiactivit} looks interesting and sh
 
 \bibitem{omg} \url{http://www.omg.org/}
 
-\bibitem{Activiti} \url{http://www.Activiti.org/}
+\bibitem{activiti} \url{http://www.Activiti.org/}
 
 \bibitem{css} \url{http://en.wikipedia.org/wiki/Cascading_Style_Sheets}
 
-\bibitem{Activitijavadoc} \url{http://Activiti.org/javadocs/index.html}
+\bibitem{activitijavadoc} \url{http://Activiti.org/javadocs/index.html}
 
 \bibitem{jbpm} \url{https://www.jboss.org/jbpm/}
 
